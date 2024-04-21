@@ -9,14 +9,22 @@ import Loader from "../../Config/Loader";
 import { setLanguage } from "../../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
 function BusinessPersonsMain() {
-  const [info, setInfo] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const [info, setInfo] = useState(
+    () => JSON.parse(localStorage.getItem("user")) || {}
+  );
   const [token, setToken] = useState(() => localStorage.getItem("token") || {});
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { setProject, isLoading } = useSelector((state) => state.Project);
-  const { rtl } = useSelector((state) => { return state?.language});
-  useEffect(() => dispatch(setLanguage()), [dispatch]);
-  const fetchDataProject = () => {dispatch(getProjectByDepartment({ info, token }));};
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
+  const fetchDataProject = () => {
+    dispatch(getProjectByDepartment({ info, token }));
+  };
   useEffect(() => fetchDataProject(), []);
   const theme = useTheme();
   const exportToExcel = () => {
@@ -63,10 +71,7 @@ function BusinessPersonsMain() {
           style={{ margin: "auto" }}
           dir={rtl.dir}
         >
-          <h2 className="mt-0 mb-20">
-            {" "}
-            {t("BusinessPersonsMain.title")}
-          </h2>
+          <h2 className="mt-0 mb-20"> {t("BusinessPersonsMain.title")}</h2>
           <Button className="mb-" onClick={exportToExcel}>
             {t("BusinessPersonsMain.ExportButton")}
           </Button>
@@ -89,7 +94,7 @@ function BusinessPersonsMain() {
               <tbody>
                 {Array.isArray(setProject) && setProject ? (
                   setProject.map((item, index) => (
-                    <tr>
+                    <tr key={item?._id}>
                       <td>{index + 1}</td>
                       <td>{item.comments}</td>
                       <td>{item?.LevelPerformance}</td>

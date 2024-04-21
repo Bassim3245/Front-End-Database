@@ -63,7 +63,6 @@ export default function ModulToploadFilePricedTechnical({
       </Button>
       <Dialog
         open={open}
-        // @ts-ignore
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}

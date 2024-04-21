@@ -15,7 +15,7 @@ function AnalyticsData() {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  useEffect(() => dispatch(setLanguage()), [dispatch]);
+  useEffect(() => {dispatch(setLanguage())}, [dispatch]);
   const { t } = useTranslation();
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "DataProductByDEPARTMENT",

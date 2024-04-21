@@ -9,16 +9,24 @@ import Loader from "../../Config/Loader";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 function PerformsnceAnalytcsMain() {
-  const [info, setInfo] = useState( () => JSON.parse(localStorage.getItem("user")) || {});
+  const [info, setInfo] = useState(
+    () => JSON.parse(localStorage.getItem("user")) || {}
+  );
   const [token, setToken] = useState(() => localStorage.getItem("token") || {});
   const dispatch = useDispatch();
   const theme = useTheme();
   const { t } = useTranslation();
   const { setProject, isLoading } = useSelector((state) => state.Project);
-  const fetchDataProject = () => {  dispatch(getProjectByDepartment({ info, token }));};
-  useEffect(() =>fetchDataProject(), []);
-  const { rtl } = useSelector((state) =>  {return state?.language});
-  useEffect(() =>dispatch(setLanguage()), [dispatch]);
+  const fetchDataProject = () => {
+    dispatch(getProjectByDepartment({ info, token }));
+  };
+  useEffect(() => fetchDataProject(), []);
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
 
   const getDataAsFileExcel = async () => {
     try {
@@ -83,7 +91,7 @@ function PerformsnceAnalytcsMain() {
               <tbody>
                 {Array.isArray(setProject) && setProject ? (
                   setProject.map((item, index) => (
-                    <tr>
+                    <tr key={item?._id}>
                       <td>{index + 1}</td>
                       <td>{item?.comments}</td>
                       <td>{item?.CompletionRate}</td>

@@ -79,10 +79,6 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   };
   useEffect(() => {
     const currentLanguage = localStorage.getItem("language");
-
-    // document.body.dir = currentLanguage === "ar" ? "rtl" : "ltr";
-
-    // document.body.dir = currentLanguage.dir || 'ltr'
   }, []);
 
   return (
@@ -91,6 +87,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
       // @ts-ignore
       open={open}
       rtl={rtl}
+      sx={{backgroundColor:"#1e6a99"}}
     >
       {" "}
       {/* Added rtl prop */}
