@@ -87,7 +87,9 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
       // @ts-ignore
       open={open}
       rtl={rtl}
-      sx={{backgroundColor:"#1e6a99"}}
+      sx={{
+        backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#1e6a99",
+      }}
     >
       {" "}
       {/* Added rtl prop */}

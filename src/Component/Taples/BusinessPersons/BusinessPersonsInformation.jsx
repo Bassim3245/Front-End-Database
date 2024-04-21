@@ -75,7 +75,7 @@ function BusinessPersonsMain() {
           <Button className="mb-" onClick={exportToExcel}>
             {t("BusinessPersonsMain.ExportButton")}
           </Button>
-          <div className="responsive-table">
+          <div className="">
             <Table
               striped
               bordered

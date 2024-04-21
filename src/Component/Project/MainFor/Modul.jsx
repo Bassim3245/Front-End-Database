@@ -192,7 +192,7 @@ export default function MainForm(props) {
         TransitionComponent={Transition}
       >
         <AppBar
-          sx={{ position: "relative", width: "100%", maxWidth: "100%" }}
+          sx={{ position: "relative"}}
           className=""
         >
           <Toolbar>

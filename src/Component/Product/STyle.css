@@ -5,6 +5,17 @@
     transform: translateX(-50%);
 }
 
+@media (max-width: 500px) {
+  .PostionTable {
+    left: 85%;
+  }
+}
+/* @media (min-width: 390px) {
+  .PostionTable {
+    left: 85%;
+  }
+} */
+
 .table-container {
     transition: max-height 0.5s ease-in-out;
     /* Adjust timing as needed */

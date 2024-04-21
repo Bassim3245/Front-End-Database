@@ -1,3 +1,15 @@
+
+
+@media (min-width: 390px) {
+    .containerCustomGridTable {
+        width: 360px;
+    }
+}
+@media (min-width: 500px) {
+    .containerCustomGridTable {
+        width: 550px;
+    }
+}
 /* Small */
 @media (min-width: 768px) {
     .containerCustomGridTable {

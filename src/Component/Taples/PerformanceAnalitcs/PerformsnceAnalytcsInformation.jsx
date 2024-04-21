@@ -65,7 +65,7 @@ function PerformsnceAnalytcsMain() {
           dir={rtl?.dir}
         >
           <h2 className="mt-0 mb-20">{t("PerformsnceAnalytcsMain.title")}</h2>
-          <div className="responsive-table">
+          <div className="">
             <Button className="mb-3" onClick={getDataAsFileExcel}>
               {t("PerformsnceAnalytcsMain.ExportButton")}
             </Button>
