@@ -1,0 +1,91 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "subTitle": "Welcome to your dashboard",
+    "report": "Download Reports",
+    "titleInfoBox": "{{subTitle}}!",
+    "salesObtained": "Sales ",
+    "trafficReceived": "Traffic Received",
+    "revenueGenerated": "Revenue Generated",
+    "recentTransactions": "Recent Transactions",
+    "campaign": "Campaign",
+    "salesQuantity": "Sales Quantity"
+  },
+  "appBar": {
+    "userName": "{{name}}",
+    "dropdown": {
+      "profile": "Profile",
+      "languageArabic": "Arabic",
+      "languageEnglish": "English",
+      "logout": "Logout"
+    }
+  },
+  "ProjectTable": {
+    "title": "List of projects",
+    "subTitle": "Projects evaluated by department employees"
+  },
+  "ProjectListReceive": {
+    "title": "List of received products",
+    "table": {
+      "DepartmentName": "Department Name",
+      "ProjectName": "Product Name",
+      "ProjectNotes": " Product Notes",
+      "date": "Sending Date",
+      "sender": "Sender ",
+      "SenderPhone": "Sender Pone",
+      "Action": "Action"
+    }
+  },
+  "AnalyticsData": {
+    "title": "Requirements analysis list",
+    "ExportButton": "Export data as Excel",
+    "table": {
+      "Notes": "Notes",
+      "WorkNatural": " Work Natural",
+      "BeneficiaryEntity": "Beneficiary entity",
+      "Specifications": "Specifications",
+      "Quantity": "Quantity",
+      "NameProduct": "Product name or system"
+    }
+  },
+  "BusinessPersonsMain": {
+    "title": "List of commissioned works",
+    "ExportButton": "Export Data As File Excel",
+    "table": {
+      "Notes": "Notes",
+      "PerformanceLevel": "Performance Level",
+      "ThePerson": "The person in charge",
+      "ProjectName": "Project Name"
+    }
+  },
+  "PerformsnceAnalytcsMain": {
+    "title": "Performance analysis list",
+    "ExportButton": "Export Data As File Excel",
+    "table": {
+      "Notes": "Notes",
+      "CompletionRatio": "completion ratio",
+      "OfferPrice": "Price offers",
+      "ProjectName": "Requests received"
+    }
+  },
+  "ProductList":{
+    "title": "Product list ",
+    "BackButton": "Bake",
+    "SendButton":"Send Project",
+    "InsertButton":"Insert Product",
+    "ButtonUpload":"File Upload",
+    "table": {
+      "Action": "Action",
+      "Unit": "Unit",
+      "AdditionPercentage": "Addition Percentage",
+      "Price": "Price",
+      "Quantity":"Quantity",
+      "PriceType":"Price Type",
+      "Specifications":"Specifications",
+      "Notes":"Notes",
+      "ProductName":"Product Name",
+      "test":"tes"
+
+    }
+  }
+}

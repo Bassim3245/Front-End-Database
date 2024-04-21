@@ -1,0 +1,96 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Component/style/fremwork.css";
+import Login from "./Component/Auth/login";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; // Removed unused imports
+import PrivateRoutes from "./Component/middleware/praivetRout";
+import PersonalProfile from "./Component/Auth/Profile/informationUser.js";
+import OpenProject from "./Component/Project/ProjectInformation/OpenProject.jsx";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import Menu from "./Component/mainMnue/Menue.jsx";
+import MainForm from "./Component/Project/MainFor/Modul.jsx";
+import Event from "./Component/Event/EventInformation.jsx";
+import AnalyticsData from "./Component/Taples/AnaLitcsData/AnalyitcsInformation.jsx";
+import BusinessPersonsMain from "./Component/Taples/BusinessPersons/BusinessPersonsInformation.jsx";
+import PerformsnceAnalytcsMain from "./Component/Taples/PerformanceAnalitcs/PerformsnceAnalytcsInformation.jsx";
+import PageNotFound from "./PageNotFound.js";
+import Root from "./Component/Layout/Root.jsx";
+import Projects from "./Component/Project/ProjectList.jsx";
+import Product from "./Component/Product/ProductList.jsx";
+import Dashboard from "./Component/Dashboard/dashboard/Dashboard.jsx";
+import SettingInformation from "./Component/IT/Mange.jsx";
+import UsersMange from "./Component/IT/UsersMange";
+import Permission from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/Permission";
+import HR from "Component/HR/HR";
+import Manger from "Component/Manger/Manger";
+import Authorized from "Component/middleware/Anuthorized";
+import Files from "Component/HR/HrMangemant/Files";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Edit } from "@mui/icons-material";
+export default function App() {
+  const {  Rol } = useSelector((state) => state.user);
+  const [info, setInfo] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/Dashboard" element={<Root />}>
+              {Rol === "H.O.D" || info?.user_type === "H.O.D" ? (
+                <Route index element={<Dashboard />} />
+              ) : Rol === "management" ||
+                Rol === "Employ" ||
+                info?.user_type === "management" ||
+                info?.user_type === "Employ" ? (
+                <Route index element={<Projects />} />
+              ) : Rol === "IT" || info?.user_type === "IT" ? (
+                <Route index element={<UsersMange />} />
+              ) : (
+                <Route path="Authorized" element={<Authorized />} />
+              )}
+
+              <Route path="ProjectList" element={<Projects />} />
+              <Route path="ProductList" element={<Product />} />
+              <Route path="MainForm" element={<MainForm />} />
+              <Route path="Event" element={<Event />} />
+              <Route
+                path="GeneralDataInformation"
+                element={<SettingInformation />}
+              />
+              <Route path="MangeUser" element={<UsersMange />} />
+              <Route path="AnalyticsData" element={<AnalyticsData />} />
+              <Route path="Profile" element={<PersonalProfile />}></Route>
+
+              <Route path="PermissionUsers/:id" element={<Permission />} />
+              <Route
+                path="BusinessPersonsMain"
+                element={<BusinessPersonsMain />}
+              />
+              <Route
+                path="PerformsnceAnalytcsMain"
+                element={<PerformsnceAnalytcsMain />}
+              />
+            </Route>
+            {/* end Rout Child one */}
+            <Route path="/Edit/:id" element={<Edit />} />
+            <Route path="/OpenProject/:id" element={<OpenProject />} />
+
+            <Route path="/Main/menu" element={<Menu />} />
+            <Route path="/HR" element={<HR />}>
+              <Route index element={<Files />} />
+            </Route>
+            <Route path="/Manger" element={<Manger />} />
+            <Route path="/Authorized" element={<Authorized />} />
+          </Route>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+    </QueryClientProvider>
+  );
+}

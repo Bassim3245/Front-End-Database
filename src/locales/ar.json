@@ -1,0 +1,92 @@
+{
+  "dashboard": {
+    "title": "لوحة القيادة",
+    "subTitle": "مرحبا في لوحة القيادة",
+    "report": "تنزيل التقارير",
+    "emailSent": "رسائل البريد الإلكتروني المرسلة",
+    "salesObtained": "المبيعات",
+    "trafficReceived": "تم الاستلام",
+    "revenueGenerated": "الإيرادات المولدة",
+    "recentTransactions": "التحويلات الأخيرة",
+    "campaign": "حملة",
+    "salesQuantity": "كمية المبيعات"
+  },
+  "appBar": {
+    "userName": " {{name}}",
+    "dropdown": {
+      "profile": "الملف الشخصي",
+      "languageArabic": "عربي",
+      "languageEnglish": "انجليزي",
+      "logout": "تسجيل الخروج"
+    }
+  },
+  "ProjectTable": {
+    "title": "قائمة المنتجات",
+    "subTitle": " المشاريع المدريجة من خلال موضفين القسم"
+  },
+  "ProjectListReceive": {
+    "title": "قائمة المشاريع المستلمة ",
+    "table": {
+      "DepartmentName": "اسم القسم",
+      "ProjectName": "اسم المشروع ",
+      "ProjectNotes": "ملاحظات المشاريع ",
+      "date": "تاريخ الارسال ",
+      "sender": "المرسل  ",
+      "SenderPhone": "موبايل المرسل ",
+      "Action": "اجراء"
+    }
+  },
+  "AnalyticsData": {
+    "title": "قائمة تحليل المتطلبات ",
+    "ExportButton": "استخراج البيانات على شكل فايل اكسل ",
+    "table": {
+      "Notes": "الملاحظات",
+      "WorkNatural": " طبيعة العمل",
+      "BeneficiaryEntity": "الجهة المستفيدة",
+      "Specifications": "المواصفات ",
+      "Quantity": "الكمية ",
+      "NameProduct": "اسم المنتج او المنظومة"
+    }
+  },
+  "BusinessPersonsMain": {
+    "title": "قائمة المكلفين بالاعمال",
+    "ExportButton": "استخراج البيانات على شكل فايل اكسل ",
+    "table": {
+      "Notes": "الملاحظات",
+      "PerformanceLevel": "مستوى الاداء",
+      "ThePerson": "قائم بالعمل",
+      "ProjectName": "اسم المشروع "
+    }
+  },
+  "PerformsnceAnalytcsMain": {
+    "title": "قائمة تحليل الاداء",
+    "ExportButton": "استخراج البيانات على شكل فايل اكسل ",
+    "table": {
+      "Notes": "الملاحظات",
+      "CompletionRatio": "مستوى الانجاز",
+      "OfferPrice": "العروض السعرية ",
+      "ProjectName": "الطلبات المستلمة "
+    }
+  },
+  "ProductList":{
+    "title": "قائمة المنتجات ",
+    "BackButton": "رجوع",
+    "SendButton":"ارسال المشروع",
+    "InsertButton":"اضافة منتج",
+    "ButtonUpload":"رفع فايل",
+
+    "table": {
+      "Action": "اجراء",
+      "Unit": "الوحدة",
+      "AdditionPercentage": "النسبة المظافة",
+      "Price": "السعر",
+      "Quantity":"الكمية",
+      "PriceType":" سعر الصرف",
+      "Specifications":"المواصفات",
+      "Notes":"الملاحظات",
+      "ProductName":"اسم النتج ",
+      "test":"test"
+    }
+  }
+
+}

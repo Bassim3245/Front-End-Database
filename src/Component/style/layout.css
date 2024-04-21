@@ -1,0 +1,16 @@
+.cont{
+    display: flex;
+}
+.position{
+  width: 100%;
+  /* max-width: 100%; */
+  /* max-height: calc(100vh - 5); */
+  position: relative;
+}
+.addE{
+    position:absolute;
+bottom: 0px;
+right: 0px;
+margin-top: 10px;
+}
+

@@ -1,0 +1,126 @@
+import React, { useEffect, useState } from "react";
+import Table from "react-bootstrap/Table";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllDataUser } from "../../../../../redux/userSlice/authActions";
+import { Delete, Edit } from "@mui/icons-material";
+import axios from "axios";
+import { BackendUrl } from "../../../../../redux/api/axios";
+import { ToastContainer, toast } from "react-toastify";
+import { Button } from "@mui/material";
+import {
+  BottomRoot,
+  ButtonClearState,
+  ButtonSave,
+  ColorLink,
+} from "../../../../Config/Content";
+import { useNavigate } from "react-router";
+function InformationUsers({ dataEmploy, theme }) {
+  // @ts-ignore
+
+  const { data } = useSelector((state) => state.user);
+  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
+  const handleDelete = async (Id) => {
+    try {
+      const response = await axios.delete(
+        `${BackendUrl}/api/deleteUserById/${Id}`
+      );
+      if (response) {
+        console.log(response?.data?.message);
+        // @ts-ignore
+        toast.delete(setMessage(response?.data?.message));
+      }
+    } catch (error) {}
+  };
+  // @ts-ignore
+  const FetchDataUser = () => {
+    // @ts-ignore
+    dispatch(getAllDataUser());
+  };
+  const handleEdit = () => {};
+  useEffect(() => {
+    FetchDataUser();
+  }, [dataEmploy, toast, setMessage, message]);
+  const handelAccess = (id) => {
+    Navigate(`PermissionUsers/${id}`);
+  };
+  return (
+    <>
+      <ToastContainer />
+      <Table
+        striped
+        style={{}}
+        variant={`${theme.palette.mode === "dark" ? "dark" : ""}`}
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th> Employee Name</th>
+            <th>Username</th>
+            <th> Phone</th>
+            <th>Password</th>
+            <th>Name Of Department </th>
+            <th>Access</th>
+            <th>Action </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data && Array.isArray(data)
+            ? data?.map((item, index) => (
+                <tr key={item?._id}>
+                  <td>{index + 1}</td>
+                  <td>{item?.name}</td>
+                  <td>{item?.username}</td>
+                  <td>{item?.Phone}</td>
+                  <td>{item?.password}</td>
+                  <td>{item?.DepartmentID?.departmentName}</td>
+                  <td>
+                    {item.user_type === "IT" ? (
+                      <BottomRoot onClick={() => handelAccess(item?._id)}>
+                        {item?.user_type}
+                      </BottomRoot>
+                    ) : item.user_type === "H.O.D" ? (
+                      <ButtonSave onClick={() => handelAccess(item?._id)}>
+                        {item?.user_type}
+                      </ButtonSave>
+                    ) : item.user_type === "management" ? (
+                      <ButtonClearState onClick={() => handelAccess(item?._id)}>
+                        {item?.user_type}
+                      </ButtonClearState>
+                    ) : item.user_type === "Employ" ? (
+                      <ColorLink onClick={() => handelAccess(item?._id)}>
+                        {item?.user_type}
+                      </ColorLink>
+                    ) : (
+                      <Button variant="contained" color="primary" onClick={() => handelAccess(item?._id)}>{item?.user_type}</Button>
+                    )}
+                  </td>
+
+                  <td>
+                    <Button
+                      className="btn"
+                      // @ts-ignore
+                      onClick={() => handleEdit(item?._id)}
+                    >
+                      {" "}
+                      <Edit />{" "}
+                    </Button>
+                    <Button
+                      className="btn "
+                      onClick={() => handleDelete(item?._id)}
+                    >
+                      {" "}
+                      <Delete />{" "}
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            : null}
+        </tbody>
+      </Table>
+    </>
+  );
+}
+
+export default InformationUsers;

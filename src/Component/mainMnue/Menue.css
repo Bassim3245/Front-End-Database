@@ -1,0 +1,86 @@
+/* Start Project */
+.Project {
+  padding-top: 50px;
+  padding-bottom: 59px;
+  /* background-color: ; */
+  position: relative;
+
+}
+
+.Project .boxContainer {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  background-color: white;
+  border-radius: 30px;
+  border-width: 0;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+  padding: 0 25px;
+  transition: all 200ms;
+  animation: fadeIn 1s ease-in-out;
+  position: relative;
+  left: 0%;
+}
+.Project .seletMode {
+  box-shadow:rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  background-color: white;
+  border-radius: 30px;
+  border-width: 0;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+  padding: 0 25px;
+  transition: all 200ms;
+  animation: fadeIn 1s ease-in-out;
+  position: relative;
+  left: 0%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    left: -100%;
+  }
+
+  to {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+
+.Project .box {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 12px 20px 0px rgb(0 0 0 / 13%),
+    0px 2px 4px 0px rgb(0 0 0 / 12%);
+
+}
+
+.Project .box:hover {
+  transform: scale(1.1);
+  animation: borderAnimation 0.3s forwards;
+  transition: 0.4s;
+
+  transform-origin: center;
+}
+
+@keyframes borderAnimation {
+  0% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+
+  }
+}
+
+.Project .ImageLogoButton {
+  width: 100px;
+}

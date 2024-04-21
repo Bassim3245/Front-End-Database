@@ -1,0 +1,36 @@
+.DisplayFormModel {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
+.displayDate {
+    display: flex;
+    gap: 10px;
+
+}
+
+@media (max-width: 768px) {
+    .DisplayFormModel {
+        flex-direction: column-reverse;
+        gap: 0;
+    }
+
+    .displayDate {
+        gap: 15px;
+    }
+
+    .displayflexComlomMobile {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .dispalyDataColomMMobile {
+
+        flex-direction: column;
+        gap: 0;
+    }
+}
