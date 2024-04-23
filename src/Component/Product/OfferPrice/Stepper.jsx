@@ -10,11 +10,42 @@ import {
 import SelectModePriceOffer from "./SelectModePriceOfer";
 import CustomPriceOffer from "./CostumPriceOffer";
 import OfferPriceTable from "./OfferPriceTaples";
+import { useDispatch } from "react-redux";
+import { setCustomDataPrice } from "../../../redux/OfferPriceCustomStat/OfferPriceCustomSlice";
 export default function CustomizedSteppers(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [selectModeNormal, setSelectModeNormal] = React.useState(false);
   const [customSelectMode, setCustomSelectMode] = React.useState(false);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [formData, setFormData] = React.useState({
+    PriceConvertToIQD: "",
+    ExpirePeriod: "",
+    ProcessingTime: "",
+    supplyPermeability: "",
+    Notes: "",
+  });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const dispatch=useDispatch()
+  const handleNextAndSaveData = () => {
+    console.log(formData.ExpirePeriod);
+    dispatch(setCustomDataPrice(formData))
+
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   const steps = selectModeNormal
     ? ["Select Mode Price Offer", "Create an ad"]
     : [
@@ -31,7 +62,7 @@ export default function CustomizedSteppers(props) {
           setCustomSelectMode={setCustomSelectMode}
           customSelectMode={customSelectMode}
         />,
-        <OfferPriceTable projectId={props?.projectId}/>,
+        <OfferPriceTable projectId={props?.projectId} targetRef={props?.targetRef} />,
       ]
     : [
         // @ts-ignore
@@ -41,8 +72,12 @@ export default function CustomizedSteppers(props) {
           setCustomSelectMode={setCustomSelectMode}
           customSelectMode={customSelectMode}
         />,
-        <CustomPriceOffer />,
-        <OfferPriceTable projectId={props?.projectId}/>,
+        <CustomPriceOffer
+          formData={formData}
+          handleInputChange={handleInputChange}
+          handleNextAndSaveData={handleNextAndSaveData}
+        />,
+        <OfferPriceTable projectId={props?.projectId} targetRef={props?.targetRef}/>,
       ];
   const isStepOptional = (step) => {
     return step === 1;
@@ -60,15 +95,10 @@ export default function CustomizedSteppers(props) {
     setSkipped(newSkipped);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
@@ -76,13 +106,12 @@ export default function CustomizedSteppers(props) {
       return newSkipped;
     });
   };
-
   const handleReset = () => {
     setActiveStep(0);
   };
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} sx={{ overflow: "auto" }}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -114,7 +143,7 @@ export default function CustomizedSteppers(props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>{dataSteps[activeStep]}</Typography>
+          <Box sx={{ mt: "20px", mb: 4 }}>{dataSteps[activeStep]}</Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
@@ -125,8 +154,16 @@ export default function CustomizedSteppers(props) {
               Back
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
-
-            {customSelectMode || selectModeNormal ? (
+            {formData.PriceConvertToIQD &&
+            formData.ExpirePeriod &&
+            formData.ProcessingTime &&
+            formData.supplyPermeability ? (
+              <Button onClick={handleNextAndSaveData}>
+                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              </Button>
+            ) : null}
+            {(customSelectMode || selectModeNormal) &&
+            formData.PriceConvertToIQD === "" ? (
               <Button onClick={handleNext}>
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>

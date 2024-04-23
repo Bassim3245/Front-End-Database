@@ -32,7 +32,9 @@ export default function ModuleEdit(props) {
     typeProject: props?.item?.typeProject,
     license: props?.item?.license,
     PriceType: props?.item?.PriceType,
-    percent:props?.item?.percent
+    percent:props?.item?.percent,
+    PriceConvert:props?.item?.PriceConvert
+    
   });
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -75,7 +77,7 @@ export default function ModuleEdit(props) {
   // @ts-ignore
   React.useEffect(() => getDataUnit, [open]);
   React.useEffect(() => {
-    if (formData.PriceType === "USD" || formData.PriceType === "EUR") {
+    if (formData.PriceType === "USD") {
       console.log(formData.PriceType);
       setSelectPriceType(true);
     }
@@ -143,12 +145,11 @@ export default function ModuleEdit(props) {
             select
             label=" تحديد نوع السعر "
             name="PriceType"
-            value={formData?.PriceType || "IQD"}
+            value={formData?.PriceType}
             onChange={handleInputChange}
           >
             <MenuItem value="IQD">IQD </MenuItem>
             <MenuItem value="USD">USD </MenuItem>
-            <MenuItem value="Other">other </MenuItem>
           </TextField>
           {selectPriceType && (
             <TextField

@@ -33,7 +33,7 @@ const DataProductByProjectIsSend = (props) => {
           <KeyboardArrowUp />
         </IconButton>
       )}
-      <div className={`PostionTable ${open ? "table-container" : ""}`}>
+      <div className={`PostionTable container ${open ? "table-container" : ""}`}>
         {open && (
           <div className="w-100 ">
             {loading && <div>loading..</div>}
@@ -52,16 +52,19 @@ const DataProductByProjectIsSend = (props) => {
                   bordered
                   hover
                   variant={theme.palette.mode === "dark" ? "dark" : ""}
+                  dir="rtl"
+                responsive
                 >
-                  <thead dir="rtl">
+                  <thead>
                     <tr>
+                    <th>#</th>
+                    <th>اسم المنتج</th>
+                    <th>الملاحضات</th>
+                    <th>المواصفات</th>
+                    <th>العدد</th>
                       <th>الوحدة</th>
                       <th>السعر</th>
-                      <th>العدد</th>
-                      <th>المواصفات</th>
-                      <th>الملاحضات</th>
-                      <th>اسم المنتج</th>
-                      <th>#</th>
+                      <th>سعر الصرف</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -69,13 +72,20 @@ const DataProductByProjectIsSend = (props) => {
                       Array.isArray(products) &&
                       products.map((item, index) => (
                         <tr key={index}>
-                          <td className="arabicText">{item?.UnitId?.Unit}</td>
-                          <td className="arabicText">{item?.PriceIQD}</td>
-                          <td className="arabicText">{item?.Quantity}</td>
-                          <td className="arabicText">{item?.description}</td>
-                          <td className="arabicText">{item?.comments}</td>
-                          <td className="arabicText">{item?.nameProduct}</td>
-                          <td className="arabicText">{index + 1}</td>
+                          <td >{index + 1}</td>
+                          <td >{item?.nameProduct}</td>
+                          <td >{item?.comments}</td>
+                          <td >{item?.description}</td>
+                          <td >{item?.Quantity}</td>
+                          <td >{item?.UnitId?.Unit}</td>
+                          <td >{item?.Price}</td>
+                          <td >{item?.PriceType}</td>
+
+                         
+                          
+                          
+                        
+                          
                         </tr>
                       ))}
                   </tbody>

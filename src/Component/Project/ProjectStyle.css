@@ -30,6 +30,11 @@
         width: 1370px;
     }
 }
+@media (min-width: 1700px) {
+    .containerCustomGridTable {
+        width: 1670px;
+    }
+}
 .containerCustomGridTable {
     padding-left: 15px;
     padding-right: 15px;

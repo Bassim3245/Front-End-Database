@@ -63,14 +63,15 @@ export default function Module(props) {
           },
         }
       );
-      if (response.data) {
-        toast.success(response.data.message);
-        props.getDataProduct();
+      if (response?.data) {
+        toast.success(response?.data?.message);
+        window.location.reload();
+        props?.getDataProduct();
         setOpen(false);
       }
     } catch (error) {
       if (error.response) {
-        toast.error(error.response.data.message);
+        toast.error(error?.response?.data?.message);
       }
     }
   };
@@ -81,9 +82,10 @@ export default function Module(props) {
   const getDataUnit = async () => {
     try {
       const response = await axios.get(`${BackendUrl}/api/UnitSystemShowData`);
-      setDataUnit(response.data.response);
+      setDataUnit(response?.data?.response);
+
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   };
 
@@ -168,7 +170,7 @@ export default function Module(props) {
               className="mb-3"
               name="PriceConvert"
               defaultValue={"1600"}
-              value={formData.PriceConvert}
+              value={formData?.PriceConvert}
               onChange={handleInputChange}
             />
           )}
@@ -183,7 +185,7 @@ export default function Module(props) {
           />
           <TextField
             fullWidth
-            label="انسبة"
+            label=" النسبة بالمية"
             id="fullWidth"
             className="mb-3"
             name="percent"

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import OfferPrice from "./showAllDataTaple.jsx";
+import OfferPrice from "./showAllDataTable.jsx";
 import {
   Slide,
   Button,
@@ -16,13 +16,16 @@ import { Close } from "@mui/icons-material";
 import { usePDF } from "react-to-pdf";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
 import { ButtonSave } from "../../Config/Content.jsx";
-// import { getDataSystemPrice } from "../../Config/fetchData.jsx";
 import { useQuery } from "react-query";
 import CustomizedSteppers from "./Stepper.jsx";
+import "jspdf-autotable";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
 });
+const options = {
+  orientation: "landscape", // Adjust orientation if needed
+};
 
 function OfferPriceMain(props) {
   const [open, setOpen] = useState(false);
@@ -38,6 +41,7 @@ function OfferPriceMain(props) {
   };
 
   const handleClose = () => {
+    localStorage.removeItem("CustomDataForPriceOffer");
     setOpen(false);
   };
   const detDataProductById = () => {
@@ -55,15 +59,14 @@ function OfferPriceMain(props) {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-  // const { isLoading, data, isError, error, refetch } = useQuery(
-  //   "DataSystemPrice",
-  //   getDataSystemPrice,
-  //   {
-  //     refetchOnWindowFocus: false,
-  //     refetchInterval: false,
-  //   }
-  // );
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  // @ts-ignore
+  const { toPDF, targetRef } = usePDF(options);
+
+  const generatePDF = () => {
+    // @ts-ignore
+    toPDF(targetRef);
+  };
+
   const theme = useTheme();
   return (
     <React.Fragment>
@@ -86,20 +89,26 @@ function OfferPriceMain(props) {
               Offer Price
             </Typography>
 
-            <Button autoFocus color="inherit" onClick={() => toPDF()}>
+            <Button autoFocus color="inherit" onClick={()=>generatePDF()}>
               Get Pdf
             </Button>
           </Toolbar>
         </AppBar>
-        <div className="w-100 bg-eee ">
+        <div
+          className={`${theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"} `}
+          style={{}}
+        >
           {loading && <div>loading..</div>}
 
           <div
             className={`m-5 ${
               theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
-            } p-3 rad-10`}
+            } p-3 rad-10 `}
           >
-            <CustomizedSteppers projectId={props?.projectId} />
+            <CustomizedSteppers
+              projectId={props?.projectId}
+              targetRef={targetRef}
+            />
           </div>
         </div>
       </Dialog>

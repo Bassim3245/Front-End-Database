@@ -1,10 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import OfferPrice from "./showAllDataTaple.jsx";
-import {
-  Slide,
-  Button,
-  useTheme,
-} from "@mui/material";
+import OfferPrice from "./showAllDataTable.jsx";
+import { Slide, Button, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePDF } from "react-to-pdf";
@@ -21,6 +17,7 @@ function OfferPriceTable(props) {
   const [PriceOffer, setPriceOffer] = useState("");
   const id = props?.projectId;
   // @ts-ignore
+
   const { products, loading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const componentPDF = useRef(null);
@@ -37,74 +34,50 @@ function OfferPriceTable(props) {
   useEffect(() => {
     detDataProductById();
   }, [open]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openMenu = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-  const { isLoading, data, isError, error, refetch } = useQuery(
-    "DataSystemPrice",
-    getDataSystemPrice,
-    {
-      refetchOnWindowFocus: false,
-      refetchInterval: false,
-    }
-  );
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
   const theme = useTheme();
   return (
-    
-        <div className=" w-100 bg-eee">
-          {loading && <div>loading..</div>}
+    <div className={`${theme.palette.mode === "dark" ? "bg-dark" : " bg-eee"}`}>
+      {loading && <div>loading..</div>}
 
-          <div
-            className={` m-5 ${
-              theme.palette.mode === "dark" ? "bg-dark" : " bg-eee"
-            } p-3 rad-10`}
-          >
-     
-            <div className="container w-100" ref={targetRef}>
-              <div className="mb-4">
-                <OfferPrice
-                  projectId={props?.projectId}
-                  products={products}
-                  label={"OfferPriceIQR"}
-                />
-              </div>
-              <div className="mb-4">
-                <OfferPrice
-                  projectId={props?.projectId}
-                  products={products}
-                  label={"OfferPriceIQRAfterPercent"}
-                />
-              </div>
-              <div className="mb-4">
-                <OfferPrice
-                  projectId={props?.projectId}
-                  products={products}
-                  label={"OfferPriceUSD"}
-                />
-              </div>
-            </div>
-            <div
-              className="container d-block"
-              style={{ width: "82%", maxWidth: "100%" }}
-            >
-              <Button
-                onClick={handleClose}
-                style={{ width: "100%", fontSize: "20px" }}
-                className="mb-3"
-              >
-                Close
-              </Button>
-            </div>
+      <div className={` m-5  p-3 rad-10`}>
+        <div className="container w-100" ref={props?.targetRef}>
+          <div className="mb-4">
+            <OfferPrice
+              projectId={props?.projectId}
+              products={products}
+              label={"OfferPriceIQR"}
+            />
+          </div>
+          <div className="mb-4">
+            <OfferPrice
+              projectId={props?.projectId}
+              products={products}
+              label={"OfferPriceIQRAfterPercent"}
+            />
+          </div>
+          <div className="mb-4">
+            <OfferPrice
+              projectId={props?.projectId}
+              products={products}
+              label={"OfferPriceUSD"}
+            />
           </div>
         </div>
-
-
+        <div
+          className="container d-block"
+          style={{ width: "82%", maxWidth: "100%" }}
+        >
+          <Button
+            onClick={handleClose}
+            style={{ width: "100%", fontSize: "20px" }}
+            className="mb-3"
+          >
+            Close
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 

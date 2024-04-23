@@ -65,12 +65,12 @@ function AnalyticsData() {
     saveAs(excelData, fileName);
   };
   return (
-    <>
+    <div className="w-100">
       {isLoading ? (
         <Loader />
       ) : (
         <div
-          className={`projects p-20 vh-100 w-100 ${
+          className={`projects p-20  ${
             theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
           }  rad-10 m-20 `}
           style={{ margin: "auto" }}
@@ -80,14 +80,13 @@ function AnalyticsData() {
           <Button className="mb-" onClick={exportToExcel}>
             {t("AnalyticsData.ExportButton")}
           </Button>
-          <div className="w-100">
+          <div className="">
             <Table
               striped
               bordered
               hover
               variant={theme.palette.mode === "dark" ? "dark" : ""}
               dir={rtl?.dir}
-              style={{overflow:"auto"}}
               responsive
             >
               <thead>
@@ -129,7 +128,7 @@ function AnalyticsData() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

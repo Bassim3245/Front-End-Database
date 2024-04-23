@@ -23,9 +23,9 @@ function Product() {
     "dataSendByUser",
     () => getDataBySendUserProjectAndProduct(DepartmentID),
     {
-      refetchIntervalInBackground: true,
-      refetchOnWindowFocus: true,
-      refetchInterval: 5000,
+      // refetchIntervalInBackground: true,
+      // refetchOnWindowFocus: true,
+      // refetchInterval: 5000,
     }
   );
   const { rtl } = useSelector((state) => {
@@ -78,17 +78,17 @@ function Product() {
                   data.length > 0 &&
                   data?.map((Project, index) => (
                     <tr key={index}>
-                      <td className="text-right">{index + 1}</td>
-                      <td className="text-right">
+                      <td >{index + 1}</td>
+                      <td >
                         {Project?.DepartmentID?.departmentName}
                       </td>
-                      <td className="text-right">{Project?.nameProject}</td>
-                      <td className="text-right" style={{ direction: "rtl" }}>
+                      <td >{Project?.nameProject}</td>
+                      <td  style={{ direction: "rtl" }}>
                         {formatDate(Project?.createdAt)}
                       </td>
                       <td>{Project?.userId?.name}</td>
                       <td>{Project?.userId?.Phone}</td>
-                      <td className="text-right">
+                      <td >
                         <div className=" ">
                           <DataProductByProjectIsSend
                             projectId={Project?._id}

@@ -41,6 +41,7 @@
     border-radius: 20px;
     overflow: hidden;
     transition: 0.3s;
+    width:fit-content;
   }
   .SelectModePrice .selectBox{
     box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px ;

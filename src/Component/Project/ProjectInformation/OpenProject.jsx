@@ -20,7 +20,7 @@ export default function OpenProject() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [message, setMessage] = useState("");
   const [dataProject, setDataProject] = useState([]);
-  const { products, loading } = useSelector((state) => state.products);
+  const { products, loading } = useSelector((state) => state?.products);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -43,9 +43,6 @@ export default function OpenProject() {
       console.error("Error fetching project data:", error);
     }
   };
-  useEffect(() => {
-    fetchDataByProjectId();
-  }, [message]);
 
   const detDataProductById = () => {
     dispatch(displayProductByProjectName(id));
@@ -67,7 +64,6 @@ export default function OpenProject() {
         setMessage(response?.data?.message);
       }
     } catch (error) {
-      console.error("Error sending product:", error);
       toast.error(error?.response?.data?.message);
     }
   };
@@ -77,9 +73,36 @@ export default function OpenProject() {
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${BackendUrl}/api/DeleteProduct/${id}`,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+      if (response) {
+        toast(response?.data?.message);
+        // setMessage(response?.data?.message);
+        window.location.reload();
+
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
+
+  useEffect(() => {
+    fetchDataByProjectId();
+  }, [message,token]);
+
   return (
     <div className={`w-100 `}>
       <ToastContainer />
@@ -144,6 +167,7 @@ export default function OpenProject() {
                 hover
                 variant={`${theme?.palette?.mode === "dark" ? "dark" : ""}`}
                 dir={rtl?.dir}
+                responsive
               >
                 <thead>
                   <tr>
@@ -176,18 +200,26 @@ export default function OpenProject() {
 
                         <td>{item?.UnitId?.Unit}</td>
 
-                        <td className="arabicText d-flex gap-2 f-wrap">
+                        <td className=" d-flex gap-2 f-wrap">
                           <div>
                             {item?.allowRequest ||
                             info?.user_type === "H.O.D" ? (
-                              <ModuleEdit
-                                item={item}
-                                getDataProduct={fetchDataProduct}
-                                // @ts-ignore
-                                ProjectWorkNatural={dataProject?.WorkNatural}
-                              />
+                              <div className="d-flex">
+                                <ModuleEdit
+                                  item={item}
+                                  getDataProduct={fetchDataProduct}
+                                  // @ts-ignore
+                                  ProjectWorkNatural={dataProject?.WorkNatural}
+                                />
+                                <Button onClick={() => handleDelete(item?._id)}>
+                                  Delete
+                                </Button>
+                              </div>
                             ) : (
-                              <AllowEdit Id={item?._id} />
+                              <>
+                                <Button>Delete</Button>
+                                <AllowEdit Id={item?._id} />
+                              </>
                             )}
                           </div>
                         </td>

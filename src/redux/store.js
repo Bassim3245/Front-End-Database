@@ -7,6 +7,7 @@ import WorkNaturalSlice from"./Whorkntural/WorkNuralSlice"
 import notificationSlice from "./Notification/NotificationState";
 import DepartmentSlice from "./DepartmentState/DepartmentSlice";
 import languageSlice from "./LanguageState"
+import CustomDataFormPriceOfferPrice  from "./OfferPriceCustomStat/OfferPriceCustomSlice";
 // @ts-ignore
 const enhance = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const store = configureStore(
@@ -19,7 +20,8 @@ const store = configureStore(
       natural:WorkNaturalSlice,
       notification: notificationSlice,
       Department:DepartmentSlice,
-      language: languageSlice
+      language: languageSlice,
+      CustomDataPrice:CustomDataFormPriceOfferPrice
     },
   },
   // @ts-ignore
