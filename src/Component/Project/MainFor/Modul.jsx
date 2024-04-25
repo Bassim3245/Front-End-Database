@@ -417,7 +417,7 @@ export default function MainForm(props) {
                 >
                   {dataUserID.map((option) => (
                     <MenuItem key={option._id} value={option._id}>
-                      {option.name}
+                      {option.name} <span className="text-secondary ms-3" style={{fontSize:"15px"}}>{option.user_type}</span>
                     </MenuItem>
                   ))}
                 </TextField>
