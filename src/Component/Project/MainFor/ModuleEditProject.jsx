@@ -39,6 +39,7 @@ import {
   getDataNatural,
 } from "../../../redux/Whorkntural/WorkNutralAction.js";
 import { Close } from "@mui/icons-material";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -102,7 +103,6 @@ export default function ModuleFormEditProject(props) {
       LevelPerformance: dataProject?.LevelPerformance || "",
       Description: dataProject?.Description || "",
       nameProduct: dataProject?.nameProduct || "",
-   
     });
     // console.log(PersonCharge);
   }, [dataProject]); // Update formData when dataProject changes
@@ -211,9 +211,10 @@ export default function ModuleFormEditProject(props) {
   });
   return (
     <React.Fragment>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <MenuItem onClick={handleClickOpen}>
         <EditIcon />
-      </Button>
+        Edit
+      </MenuItem>
       <Dialog
         fullScreen
         open={open}

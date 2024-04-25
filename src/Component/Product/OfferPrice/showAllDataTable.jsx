@@ -174,10 +174,7 @@ export default function OfferPrice(props) {
   return (
     <div>
       <div className=" w-100 mb-3 mt-3">
-        <div
-          dir="rtl"
-          style={{ direction: "rtl", fontFamily: "Arial, sans-serif" }}
-        >
+        <div style={{ direction: "rtl", fontFamily: "Arial, sans-serif" }}>
           <p
             style={{
               textAlign: "center",
@@ -187,9 +184,9 @@ export default function OfferPrice(props) {
           >
             جدول كميات B.O.Q
           </p>
-          <p style={{ textAlign: "center" }}>العرض الفني المسعر</p>
+          <p style={{ textAlign: "center" }}>Priced technical offer </p>
           <p style={{ textAlign: "center" }}>
-            الجهة المستفيدة: {data?.nameProject} /{data?.NumberBook}
+            the beneficiary: {data?.nameProject} /{data?.NumberBook}
           </p>
         </div>
       </div>
@@ -205,23 +202,23 @@ export default function OfferPrice(props) {
           <tr style={{ background: "#e0e0e0" }}>
             {props?.label === "OfferPriceIQR" ? (
               <>
-                <th>IQR السعر الاجمالي</th>
-                <th> IQR السعر</th>
+                <th> Total Price IQD</th>
+                <th>Price IQD</th>
               </>
             ) : props?.label === "OfferPriceIQRAfterPercent" ? (
               <>
-                <th> بعد IQR السعر الاجمالي</th>
-                <th> بعد IQR السعر</th>
+                <th>The total price after adding the percentage IQD</th>
+                <th>Price After Adding the percentage IQD</th>
               </>
             ) : props?.label === "OfferPriceUSD" ? (
               <>
-                <th> USD السعر الاجمالي</th>
-                <th> USD بعد السعر</th>
+                <th>Total Price USD</th>
+                <th>Price USD</th>
               </>
             ) : null}
-            <th>سعر الصرف</th>
-            <th>العدد</th>
-            <th>اسم المنتج</th>
+            <th>Unit</th>
+            <th>Quantity</th>
+            <th>Product name</th>
             <th>#</th>
           </tr>
         </thead>
@@ -287,8 +284,8 @@ export default function OfferPrice(props) {
                     </td>
                   </>
                 ) : null}
+                <td className="arabicText"> {item?.UnitId?.Unit}</td>
 
-                <td className="arabicText"> {item?.PriceType}</td>
                 <td className="arabicText">{item?.Quantity}</td>
                 <td className="arabicText">
                   {item?.nameProduct}

@@ -19,6 +19,10 @@ code {
 }
 
 
+@font-face {
+  font-family: 'NotoKufiArabic';
+  src: local('NotoKufiArabic'), url(./Font/NotoKufiArabic-VariableFont_wght.ttf) format('truetype');
+}
 
 
  

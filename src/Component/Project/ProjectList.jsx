@@ -10,16 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
 import { GridToolbar } from "@mui/x-data-grid";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../Config/Loader";
 import StyledDataGrid from "../Config/StyledDataGrid";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
+import { StyledMenu } from "Component/Config/Content";
+import { OpenInNew, Settings } from "@mui/icons-material";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state.Project);
   const [info, setInfo] = useState(
@@ -37,6 +37,16 @@ const Projects = () => {
   }, [dispatch]);
   const theme = useTheme();
   const { t } = useTranslation();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const columns = [
     { field: "_id", headerName: "_id" },
     { field: "id", headerName: "ID", width: 33 },
@@ -84,51 +94,59 @@ const Projects = () => {
       field: "Action",
       headerName: "Action",
       headerAlign: "center",
-      width: 250,
       renderCell: (params) => {
         return (
-          <Box
-            sx={{
-              p: "5px",
-              width: "250px",
-              maxWidth: "100%",
-              borderRadius: "3px",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "space-evenly",
-              gap: "10px",
-              flexWrap: "wrap",
-            }}
-            className="responsiveBOXaCTION"
-          >
-            {info.user_type === "H.O.D" || info.user_type === "management" ? (
-              <>
-                <Button
-                  onClick={() => Delete(params?.row?._id)}
-                  variant="contained"
-                >
-                  <DeleteIcon />
-                </Button>
-                <ModuleFormEditProject ProjectData={params?.row} />
-              </>
-            ) : null}
+          <div>
             <Button
+              id="demo-customized-button"
+              aria-label="delete"
+              aria-controls={open ? "demo-customized-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
               variant="contained"
-              onClick={() => HandelOpen(params?.row?._id)}
+              disableElevation
+              onClick={handleClick}
             >
-              <FontAwesomeIcon
-                icon={faPenToSquare}
-                size="lg"
-                style={{ fontSize: "21px" }}
-              />
+              <Settings />
             </Button>
-          </Box>
+            <StyledMenu
+              id="demo-customized-menu"
+              MenuListProps={{
+                "aria-labelledby": "demo-customized-button",
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              {info.user_type === "H.O.D" || info.user_type === "management" ? (
+                <>
+                  <ModuleFormEditProject ProjectData={params?.row} />
+                  <MenuItem
+                    onClick={() => Delete(params?.row?._id)}
+                    disableRipple
+                  >
+                    <DeleteIcon />
+                    Delete
+                  </MenuItem>
+                </>
+              ) : null}
+              <Divider sx={{ my: 0.5 }} />
+              <MenuItem
+                onClick={() => HandelOpen(params?.row?._id)}
+                disableRipple
+              >
+                <OpenInNew />
+                Open Project
+              </MenuItem>
+            </StyledMenu>
+          </div>
         );
       },
     },
   ];
 
   async function Delete(_id) {
+    // @ts-ignore
     axios({
       method: "DELETE",
       url: `${BackendUrl}/api/deleteProject/${_id}`,
@@ -137,7 +155,8 @@ const Projects = () => {
       },
     })
       .then((response) => {
-        setDelete(toast.success(response?.data?.message));
+        // @ts-ignore
+        return setDelete(toast.success(response?.data?.message));
       })
       .catch((error) => {
         console.log(error);
@@ -147,6 +166,7 @@ const Projects = () => {
     navigate(`/OpenProject/${id}`);
   };
   const fetchDataProject = () => {
+    // @ts-ignore
     dispatch(getProjectByDepartment({ info, token }));
   };
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
@@ -203,167 +223,3 @@ const Projects = () => {
   );
 };
 export default Projects;
-//     <>
-//       <div className=" vh-100  " style={{ background: "#f1f5f9" }}>
-//         <div className="  mb-2 w-100 d-flex justify-content-between ">
-//           <Search
-// // @ts-ignore
-//           setProject={setProject} />
-//           {info.user_type === "management" || info.user_type === "H.O.D" ? (
-//             <MainForm fetchDataProject={fetchDataProject} />
-//           ) : null}
-//         </div>
-//         <ToastContainer />
-//         <TableContainer component={Paper}>
-//           {!isLoading ? (
-//             <Table aria-label="customized table">
-//               <TableHead>
-//                 <TableRow>
-//                   <StyledTableCell>Action</StyledTableCell>
-//                   <StyledTableCell>رمز الكتاب</StyledTableCell>
-//                   {info.user_type === "H.O.D" ? (
-//                     <>
-//                       <StyledTableCell>مستوا الانجاز</StyledTableCell>
-//                       <StyledTableCell>مستوا الاداء</StyledTableCell>
-//                     </>
-//                   ) : info.user_type === "management" ? (
-//                     <>
-//                       <StyledTableCell>مستوا الانجاز</StyledTableCell>
-//                       <StyledTableCell>مستوا الاداء</StyledTableCell>
-//                     </>
-//                   ) : null}
-//                   <StyledTableCell>تاريخ الانتهاء</StyledTableCell>
-//                   <StyledTableCell>تاريخ الكتاب</StyledTableCell>
-//                   <StyledTableCell>طريقة التحصيل</StyledTableCell>
-//                   <StyledTableCell>طبيعة العمل</StyledTableCell>
-//                   <StyledTableCell>الجهة المستفيدة</StyledTableCell>
-//                   <StyledTableCell>رقم الطلب</StyledTableCell>
-//                   <StyledTableCell>اسم المشروع</StyledTableCell>
-//                   <StyledTableCell>اسم القسم</StyledTableCell>
-//                 </TableRow>
-//               </TableHead>
-//               {setProject && Array.isArray(setProject) ? (
-//                 setProject?.map(
-//                   ({
-//                     _id,
-//                     DepartmentID,
-//                     nameProject,
-//                     NumberBook,
-//                     beneficiary,
-//                     MethodOption,
-//                     CompletionRate,
-//                     LevelPerformance,
-//                     WorkNaturel,
-//                     DateBook,
-//                     DateClose,
-//                     Code,
-//                   }) => (
-//                     <TableBody key={_id}>
-//                       <StyledTableRow>
-//                         <StyledTableCell>
-//                           {info.user_type === "H.O.D" ? (
-//                             <div className="d-flex justify-content-center f-wrap gap-2">
-//                               <Button
-//                                 onClick={() => Delete(_id)}
-//                                 variant="outlined"
-//                               >
-//                                 <DeleteIcon />
-//                               </Button>
-//                               <ModuleFormEditProject
-//                                 ProjectData={setProject}
-//                                 ProjectID={_id}
-//                               />
-//                               <Button
-//                                 variant="outlined"
-//                                 onClick={() =>
-//                                   // @ts-ignore
-//                                   handelOpen(_id, DepartmentID._id, nameProject)
-//                                 }
-//                               >
-//                                 <FontAwesomeIcon
-//                                   icon={faPenToSquare}
-//                                   size="lg"
-//                                   style={{ fontSize: "21px" }}
-//                                 />
-//                               </Button>
-//                             </div>
-//                           ) : info.user_type === "management" ? (
-//                             <>
-//                               <div className="d-flex justify-content-center f-wrap gap-2">
-//                                 <Button
-//                                   variant="outlined"
-//                                   onClick={() => handleEdit(_id)}
-//                                 >
-//                                   request edit
-//                                 </Button>
-//                                 <Button
-//                                   variant="outlined"
-//                                   onClick={() =>
-//                                     handelOpen(
-//                                       _id,
-//                                       // @ts-ignore
-//                                       DepartmentID._id,
-//                                       nameProject
-//                                     )
-//                                   }
-//                                 >
-//                                   open
-//                                 </Button>
-//                               </div>
-//                             </>
-//                           ) : (
-//                             <Button
-//                               variant="outlined"
-//                               onClick={() =>
-//                                 // @ts-ignore
-//                                 handelOpen(_id, DepartmentID._id, nameProject)
-//                               }
-//                             >
-//                               open
-//                             </Button>
-//                           )}
-//                         </StyledTableCell>
-//                         <StyledTableCell>{Code}</StyledTableCell>
-//                         {info.user_type === "H.O.D" ? (
-//                           <>
-//                             <StyledTableCell>{CompletionRate}</StyledTableCell>
-//                             <StyledTableCell>
-//                               {LevelPerformance}
-//                             </StyledTableCell>
-//                           </>
-//                         ) : info.user_type === "management" ? (
-//                           <>
-//                             <StyledTableCell>{CompletionRate}</StyledTableCell>
-//                             <StyledTableCell>
-//                               {LevelPerformance}
-//                             </StyledTableCell>
-//                           </>
-//                         ) : null}
-//                         <StyledTableCell>
-//                           {formatDate(DateClose)}
-//                         </StyledTableCell>
-//                         <StyledTableCell>
-//                           {formatDate(DateBook)}
-//                         </StyledTableCell>
-//                         <StyledTableCell>{MethodOption}</StyledTableCell>
-//                         <StyledTableCell>{WorkNutrel}</StyledTableCell>
-//                         <StyledTableCell>{beneficiary}</StyledTableCell>
-//                         <StyledTableCell>{NumberBook}</StyledTableCell>
-//                         <StyledTableCell>{nameProject}</StyledTableCell>
-//                         <StyledTableCell>
-//                           {DepartmentID.departmentName}
-//                         </StyledTableCell>
-//                       </StyledTableRow>
-//                     </TableBody>
-//                   )
-//                 )
-//               ) : (
-//                 <div>No Department</div>
-//               )}
-//             </Table>
-//           ) : (
-//             <div>loading...</div>
-//           )}
-//         </TableContainer>
-//       </div>
-//     </>

@@ -24,6 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice/userSlice";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import Pusher from "pusher-js";
+import { useNavigate } from "react-router";
 
 const drawerWidth = 270;
 
@@ -51,19 +54,12 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     // @ts-ignore
     return state.language;
   });
+  const navigate=useNavigate()
   const dispatch = useDispatch();
-
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl);
   const { t, i18n } = useTranslation();
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const handleDirectionArabic = () => {
     const language = "ar";
     i18n.changeLanguage("ar");
@@ -77,10 +73,38 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     dispatch(setLanguage(language));
     localStorage.setItem("language", "en");
   };
+  const [votes, setVotes] = useState(0);
+  const [departmentId, setDepartmentId] = useState(null);
   useEffect(() => {
-    const currentLanguage = localStorage.getItem("language");
+    const pusher = new Pusher("981e65db6d4dc90983b4", {
+      cluster: "us3",
+      encrypted: true,
+    });
+    const channel = pusher.subscribe("poll");
+    channel.bind("vote", (eventData) => {
+      console.log("departmentId:", eventData?.departmentId);
+      if (eventData?.departmentId == info?.DepartmentID) {
+        setDepartmentId(eventData?.departmentId);
+        setVotes((prevVotes) => {
+          return prevVotes ? prevVotes + 1 : 0;
+        });
+      }
+      toast(eventData?.message || null);
+    });
+    return () => {
+      pusher.unsubscribe("poll");
+    };
   }, []);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const HandleProfile = () => {
+    navigate("Profile");
+  };
   return (
     <AppBar
       position="fixed"
@@ -143,7 +167,10 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
               <DarkModeOutlinedIcon />
             </IconButton>
           )}
-          <Nonfiction /> {/* Corrected component name to match import */}
+          {/* start Notifction */}
+          <Nonfiction votes={votes} />
+          {/* start end */}
+
           <IconButton
             color="inherit"
             id="basic-button"
@@ -163,13 +190,14 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={HandleProfile}>
               <Person2OutlinedIcon
                 fontSize="small"
                 sx={{ marginRight: "10px" }}
               />
               {t("appBar.dropdown.profile")}
             </MenuItem>
+            {/* start icon language */}
             {rtl.flexDirection === "row" ? (
               <MenuItem onClick={handleDirectionArabic}>
                 <FontAwesomeIcon
@@ -187,6 +215,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
                 {t("appBar.dropdown.languageEnglish")}
               </MenuItem>
             )}
+            {/* end Icon language */}
             <MenuItem
               onClick={() => {
                 dispatch(logout());

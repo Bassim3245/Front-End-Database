@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 // @ts-ignore
 const StyledDataGrid = styled(DataGrid)(
   ({ theme, rowCount, containerHasDirection, direction, gridTheme }) => ({
-    backgroundColor:theme.palette.mode === "dark" ? "#0C0C0959" : "#FEFDFDF7",
+    backgroundColor: theme.palette.mode === "dark" ? "#0C0C0959" : "#FEFDFDF7",
     width: "100%",
     height: "auto",
     border: "none !important",
@@ -58,6 +58,7 @@ const StyledDataGrid = styled(DataGrid)(
         whiteSpace: "break-spaces !important",
         overflow: "hidden",
         // textOverflow: "ellipsis",
+        whiteSpace: "wrap",
         lineBreak: "anywhere !important",
       },
     // @ts-ignore
@@ -77,7 +78,7 @@ const StyledDataGrid = styled(DataGrid)(
         // textOverflow: 'ellipsis',
         // lineBreak: 'anywhere !important',
         display: "flex !important",
-        fontSize:"14px"
+        fontSize: "14px",
         // justifyContent:'flex-end !important':'start !important',
       },
     "& .MuiDataGrid-cell .MuiDataGrid-cell ": {

@@ -66,9 +66,39 @@ const getAllDataUser = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
-      if (error || error.response) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
       }
     }
   }
 );
-export { registerUser, loginUser, getAllDataUser };
+const getAllDataUserById = createAsyncThunk(
+  "auth/getAllUserById",
+  async ({id,token}, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BackendUrl}/api/getDataUserById/${id}`,
+        headers: {
+          Accept: "application/json",
+          token:token
+        },
+      });
+      if (response || response?.data) {
+        return response?.data?.response;
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export { registerUser, loginUser, getAllDataUser, getAllDataUserById };

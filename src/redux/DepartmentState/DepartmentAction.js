@@ -3,7 +3,7 @@ import axios from "axios";
 import { BackendUrl, token } from "../api/axios";
 export const getDataDepartmentID = createAsyncThunk(
   "getDataDepartmentID/",
-  async (DepartmentID, thunkAPI) => {
+  async ({DepartmentID}, thunkAPI) => {
     try {
       console.log("hello", DepartmentID);
       const response = await axios.get(

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Box, Drawer } from "@mui/material";
+import { Badge, Box, Drawer } from "@mui/material";
 import { IconButton, Typography } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-export default function Notifction() {
+export default function Notifction(props) {
   const [state, setState] = useState({
     right: false,
   });
@@ -21,7 +21,7 @@ export default function Notifction() {
   const list = (anchor) => (
     <Box
       sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
+        width: anchor === "top" || anchor === "bottom" ? "auto" : 350,
         zIndex: "99",
       }}
       role="presentation"
@@ -40,10 +40,19 @@ export default function Notifction() {
   return (
     <div>
       <React.Fragment>
-        <IconButton color="inherit" onClick={toggleDrawer("right", true)}>
-          <NotificationsOutlinedIcon />
-        </IconButton>{" "}
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit"
+          sx={{ marginRight: 2 }}
+          onClick={toggleDrawer("right", true)}
+        >
+          <Badge badgeContent={props?.votes} color="error">
+            <NotificationsOutlinedIcon />
+          </Badge>
+        </IconButton>
         <Drawer
+          sx={{ zIndex: "9999" }}
           anchor={"right"}
           open={state.right}
           onClose={toggleDrawer("right", false)}

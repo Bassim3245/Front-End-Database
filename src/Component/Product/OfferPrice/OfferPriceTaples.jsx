@@ -3,27 +3,15 @@ import OfferPrice from "./showAllDataTable.jsx";
 import { Slide, Button, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { usePDF } from "react-to-pdf";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
-import { getDataSystemPrice } from "../../Config/fetchData.jsx";
-import { useQuery } from "react-query";
-const Transition = React.forwardRef(function Transition(props, ref) {
-  // @ts-ignore
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 function OfferPriceTable(props) {
   const [open, setOpen] = useState(false);
-  const [PriceOffer, setPriceOffer] = useState("");
   const id = props?.projectId;
   // @ts-ignore
 
   const { products, loading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
-  const componentPDF = useRef(null);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -34,7 +22,6 @@ function OfferPriceTable(props) {
   useEffect(() => {
     detDataProductById();
   }, [open]);
-
   const theme = useTheme();
   return (
     <div className={`${theme.palette.mode === "dark" ? "bg-dark" : " bg-eee"}`}>

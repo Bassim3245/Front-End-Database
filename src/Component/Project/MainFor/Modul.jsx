@@ -242,6 +242,8 @@ export default function MainForm(props) {
                     </MenuItem>
                   ))}
                 </TextField>
+{/* end WorkNatural */}
+
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
@@ -259,6 +261,8 @@ export default function MainForm(props) {
                     </MenuItem>
                   ))}
                 </TextField>
+                {/* end MethodOption */}
+
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
@@ -276,6 +280,9 @@ export default function MainForm(props) {
                     </MenuItem>
                   ))}
                 </TextField>
+
+
+                {/* end Stage */}
                 {/*textarea  */}
                 <Textarea
                   aria-label="minimum height"
@@ -291,7 +298,7 @@ export default function MainForm(props) {
                     maxWidth: "100%",
                   }}
                 />
-                {/* End of Selection */}
+                {/* end comments */}
                 <Box
                   className="mb-4 d-flex gap-3 "
                   sx={{ width: "500px", maxWidth: "100%" }}
@@ -314,6 +321,7 @@ export default function MainForm(props) {
                       </MenuItem>
                     ))}
                   </TextField>
+                  {/* LevelPerformance */}
                   <TextField
                     id="outlined-select-currency"
                     sx={{ width: "100%", maxWidth: "100%" }}
@@ -355,6 +363,7 @@ export default function MainForm(props) {
                   value={nameProject}
                   onChange={handleInputChange}
                 />
+                {/* end nameProject  */}
                 <TextField
                   fullWidth
                   sx={{ width: "500px", maxWidth: "100%" }}
@@ -366,6 +375,7 @@ export default function MainForm(props) {
                   value={NumberBook}
                   onChange={handleInputChange}
                 />
+                {/* end NumberBook */}
                 {/* start Date Project */}
                 <div
                   className="displayDate mb-4"
@@ -397,6 +407,7 @@ export default function MainForm(props) {
                 {/* end Date for the project  */}
 
                 {/* start select */}
+                {/* start beneficiary*/}
                 <div className="d-flex gap-4">
                   {OtherOption ? (
                     <TextField
@@ -452,6 +463,7 @@ export default function MainForm(props) {
                     </div>
                   )}
                 </div>
+                {/* end */}
 
                 {/* end other  option and slect drob down */}
                 <TextField

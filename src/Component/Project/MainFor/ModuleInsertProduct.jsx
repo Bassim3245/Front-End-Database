@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 export default function Module(props) {
   const [open, setOpen] = useState(false);
   const token = localStorage.getItem("token") || "";
@@ -83,18 +82,15 @@ export default function Module(props) {
     try {
       const response = await axios.get(`${BackendUrl}/api/UnitSystemShowData`);
       setDataUnit(response?.data?.response);
-
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
   };
-
   useEffect(() => {
     if (open) {
       getDataUnit();
     }
   }, [open]);
-
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -138,17 +134,15 @@ export default function Module(props) {
             value={formData.Quantity}
             onChange={handleInputChange}
           />
-          {props.ProjectWorkNatural === "برمجة" && (
-            <TextField
-              fullWidth
-              label=" الرخصة "
-              id="fullWidth"
-              className="mb-3"
-              name="license"
-              value={formData.license}
-              onChange={handleInputChange}
-            />
-          )}
+          <TextField
+            fullWidth
+            label=" الرخصة "
+            id="fullWidth"
+            className="mb-3"
+            name="license"
+            value={formData.license}
+            onChange={handleInputChange}
+          />
           <TextField
             id="outlined-select-currency"
             sx={{ width: "500px", maxWidth: "100%" }}

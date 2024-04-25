@@ -95,19 +95,18 @@ const SideBar = ({ open, handleDrawerClose }) => {
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
+  const { Rol } = useSelector((state) => state.user);
   // @ts-ignore
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-  const generalInfo = [
-    { text: "Profile", icon: <PersonOutlinedIcon />, path: "Profile" },
-  ];
+  // const generalInfo = [
+  //   { text: "Profile", icon: <PersonOutlinedIcon />, path: "Profile" },
+  // ];
 
   let Route1 = [];
   let Route2 = [];
-  let Route3 = [];
-
-  switch (info?.user_type) {
+  switch (Rol||info?.user_type) {
     case "IT":
       Route1 = [
         {
@@ -122,7 +121,15 @@ const SideBar = ({ open, handleDrawerClose }) => {
         },
       ];
       break;
-
+    case "Employ":
+      Route1 = [
+        {
+          text: "Project",
+          icon: <Dataset />,
+          path: "ProjectList",
+        },
+      ];
+      break;
     case "H.O.D":
       Route1 = [
         {
@@ -131,12 +138,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "/Dashboard",
         },
         {
-          text: "قائمة المشاريع",
+          text: " List Projects",
           icon: <Dataset />,
           path: "ProjectList",
         },
         {
-          text: "منتجات ",
+          text: "Products ",
           icon: <ReceiptOutlinedIcon />,
           path: "ProductList",
         },
@@ -161,11 +168,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
           text: "Performance analytics",
           icon: <StackedLineChart />,
           path: "PerformsnceAnalytcsMain",
-        },
-        {
-          text: "Calendar",
-          icon: <CalendarTodayOutlinedIcon />,
-          path: "calendar",
         },
       ];
       break;
@@ -204,23 +206,11 @@ const SideBar = ({ open, handleDrawerClose }) => {
           icon: <StackedLineChart />,
           path: "PerformsnceAnalytcsMain",
         },
-        {
-          text: "Calendar",
-          icon: <CalendarTodayOutlinedIcon />,
-          path: "calendar",
-        },
       ];
       break;
-    case "Employ":
-      Route1 = [
-        {
-          text: "Project",
-          icon: <Dataset />,
-          path: "ProjectList",
-        },
-      ];
+
     default:
-      navigate("/Authorized");
+      navigate("*");
   }
   return (
     // Anchor to male from dirction right
@@ -287,7 +277,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
-                  dir:rtl?.dir,
+                  dir: rtl?.dir,
                   bgcolor:
                     location.pathname === item.path
                       ? theme.palette.mode === "dark"
@@ -307,7 +297,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
                 </ListItemIcon>
                 <ListItemText
                   primary={item.text}
-                  sx={{ opacity: open ? 1 : 0}}
+                  sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
             </Tooltip>
@@ -360,12 +350,9 @@ const SideBar = ({ open, handleDrawerClose }) => {
           </ListItem>
         ))}
       </List>
-
       <Divider />
-      
-
       <List dir={rtl.dir}>
-        {generalInfo?.map((item) => (
+        {/* {generalInfo?.map((item) => (
           <ListItem
             key={item.path}
             disablePadding
@@ -404,7 +391,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
               </ListItemButton>
             </Tooltip>
           </ListItem>
-        ))}
+        ))} */}
         <ListItem disablePadding sx={{ display: "block" }} dir={rtl.dir}>
           <Tooltip title={open ? null : "Logout"} placement="left">
             <ListItemButton
@@ -432,10 +419,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
               >
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText
-                primary="Logout"
-                sx={{ opacity: open ? 1 : 0 }}
-              />
+              <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </Tooltip>
         </ListItem>

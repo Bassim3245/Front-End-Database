@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from "react";
-import OfferPrice from "./showAllDataTable.jsx";
 import {
   Slide,
   Button,
@@ -16,7 +15,6 @@ import { Close } from "@mui/icons-material";
 import { usePDF } from "react-to-pdf";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
 import { ButtonSave } from "../../Config/Content.jsx";
-import { useQuery } from "react-query";
 import CustomizedSteppers from "./Stepper.jsx";
 import "jspdf-autotable";
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -29,13 +27,10 @@ const options = {
 
 function OfferPriceMain(props) {
   const [open, setOpen] = useState(false);
-  const [PriceOffer, setPriceOffer] = useState("");
   const id = props?.projectId;
   // @ts-ignore
   const { products, loading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
-  const componentPDF = useRef(null);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -51,14 +46,6 @@ function OfferPriceMain(props) {
   useEffect(() => {
     detDataProductById();
   }, [open]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openMenu = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
   // @ts-ignore
   const { toPDF, targetRef } = usePDF(options);
 
@@ -69,6 +56,7 @@ function OfferPriceMain(props) {
 
   const theme = useTheme();
   return (
+
     <React.Fragment>
       <ButtonSave variant="outlined" onClick={handleClickOpen}>
         Price Offer

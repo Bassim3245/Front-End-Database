@@ -30,9 +30,12 @@ import Files from "Component/HR/HrMangemant/Files";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Edit } from "@mui/icons-material";
+import Test from "./Component/Product/test.jsx";
 export default function App() {
-  const {  Rol } = useSelector((state) => state.user);
-  const [info, setInfo] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const { Rol } = useSelector((state) => state.user);
+  const [info, setInfo] = useState(
+    () => JSON.parse(localStorage.getItem("user")) || {}
+  );
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
@@ -43,17 +46,15 @@ export default function App() {
             <Route path="/Dashboard" element={<Root />}>
               {Rol === "H.O.D" || info?.user_type === "H.O.D" ? (
                 <Route index element={<Dashboard />} />
-              ) : Rol === "management" ||
-                Rol === "Employ" ||
-                info?.user_type === "management" ||
-                info?.user_type === "Employ" ? (
+              ) : Rol === "management" || info?.user_type === "management" ? (
+                <Route index element={<Projects />} />
+              ) : Rol === "Employ" || info?.user_type === "Employ" ? (
                 <Route index element={<Projects />} />
               ) : Rol === "IT" || info?.user_type === "IT" ? (
                 <Route index element={<UsersMange />} />
               ) : (
                 <Route path="Authorized" element={<Authorized />} />
               )}
-
               <Route path="ProjectList" element={<Projects />} />
               <Route path="ProductList" element={<Product />} />
               <Route path="MainForm" element={<MainForm />} />
@@ -87,6 +88,7 @@ export default function App() {
             <Route path="/Manger" element={<Manger />} />
             <Route path="/Authorized" element={<Authorized />} />
           </Route>
+          <Route path="/test" element={<Test />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
