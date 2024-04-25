@@ -74,7 +74,7 @@ const Projects = () => {
       headerName: "Method Option",
     },
     {
-      field: "WorkNutrel",
+      field: "WorkNatural",
       headerName: "Work Naturel",
     },
     {
@@ -156,7 +156,7 @@ const Projects = () => {
     })
       .then((response) => {
         // @ts-ignore
-        return setDelete(toast.success(response?.data?.message));
+       setDelete(toast.success(response?.data?.message));
       })
       .catch((error) => {
         console.log(error);

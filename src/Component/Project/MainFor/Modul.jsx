@@ -191,10 +191,7 @@ export default function MainForm(props) {
         // @ts-ignore
         TransitionComponent={Transition}
       >
-        <AppBar
-          sx={{ position: "relative"}}
-          className=""
-        >
+        <AppBar sx={{ position: "relative" }} className="">
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose}>
               <Close />
@@ -228,7 +225,6 @@ export default function MainForm(props) {
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
-                  select
                   label="طبيعة العمل"
                   className="mb-4"
                   name="WorkNatural"
@@ -236,30 +232,21 @@ export default function MainForm(props) {
                   value={WorkNatural}
                   onChange={handleInputChange}
                 >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
+            
                 </TextField>
-{/* end WorkNatural */}
+         
+                {/* end WorkNatural */}
 
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
                   className="mb-4"
-                  select
                   label="طريقة التحصيل"
                   name="MethodOption"
                   dir="rtl"
                   value={MethodOption}
                   onChange={handleInputChange}
                 >
-                  {optionMethod.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
                 </TextField>
                 {/* end MethodOption */}
 
@@ -267,20 +254,14 @@ export default function MainForm(props) {
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
                   className="mb-4 me-3"
-                  select
                   label="المرحلة "
                   name="Stage"
                   dir="rtl"
                   value={Stage}
                   onChange={handleInputChange}
                 >
-                  {getDtaInfo.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.workNaturalData}
-                    </MenuItem>
-                  ))}
+             
                 </TextField>
-
 
                 {/* end Stage */}
                 {/*textarea  */}
@@ -405,63 +386,20 @@ export default function MainForm(props) {
                   </div>
                 </div>
                 {/* end Date for the project  */}
-
                 {/* start select */}
                 {/* start beneficiary*/}
-                <div className="d-flex gap-4">
-                  {OtherOption ? (
-                    <TextField
-                      id="outlined-select-currency"
-                      sx={{ width: "500px", maxWidth: "100%" }}
-                      select
-                      label=" الجهة المستفيدة"
-                      className="mb-4"
-                      name="beneficiary"
-                      dir="rtl"
-                      value={beneficiary}
-                      onChange={handleInputChange}
-                    >
-                      {Ministries.map((option) => (
-                        <MenuItem key={option._id} value={option.ministries}>
-                          {option.ministries}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key="otherOption">
-                        <ButtonSave
-                          onClick={() => handleSelectDropdown()}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            maxWidth: "100%",
-                          }}
-                        >
-                          كتابة أختيار أخر
-                        </ButtonSave>
-                      </MenuItem>
-                    </TextField>
-                  ) : (
-                    <div className="d-bloke">
-                      <TextField
-                        fullWidth
-                        sx={{ width: "500px", maxWidth: "100%" }}
-                        label=" اكتب الاختيار"
-                        id="fullWidth"
-                        className=""
-                        dir="rtl"
-                        name="beneficiary"
-                        value={beneficiary}
-                        onChange={handleInputChange}
-                      />
-                      <div style={{ textAlign: "right" }}>
-                        <IconButton
-                          aria-label="back"
-                          onClick={() => handleBack()}
-                        >
-                          <ArrowBackIcon />
-                        </IconButton>
-                      </div>
-                    </div>
-                  )}
+                <div className="d-bloke">
+                  <TextField
+                    fullWidth
+                    sx={{ width: "500px", maxWidth: "100%" }}
+                    label=" الجهات المستفيدة"
+                    id="fullWidth"
+                    className="mb-3"
+                    dir="rtl"
+                    name="beneficiary"
+                    value={beneficiary}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 {/* end */}
 
