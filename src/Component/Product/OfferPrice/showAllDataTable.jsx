@@ -76,7 +76,7 @@ function SumTotalPriceAfterAddPercentageAnddConvertToUSD(
         (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
       );
     }, 0);
-    const formattedTotalSum = new Intl.NumberFormat().format(totalSum);
+    const formattedTotalSum = new Intl.NumberFormat().format(Math.ceil(totalSum));
     return formattedTotalSum;
   }
 }
@@ -90,13 +90,14 @@ function calculatePriceAfterPercentageWithQuantity(item) {
   if (item.PriceType === "USD") {
     const priceTotalEachProductAfterPercentage =
       priceAfterPercent * item.PriceConvert * item?.Quantity;
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   } else {
     const priceTotalEachProductAfterPercentage =
       priceAfterPercent * item?.Quantity;
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   }
 }
+
 function calculatePriceAfterPercentageWithoutQuantity(item) {
   const percentage = item.percent / 100;
   const priceAfterPercent = item?.Price * (1 + percentage);
@@ -104,10 +105,10 @@ function calculatePriceAfterPercentageWithoutQuantity(item) {
   if (item.PriceType === "USD") {
     const priceTotalEachProductAfterPercentage =
       priceAfterPercent * item.PriceConvert;
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   } else {
     const priceTotalEachProductAfterPercentage = priceAfterPercent;
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   }
 }
 function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
@@ -121,11 +122,11 @@ function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
     const priceTotalEachProductAfterPercentage =
       (priceAfterPercent * item.PriceConvert) /
       (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   } else {
     const priceTotalEachProductAfterPercentage =
       priceAfterPercent / (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   }
 }
 function calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
@@ -133,7 +134,7 @@ function calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
   PriceConvertToIQD
 ) {
   const priceToConvert = 1600;
-  const percentage = item.percent / 100;
+  const percentage =Math.ceil(item.percent / 100);
   const priceAfterPercent = item?.Price * (1 + percentage);
   if (item.PriceType === "USD") {
     const priceTotalEachProductAfterPercentage =
@@ -147,7 +148,7 @@ function calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
-
+// end Calculater 
 export default function OfferPrice(props) {
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "DataProjectById",
@@ -232,7 +233,7 @@ export default function OfferPrice(props) {
         >
           <th></th>
           <th></th>
-          <th className=" p-3">طلبية رخصة برمجية</th>
+          <th className=" p-3"> {data?.nameProject} </th>
           <th></th>
           <th></th>
         </tr>

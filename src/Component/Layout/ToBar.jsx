@@ -54,7 +54,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     // @ts-ignore
     return state.language;
   });
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -89,7 +89,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
           return prevVotes ? prevVotes + 1 : 0;
         });
       }
-      toast(eventData?.message || null);
+      toast(eventData?.message || null, { position: "bottom-right" });
     });
     return () => {
       pusher.unsubscribe("poll");

@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 export default function OpenProject() {
   const { id } = useParams();
+  console.log(id);
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [message, setMessage] = useState("");
   const [dataProject, setDataProject] = useState([]);
@@ -45,6 +46,7 @@ export default function OpenProject() {
   };
 
   const detDataProductById = () => {
+    // @ts-ignore
     dispatch(displayProductByProjectName(id));
   };
   useEffect(() => detDataProductById(), []);

@@ -20,6 +20,7 @@ import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
 import { StyledMenu } from "Component/Config/Content";
 import { OpenInNew, Settings } from "@mui/icons-material";
+import Swal from "sweetalert2";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state.Project);
   const [info, setInfo] = useState(
@@ -37,7 +38,6 @@ const Projects = () => {
   }, [dispatch]);
   const theme = useTheme();
   const { t } = useTranslation();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -46,7 +46,6 @@ const Projects = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const columns = [
     { field: "_id", headerName: "_id" },
     { field: "id", headerName: "ID", width: 33 },
@@ -54,7 +53,7 @@ const Projects = () => {
       field: "Code",
       headerName: "Code",
     },
-    { field: "DepartmentID", headerName: " Department Name", flex: 2 },
+    { field: "DepartmentID", headerName: " Department Name", flex: 1.5 },
     {
       field: "nameProject",
       headerName: "Project Name",
@@ -68,6 +67,7 @@ const Projects = () => {
     {
       field: "beneficiary",
       headerName: "Beneficiary",
+      flex: 2,
     },
     {
       field: "MethodOption",
@@ -118,18 +118,22 @@ const Projects = () => {
               open={open}
               onClose={handleClose}
             >
-              {info.user_type === "H.O.D" || info.user_type === "management" ? (
-                <>
-                  <ModuleFormEditProject ProjectData={params?.row} />
-                  <MenuItem
-                    onClick={() => Delete(params?.row?._id)}
-                    disableRipple
-                  >
-                    <DeleteIcon />
-                    Delete
-                  </MenuItem>
-                </>
-              ) : null}
+              {info.user_type === "H.O.D" || info.user_type === "management"
+                ? [
+                    <ModuleFormEditProject
+                      key="edit"
+                      ProjectData={params?.row}
+                    />,
+                    <MenuItem
+                      key="delete"
+                      onClick={() => Delete(params?.row?._id)}
+                      disableRipple
+                    >
+                      <DeleteIcon />
+                      Delete
+                    </MenuItem>,
+                  ]
+                : null}
               <Divider sx={{ my: 0.5 }} />
               <MenuItem
                 onClick={() => HandelOpen(params?.row?._id)}
@@ -146,23 +150,62 @@ const Projects = () => {
   ];
 
   async function Delete(_id) {
-    // @ts-ignore
-    axios({
-      method: "DELETE",
-      url: `${BackendUrl}/api/deleteProject/${_id}`,
-      headers: {
-        token: token,
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success ms-3",
+        cancelButton: "btn btn-danger",
       },
-    })
-      .then((response) => {
-        // @ts-ignore
-       setDelete(toast.success(response?.data?.message));
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
       })
-      .catch((error) => {
-        console.log(error);
+      .then((result) => {
+        if (result.isConfirmed) {
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Your imaginary file is safe :)",
+            icon: "error",
+          });
+        }
       });
+    // @ts-ignore
+    // axios({
+    //   method: "DELETE",
+    //   url: `${BackendUrl}/api/deleteProject/${_id}`,
+    //   headers: {
+    //     token: token,
+    //   },
+    // })
+    //   .then((response) => {
+    //     // @ts-ignore
+    //     setDelete(toast.success(response?.data?.message));
+    //     setAnchorEl(null);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
   const HandelOpen = (id) => {
+    console.log(" hellow project ", id);
+    // console.log(setProject);
+
     navigate(`/OpenProject/${id}`);
   };
   const fetchDataProject = () => {

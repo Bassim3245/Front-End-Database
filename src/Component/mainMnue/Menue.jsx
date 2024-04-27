@@ -93,6 +93,21 @@ function Product() {
               Automate Operations
             </Button>
           </div>
+          <div className="box ">
+            <img
+              src="/image/icons8-assistance-64.png"
+              alt="Management"
+              className="ImageLogoButton"
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              className="mt-3"
+              onClick={handleManger}
+            >
+              Assistance
+            </Button>
+          </div>
         </div>
       </div>
     </>

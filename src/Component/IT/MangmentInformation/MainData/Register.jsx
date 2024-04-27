@@ -29,9 +29,15 @@ function Register(props) {
     formData.append("user_type", user_type);
     formData.append("DepartmentID", DepartmentID);
     formData.append("image", image);
-
     // @ts-ignore
     dispatch(registerUser(formData));
+    setName("");
+    setPassword("");
+    setPhone("");
+    setImage("");
+    setUserType("");
+    setUsername("");
+    setDepartmentID("");
     if (props?.setDataEmploy) props.setDataEmploy(formData);
   };
   useEffect(() => {
@@ -44,9 +50,13 @@ function Register(props) {
       dispatch(clearState());
     }
   }, [isSuccess, isError, message, dispatch]);
-  const theme=useTheme()
+  const theme = useTheme();
   return (
-    <div className={`social-boxes p-20 ${theme.palette.mode==="dark"?"bg-dark":"bg-eee"} rad-10`}>
+    <div
+      className={`social-boxes p-20 ${
+        theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
+      } rad-10`}
+    >
       <ToastContainer />
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-lg-12 col-xl-11">
@@ -66,7 +76,9 @@ function Register(props) {
                         Your Name:
                       </label>
                       <input
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         type="text"
                         name="name"
                         id="name"
@@ -83,7 +95,9 @@ function Register(props) {
                         Username:
                       </label>
                       <input
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         type="text"
                         name="username"
                         id="username"
@@ -100,7 +114,9 @@ function Register(props) {
                         Password:
                       </label>
                       <input
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         type="password"
                         name="password"
                         id="password"
@@ -117,7 +133,9 @@ function Register(props) {
                         Phone:
                       </label>
                       <input
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         type="text"
                         name="Phone"
                         id="Phone"
@@ -134,7 +152,9 @@ function Register(props) {
                         Type User:
                       </label>
                       <select
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         className="form-select"
                         name="user_type"
                         value={user_type}
@@ -146,7 +166,6 @@ function Register(props) {
                         <option value="Employ">Employ</option>
                         <option value="H.O.D">Head of Department</option>
                         <option value="HR">HR</option>
-
                       </select>
                     </div>
                   </div>
@@ -156,7 +175,9 @@ function Register(props) {
                         Department:
                       </label>
                       <select
-                       data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
                         className="form-select"
                         name="DepartmentID"
                         value={DepartmentID}
@@ -174,7 +195,6 @@ function Register(props) {
                   </div>
                   <div>
                     <Button
-                    
                       component="label"
                       role={undefined}
                       variant="contained"
