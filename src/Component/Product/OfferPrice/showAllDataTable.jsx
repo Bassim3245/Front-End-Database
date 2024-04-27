@@ -134,18 +134,18 @@ function calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
   PriceConvertToIQD
 ) {
   const priceToConvert = 1600;
-  const percentage =Math.ceil(item.percent / 100);
+  const percentage = item.percent / 100;
   const priceAfterPercent = item?.Price * (1 + percentage);
   if (item.PriceType === "USD") {
     const priceTotalEachProductAfterPercentage =
       (priceAfterPercent * item?.PriceConvert * item?.Quantity) /
       (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   } else {
     const priceTotalEachProductAfterPercentage =
       (priceAfterPercent * item?.Quantity) /
       (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
   }
 }
 // end Calculater 
