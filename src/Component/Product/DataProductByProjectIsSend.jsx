@@ -64,6 +64,7 @@ const DataProductByProjectIsSend = (props) => {
                     <th>العدد</th>
                       <th>الوحدة</th>
                       <th>السعر</th>
+                      <th>معامل التحويل</th>
                       <th>سعر الصرف</th>
                     </tr>
                   </thead>
@@ -79,13 +80,8 @@ const DataProductByProjectIsSend = (props) => {
                           <td >{item?.Quantity}</td>
                           <td >{item?.UnitId?.Unit}</td>
                           <td >{item?.Price}</td>
+                          <td >{item?.PriceConvert||"0"}</td>
                           <td >{item?.PriceType}</td>
-
-                         
-                          
-                          
-                        
-                          
                         </tr>
                       ))}
                   </tbody>
