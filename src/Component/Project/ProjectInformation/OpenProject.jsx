@@ -179,6 +179,7 @@ export default function OpenProject() {
                     <th>{t("ProductList.table.PriceType")}</th>
                     <th>{t("ProductList.table.Quantity")}</th>
                     <th>{t("ProductList.table.AdditionPercentage")}</th>
+                    <th>{t("ProductList.table.priceConvert")}</th>
                     <th>{t("ProductList.table.Notes")}</th>
                     <th>{t("ProductList.table.Specifications")}</th>
                     <th>{t("ProductList.table.Unit")}</th>
@@ -196,10 +197,10 @@ export default function OpenProject() {
                         <td>{item?.PriceType}</td>
                         <td>{item?.Quantity}</td>
                         <td>{item?.percent}</td>
+                        <td>{item?.PriceConvert}</td>
 
                         <td>{item?.comments}</td>
                         <td>{item?.description}</td>
-
                         <td>{item?.UnitId?.Unit}</td>
 
                         <td className=" d-flex gap-2 f-wrap">

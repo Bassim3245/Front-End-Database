@@ -5,7 +5,6 @@ import Header from "../../../../../Layout/Header"; // Corrected import path
 import { BackendUrl } from "../../../../../../redux/api/axios";
 import axios from "axios";
 import { toast } from "react-toastify";
-
 const Permission = () => {
   const columns = [
     { field: "id", headerName: "ID", flex: 1 }, // Increased width of ID column to 150

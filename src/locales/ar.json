@@ -82,6 +82,7 @@
       "Price": "السعر",
       "Quantity":"الكمية",
       "PriceType":" سعر الصرف",
+      "priceConvert":"معامل التحويل  ",
       "Specifications":"المواصفات",
       "Notes":"الملاحظات",
       "ProductName":"اسم النتج ",

@@ -14,11 +14,13 @@ import {
   ColorLink,
 } from "../../../../Config/Content";
 import { useNavigate } from "react-router";
+import ModuleEdit from "./RoleAndPermission/EditUser";
 function InformationUsers({ dataEmploy, theme }) {
   // @ts-ignore
 
   const { data } = useSelector((state) => state.user);
   const [message, setMessage] = useState("");
+  const [UpdateDataUser,setDataUser]=(false)
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   const handleDelete = async (Id) => {
@@ -41,7 +43,7 @@ function InformationUsers({ dataEmploy, theme }) {
   const handleEdit = () => {};
   useEffect(() => {
     FetchDataUser();
-  }, [dataEmploy, toast, setMessage, message]);
+  }, [dataEmploy, toast, setMessage, message,UpdateDataUser]);
   const handelAccess = (id) => {
     Navigate(`PermissionUsers/${id}`);
   };
@@ -93,26 +95,26 @@ function InformationUsers({ dataEmploy, theme }) {
                         {item?.user_type}
                       </ColorLink>
                     ) : (
-                      <Button variant="contained" color="primary" onClick={() => handelAccess(item?._id)}>{item?.user_type}</Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handelAccess(item?._id)}
+                      >
+                        {item?.user_type}
+                      </Button>
                     )}
                   </td>
-
                   <td>
-                    <Button
-                      className="btn"
-                      // @ts-ignore
-                      onClick={() => handleEdit(item?._id)}
-                    >
-                      {" "}
-                      <Edit />{" "}
-                    </Button>
-                    <Button
-                      className="btn "
-                      onClick={() => handleDelete(item?._id)}
-                    >
-                      {" "}
-                      <Delete />{" "}
-                    </Button>
+                    <div className="d-flex">
+                      <ModuleEdit id={item?._id} setDataUser={setDataUser} />
+                      <Button
+                        className="btn "
+                        onClick={() => handleDelete(item?._id)}
+                      >
+                        {" "}
+                        <Delete />{" "}
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))

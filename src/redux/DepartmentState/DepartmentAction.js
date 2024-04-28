@@ -5,7 +5,6 @@ export const getDataDepartmentID = createAsyncThunk(
   "getDataDepartmentID/",
   async ({DepartmentID}, thunkAPI) => {
     try {
-      console.log("hello", DepartmentID);
       const response = await axios.get(
         `${BackendUrl}/api/getDataById/${DepartmentID}`
       );
@@ -21,11 +20,10 @@ export const getDataDepartmentID = createAsyncThunk(
 );
 export const getallDepartment = createAsyncThunk(
   "getallDataDepartment/",
-  async (DepartmentID, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      console.log("hello", DepartmentID);
       const response = await axios.get(
-        `${BackendUrl}/api/getDataById/${DepartmentID}`
+        `${BackendUrl}/api/getData/Department`
       );
       return response.data;
     } catch (error) {

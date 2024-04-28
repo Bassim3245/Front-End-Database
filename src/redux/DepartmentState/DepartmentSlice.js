@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDataDepartmentID } from "./DepartmentAction";
+import { getDataDepartmentID ,getallDepartment} from "./DepartmentAction";
 const DepartmentSlice = createSlice({
   name: "Department",
   initialState: {
@@ -8,7 +8,6 @@ const DepartmentSlice = createSlice({
     isSuccess: false,
     isLoading: null,
     message: "",
-    
   },
   reducers: {
   },
@@ -22,6 +21,17 @@ const DepartmentSlice = createSlice({
         state.department=payload
       })
       .addCase(getDataDepartmentID.rejected, (state, { payload }) => {
+        state.message = "error";
+      })
+      builder
+      .addCase(getallDepartment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getallDepartment.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.department=payload
+      })
+      .addCase(getallDepartment.rejected, (state, { payload }) => {
         state.message = "error";
       })
   }

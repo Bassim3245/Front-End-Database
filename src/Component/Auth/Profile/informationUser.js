@@ -61,7 +61,7 @@ export default function PersonalProfile(props) {
       formData.append("Phone", Phone || "");
       const response = await axios({
         method: "put",
-        url: `${BackendUrl}/api/updateUserById`,
+        url: `${BackendUrl}/api/updateUserById/${info?._id}`,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

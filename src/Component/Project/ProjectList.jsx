@@ -148,7 +148,6 @@ const Projects = () => {
       },
     },
   ];
-
   async function Delete(_id) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -157,8 +156,9 @@ const Projects = () => {
       },
       buttonsStyling: false,
     });
-    swalWithBootstrapButtons
-      .fire({
+  
+    try {
+      const result = await swalWithBootstrapButtons.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
         icon: "warning",
@@ -166,46 +166,41 @@ const Projects = () => {
         confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          swalWithBootstrapButtons.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
-          });
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire({
-            title: "Cancelled",
-            text: "Your imaginary file is safe :)",
-            icon: "error",
-          });
-        }
       });
-    // @ts-ignore
-    // axios({
-    //   method: "DELETE",
-    //   url: `${BackendUrl}/api/deleteProject/${_id}`,
-    //   headers: {
-    //     token: token,
-    //   },
-    // })
-    //   .then((response) => {
-    //     // @ts-ignore
-    //     setDelete(toast.success(response?.data?.message));
-    //     setAnchorEl(null);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+  
+      if (result.isConfirmed) {
+        // @ts-ignore
+        const response = await axios({
+          method: "DELETE",
+          url: `${BackendUrl}/api/deleteProject/${_id}`,
+          headers: {
+            token: token,
+          },
+        });
+  
+        // Assuming you're using toastify for toasts
+        setDelete(toast.success(response?.data?.message));
+        
+        // Close any open menu or popover
+        setAnchorEl(null);
+  
+        swalWithBootstrapButtons.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your imaginary file is safe :)",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   const HandelOpen = (id) => {
-    console.log(" hellow project ", id);
-    // console.log(setProject);
-
     navigate(`/OpenProject/${id}`);
   };
   const fetchDataProject = () => {

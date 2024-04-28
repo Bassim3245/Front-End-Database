@@ -81,6 +81,7 @@
       "Price": "Price",
       "Quantity":"Quantity",
       "PriceType":"Price Type",
+      "priceConvert":"Conversion factor",
       "Specifications":"Specifications",
       "Notes":"Notes",
       "ProductName":"Product Name",

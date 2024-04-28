@@ -117,3 +117,21 @@ export const fetchDataAllDepartment= async () => {
     console.log(error);
   }
 };
+export const getDataUserById= async (id,token) => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BackendUrl}/api/getDataUserById/${id}`,
+        headers: {
+          Accept: "application/json",
+          token:token
+        },
+        
+      });
+      if (response&&response?.data) {
+        // console.log(response.data?.response);
+        return response?.data?.response;
+      }
+  } catch (error) {
+return error.response.data.message  }
+};
