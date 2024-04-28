@@ -290,6 +290,7 @@ export default function OfferPrice(props) {
                 <td className="arabicText">{item?.Quantity}</td>
                 <td className="arabicText">
                   {item?.nameProduct}
+                  {item?.comments||null}
                   <br />
                   <span>{item.license}</span>
                 </td>

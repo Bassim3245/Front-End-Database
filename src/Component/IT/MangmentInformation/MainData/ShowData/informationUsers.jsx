@@ -15,26 +15,61 @@ import {
 } from "../../../../Config/Content";
 import { useNavigate } from "react-router";
 import ModuleEdit from "./RoleAndPermission/EditUser";
+import Swal from "sweetalert2";
 function InformationUsers({ dataEmploy, theme }) {
   // @ts-ignore
 
   const { data } = useSelector((state) => state.user);
   const [message, setMessage] = useState("");
-  const [UpdateDataUser,setDataUser]=(false)
+  // @ts-ignore
+  const [UpdateDataUser,setDataUser]=useState(false);
+  // @ts-ignore
   const dispatch = useDispatch();
   const Navigate = useNavigate();
+
   const handleDelete = async (Id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success ms-3",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: false,
+    });
     try {
-      const response = await axios.delete(
-        `${BackendUrl}/api/deleteUserById/${Id}`
-      );
-      if (response) {
-        console.log(response?.data?.message);
+      const result = await swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      });
+  
+      if (result.isConfirmed) {
         // @ts-ignore
-        toast.delete(setMessage(response?.data?.message));
+        const response = await axios({
+          method: "DELETE",
+          url: `${BackendUrl}/api/deleteUserById/${Id}`,
+        });
+        setMessage(response?.data?.message)
+      toast.success(message);
+        swalWithBootstrapButtons.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your imaginary file is safe :)",
+          icon: "error",
+        });
       }
-    } catch (error) {}
-  };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // @ts-ignore
   const FetchDataUser = () => {
     // @ts-ignore
