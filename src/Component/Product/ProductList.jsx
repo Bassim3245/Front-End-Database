@@ -35,7 +35,7 @@ function Product() {
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      refetchInterval: 5000,
+      // refetchInterval: 5000,
     }
   );
   

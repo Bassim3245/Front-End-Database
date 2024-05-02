@@ -135,3 +135,26 @@ export const getDataUserById= async (id,token) => {
   } catch (error) {
 return error.response.data.message  }
 };
+export const getDataProject=async(info,token)=>{
+  try {
+    const response = await axios({
+      method: "get",
+      url:
+        info?.user_type === "H.O.D" || info?.user_type === "management"
+          ? `${BackendUrl}/api/getProjects`
+          : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        token: token,
+      },
+    });
+    if (response || response?.data) {
+      return response.data;
+    }
+  } catch (error) {
+    if (error || error.response) {
+      return error.response.data.message;
+    }
+  }
+}

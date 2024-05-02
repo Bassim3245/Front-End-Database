@@ -21,6 +21,7 @@ import { BackendUrl } from "../../redux/api/axios";
 export default function DepartmentInHr(props) {
   const [open, setOpen] = React.useState(false);
   const [departmentsData, setDepartmentsData] = React.useState([]);
+  const [checkData, setCheckData] = React.useState([]);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
@@ -38,6 +39,20 @@ export default function DepartmentInHr(props) {
 
   const [checkedItems, setCheckedItems] = React.useState({});
   const token = localStorage.getItem("token");
+  const getDataCheckByIdBooKId = async () => {
+    try {
+      const response = await axios.get(
+        `${BackendUrl}/api/getDataAllById/${props?.UploadId}`
+      );
+      setCheckData(response.data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  React.useEffect(() => {
+  
+    getDataCheckByIdBooKId();
+  }, [open]);
 
   const handleCheckboxChange = (itemId) => (event) => {
     setCheckedItems((prevCheckedItems) => ({
@@ -56,7 +71,8 @@ export default function DepartmentInHr(props) {
   };
   const handleClose = async () => {
     try {
-      console.log(checkedItems);
+      // console.log(checkedItems);
+      console.log(props?.UploadId);
       const response = await axios.put(
         `${BackendUrl}/api/sendProjectToDepartment/${props?.UploadId}`,
         departmentsData.filter((item) => checkedItems[item._id]),
@@ -98,8 +114,15 @@ export default function DepartmentInHr(props) {
                   key={item._id}
                   control={
                     <Checkbox
-                      // disabled={item.sendProject ? true : false}
-                      checked={checkedItems[item._id] || item.sendProject ? true : false}
+                      disabled={item.checkData ? true : false}
+                      checked={
+                        checkedItems[item._id] ||
+                        item.sendProject ||
+                        (item.checkData &&
+                          item.checkData?.departmentId?.includes(item.departmentId))
+                          ? true
+                          : false
+                      }
                       onChange={handleCheckboxChange(item._id)}
                     />
                   }

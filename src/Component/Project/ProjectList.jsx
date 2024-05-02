@@ -21,8 +21,11 @@ import { useTranslation } from "react-i18next";
 import { StyledMenu } from "Component/Config/Content";
 import { OpenInNew, Settings } from "@mui/icons-material";
 import Swal from "sweetalert2";
+import { useQuery } from "react-query";
+import { getDataByProjectID, getDataProject } from "Component/Config/fetchData";
 const Projects = () => {
-  const { setProject, loading } = useSelector((state) => state.Project);
+  const { setProject, loading } = useSelector((state) => state?.Project);
+
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -46,6 +49,19 @@ const Projects = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const fetchDataProject = () => {
+    // @ts-ignore
+    dispatch(getProjectByDepartment({ info, token }));
+  };
+  // const { isLoading, data, isError, error, isFetching } = useQuery(
+  //   "dataSendByUser",
+  //   () => getDataProject(info,token),
+  //   {
+  //     refetchIntervalInBackground: true,
+  //     refetchOnWindowFocus: true,
+  //     refetchInterval: 5000,
+  //   }
+  // );
   const columns = [
     { field: "_id", headerName: "_id" },
     { field: "id", headerName: "ID", width: 33 },
@@ -136,7 +152,7 @@ const Projects = () => {
                 : null}
               <Divider sx={{ my: 0.5 }} />
               <MenuItem
-                onClick={() => HandelOpen(params?.row?._id)}
+                onClick={() => HandelOpen(params.row._id)}
                 disableRipple
               >
                 <OpenInNew />
@@ -156,7 +172,7 @@ const Projects = () => {
       },
       buttonsStyling: false,
     });
-  
+
     try {
       const result = await swalWithBootstrapButtons.fire({
         title: "Are you sure?",
@@ -167,7 +183,7 @@ const Projects = () => {
         cancelButtonText: "No, cancel!",
         reverseButtons: true,
       });
-  
+
       if (result.isConfirmed) {
         // @ts-ignore
         const response = await axios({
@@ -177,13 +193,9 @@ const Projects = () => {
             token: token,
           },
         });
-  
-        // Assuming you're using toastify for toasts
+
         setDelete(toast.success(response?.data?.message));
-        
-        // Close any open menu or popover
         setAnchorEl(null);
-  
         swalWithBootstrapButtons.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
@@ -203,12 +215,8 @@ const Projects = () => {
   const HandelOpen = (id) => {
     navigate(`/OpenProject/${id}`);
   };
-  const fetchDataProject = () => {
-    // @ts-ignore
-    dispatch(getProjectByDepartment({ info, token }));
-  };
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
-  const rows = setProject.map((item, index) => ({
+  const rows = setProject?.map((item, index) => ({
     id: index + 1,
     ...item,
     DepartmentID: item.DepartmentID?.departmentName,
@@ -228,7 +236,9 @@ const Projects = () => {
           />
           <ToastContainer />
           <Box className={"mb-2"}>
-            <MainForm fetchDataProject={fetchDataProject} />
+            {info?.user_type === "H.O.D" || info?.user_type === "management" ? (
+              <MainForm fetchDataProject={fetchDataProject} />
+            ) : null}
           </Box>
           <Box
             sx={{

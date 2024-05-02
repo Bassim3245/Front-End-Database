@@ -1,9 +1,24 @@
-import { useTheme } from "@mui/material";
+import { Button, Divider, MenuItem, useTheme } from "@mui/material";
 import { getDataByProjectID } from "../../Config/fetchData";
 import * as React from "react";
 
 import { Table } from "react-bootstrap";
 import { useQuery } from "react-query";
+import axios from "axios";
+import { BackendUrl } from "../../../redux/api/axios";
+import { StyledMenu } from "Component/Config/Content";
+import {
+  Archive,
+  EditNotifications,
+  GetApp,
+  GetAppOutlined,
+  PictureAsPdf,
+  TextSnippet,
+} from "@mui/icons-material";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // start function total sum
 function calculateTotalPriceOFproject(Products) {
   const selectPriceType = "Normal";
@@ -26,26 +41,32 @@ function calculateTotalPriceOFproject(Products) {
     return formattedTotalSum;
   }
 }
+// culcolat loop data
 function SumTotalPriceAfterAddPercentage(Products) {
   const selectPriceType = "Normal";
   if (selectPriceType === "Normal") {
     const totalSum = Products.reduce((accumulator, currentItem) => {
-      let PriceInUSD = 0; // Initialize to 0
-      let PriceInIQD = 0; // Initialize to 0
+      // Convert to number and provide fallback to 0 if NaN
+      let PriceInUSD =
+        Number(currentItem?.Price) * Number(currentItem?.PriceConvert) || 0;
+      let PriceInIQD = Number(currentItem?.Price) || 0;
+      let Quantity = Number(currentItem?.Quantity) || 0;
+      let percentage = Number(currentItem?.percent) / 100 || 0;
+
       if (currentItem.PriceType === "IQD") {
-        PriceInIQD = currentItem?.Price;
+        PriceInUSD = 0; // Reset to 0 if the price type is not USD
       }
       if (currentItem.PriceType === "USD") {
-        PriceInUSD = currentItem?.Price * currentItem?.PriceConvert || 0; // Convert USD price to IQR
+        PriceInIQD = 0; // Reset to 0 if the price type is not IQD
       }
-      const percentage = currentItem?.percent / 100;
 
       const PriceAfterConvert = PriceInUSD + PriceInIQD;
       const priceAfterPercent = PriceAfterConvert * (1 + percentage);
       const PriceInIQR = priceAfterPercent;
 
-      return accumulator + PriceInIQR * currentItem.Quantity;
+      return accumulator + PriceInIQR * Quantity;
     }, 0);
+
     const formattedTotalSum = new Intl.NumberFormat().format(totalSum);
     return formattedTotalSum;
   }
@@ -76,7 +97,9 @@ function SumTotalPriceAfterAddPercentageAnddConvertToUSD(
         (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
       );
     }, 0);
-    const formattedTotalSum = new Intl.NumberFormat().format(Math.ceil(totalSum));
+    const formattedTotalSum = new Intl.NumberFormat().format(
+      Math.ceil(totalSum)
+    );
     return formattedTotalSum;
   }
 }
@@ -84,86 +107,134 @@ function SumTotalPriceAfterAddPercentageAnddConvertToUSD(
 // end function to sum total price
 // start Function Each Item
 function calculatePriceAfterPercentageWithQuantity(item) {
-  const percentage = item.percent / 100;
-  const priceAfterPercent = item?.Price * (1 + percentage);
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+
+  const priceAfterPercent = price * (1 + percentage);
 
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage =
-      priceAfterPercent * item.PriceConvert * item?.Quantity;
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * priceConvert * quantity
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage =
-      priceAfterPercent * item?.Quantity;
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * quantity
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
 
 function calculatePriceAfterPercentageWithoutQuantity(item) {
-  const percentage = item.percent / 100;
-  const priceAfterPercent = item?.Price * (1 + percentage);
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+
+  const priceAfterPercent = price * (1 + percentage);
 
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage =
-      priceAfterPercent * item.PriceConvert;
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * priceConvert
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage = priceAfterPercent;
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(priceAfterPercent);
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
+
 function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
   item,
   PriceConvertToIQD
 ) {
   const priceToConvert = 1600;
-  const percentage = item.percent / 100;
-  const priceAfterPercent = item?.Price * (1 + percentage);
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const priceAfterPercent = price * (1 + percentage);
+
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage =
-      (priceAfterPercent * item.PriceConvert) /
-      (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * priceConvert) / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage =
-      priceAfterPercent / (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
-function calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
+
+function calculatePriceAfterPercentageWithQuantityAndConvertToUsd(
   item,
   PriceConvertToIQD
 ) {
   const priceToConvert = 1600;
-  const percentage = item.percent / 100;
-  const priceAfterPercent = item?.Price * (1 + percentage);
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+  const priceAfterPercent = price * (1 + percentage);
+
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage =
-      (priceAfterPercent * item?.PriceConvert * item?.Quantity) /
-      (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * priceConvert * quantity) /
+        (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage =
-      (priceAfterPercent * item?.Quantity) /
-      (PriceConvertToIQD || priceToConvert);
-    return new Intl.NumberFormat().format(Math.ceil(priceTotalEachProductAfterPercentage));
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * quantity) / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
-// end Calculater 
+
+function calculatePrice(item) {
+  if (!item) return 0;
+  // Convert to number in case they are strings
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+
+  if (isNaN(price) || isNaN(priceConvert)) return 0; // Check if conversion is successful
+
+  return item.PriceType === "USD"
+    ? new Intl.NumberFormat().format(price * priceConvert)
+    : new Intl.NumberFormat().format(price);
+}
+
+const calculateTotalPrice = (item) => {
+  if (!item) return 0;
+  // Convert to number in case they are strings
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+
+  if (isNaN(price) || isNaN(priceConvert) || isNaN(quantity)) return 0; // Check if conversion is successful
+
+  return item.PriceType === "USD"
+    ? new Intl.NumberFormat().format(price * priceConvert * quantity)
+    : new Intl.NumberFormat().format(price * quantity);
+};
+// end Calculater
 export default function OfferPrice(props) {
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "DataProjectById",
     () => getDataByProjectID(props?.projectId),
     {
-      refetchIntervalInBackground: true,
-      refetchOnWindowFocus: true,
-      refetchInterval: 5000,
+      // refetchIntervalInBackground: true,
+      // refetchOnWindowFocus: true,
+      // refetchInterval: 5000,
     }
   );
   const Products = props?.products;
-  const formatNumberPrice = (data) => {
-    const formattedTotalSum = new Intl.NumberFormat().format(data);
-    return formattedTotalSum;
-  };
+  // const formatNumberPrice = (data) => {
+  //   const formattedTotalSum = new Intl.NumberFormat().format(data);
+  //   return formattedTotalSum;
+  // };
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("CustomDataForPriceOffer")) || {}
   );
@@ -171,7 +242,101 @@ export default function OfferPrice(props) {
   const [textDark, setDark] = React.useState(
     theme.palette.mode === "dark" ? theme.palette.text.primary : ""
   );
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const PriceConvertToIQD = info?.PriceConvertToIQD;
+  const [dataSet, setDataSet] = React.useState({});
+  const collectData = (Products) => {
+    if (!Products) return;
+    const dataProject = data||{};
+    const priceProduct = Products.map((product) => calculatePrice(product));
+    const priceProductQuantity = Products.map((product) =>
+      calculateTotalPrice(product)
+    );
+    const calculateTotalPriceOF = calculateTotalPriceOFproject(Products);
+    const SumTotalPriceAfterAdd = SumTotalPriceAfterAddPercentage(Products);
+    const SumTotalPriceAfterAddPercentageAnddConvert =
+      SumTotalPriceAfterAddPercentageAnddConvertToUSD(Products);
+    const calculatePriceAfterPercentageWith = Products.map((product) =>
+      calculatePriceAfterPercentageWithQuantity(product)
+    );
+    const calculateAfterPercentageWithoutQuantity = Products.map((product) =>
+      calculatePriceAfterPercentageWithoutQuantity(product)
+    );
+    const calculateAfterPercentageWithQuantityAndConvertToUsd = Products.map(
+      (product) =>
+        calculatePriceAfterPercentageWithQuantityAndConvertToUsd(product)
+    );
+    const calculateAfterPercentageWithoutQuantityAndConvertToUsd = Products.map(
+      (product) =>
+        calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(product)
+    );
+    const newData = {
+      Products,
+      dataProject,
+      priceProduct,
+      priceProductQuantity,
+      calculateTotalPriceOF,
+      SumTotalPriceAfterAdd,
+      SumTotalPriceAfterAddPercentageAnddConvert,
+      calculatePriceAfterPercentageWith,
+      calculateAfterPercentageWithoutQuantity,
+      calculateAfterPercentageWithQuantityAndConvertToUsd,
+      calculateAfterPercentageWithoutQuantityAndConvertToUsd,
+    };
+
+    setDataSet(newData);
+  };
+
+  React.useEffect(() => {
+    collectData(Products);
+  }, [Products]);
+
+  React.useEffect(() => {
+    console.log("Data Set Updated:", dataSet);
+  }, [dataSet]);
+  const [loading, setLoading] = React.useState(false);
+  const handelDataPdf = async (label) => {
+    try {
+      const formData = new FormData();
+      // @ts-ignore
+      formData.append("dataSet", dataSet);
+      formData.append("label", label);
+      const response = await axios.post(
+        `${BackendUrl}/api/setDataAsPdf`,
+        {dataSet,label},
+        {
+          headers: {
+            "Content-Type": "application/json", // Corrected header name
+          },
+          responseType: 'blob' ,
+        }
+      );
+      if (response) {
+        console.log(response);
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.nameProject}.pdf`; // Change filename accordingly
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setLoading(false);
+        // setAnchorEl(null);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   return (
     <div>
       <div className=" w-100 mb-3 mt-3">
@@ -191,6 +356,55 @@ export default function OfferPrice(props) {
           </p>
         </div>
       </div>
+      <div className="mb-3 d-flex justify-contain-center w-100">
+        <Button
+          id="demo-customized-button"
+          aria-controls={open ? "demo-customized-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          variant="contained"
+          disableElevation
+          onClick={handleClick}
+          endIcon={<GetApp />}
+        >
+          Export F
+        </Button>
+
+        <StyledMenu
+          id="demo-customized-menu"
+          MenuListProps={{
+            "aria-labelledby": "demo-customized-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem
+            onClick={
+              props?.label === "OfferPriceIQR"
+                ? () => handelDataPdf("OfferPriceIQR")
+                : props?.label === "OfferPriceIQRAfterPercent"
+                ? () => handelDataPdf("OfferPriceIQRAfterPercent")
+                : props?.label === "OfferPriceUSD"
+                ? () => handelDataPdf("OfferPriceUSD")
+                : null
+            }
+            disableRipple
+          >
+            <PictureAsPdf />
+            Download as Pdf
+          </MenuItem>
+          <MenuItem onClick={handleClose} disableRipple>
+            <TextSnippet />
+            Download as Excel
+          </MenuItem>
+          <MenuItem onClick={handleClose} disableRipple>
+            <ArchiveIcon />
+            Download as Word
+          </MenuItem>
+        </StyledMenu>
+      </div>
+      {loading ? 'Downloading...' : 'Download PDF'}
       <Table
         striped
         bordered
@@ -244,19 +458,8 @@ export default function OfferPrice(props) {
               <tr key={item._id}>
                 {props?.label === "OfferPriceIQR" ? (
                   <>
-                    <td className="arabicText">
-                      {" "}
-                      {item?.PriceType === "USD"
-                        ? formatNumberPrice(
-                            item?.Price * item?.PriceConvert * item?.Quantity
-                          )
-                        : formatNumberPrice(item?.Price * item?.Quantity)}
-                    </td>
-                    <td className="arabicText">
-                      {item?.PriceType === "USD"
-                        ? formatNumberPrice(item?.Price * item?.PriceConvert)
-                        : formatNumberPrice(item?.Price)}
-                    </td>
+                    <td className="arabicText"> {calculateTotalPrice(item)}</td>
+                    <td className="arabicText">{calculatePrice(item)}</td>
                   </>
                 ) : props?.label === "OfferPriceIQRAfterPercent" ? (
                   <>
@@ -272,7 +475,7 @@ export default function OfferPrice(props) {
                   <>
                     <td className="arabicText">
                       {" "}
-                      {calculatePriceAfterPercentageWittQuantityAndConvertToUsd(
+                      {calculatePriceAfterPercentageWithQuantityAndConvertToUsd(
                         item,
                         PriceConvertToIQD
                       )}
@@ -290,9 +493,14 @@ export default function OfferPrice(props) {
                 <td className="arabicText">{item?.Quantity}</td>
                 <td className="arabicText">
                   {item?.nameProduct}
-                  {item?.comments||null}
+
                   <br />
-                  <span>{item.license}</span>
+                  <p className="text-secondary m-1">
+                    {item?.comments || null}
+                    <span style={{ color: "black" }} className="me-2">
+                      ({item.license})
+                    </span>
+                  </p>
                 </td>
                 <td className="arabicText">{index + 1}</td>
               </tr>

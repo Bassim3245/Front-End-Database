@@ -1,6 +1,6 @@
 {
   "dashboard": {
-    "title": "لوحة القيادة",
+    "title": "الواجهة الرئيسية",
     "subTitle": "مرحبا في لوحة القيادة",
     "report": "تنزيل التقارير",
     "emailSent": "رسائل البريد الإلكتروني المرسلة",
@@ -22,17 +22,17 @@
   },
   "ProjectTable": {
     "title": "قائمة المنتجات",
-    "subTitle": " المشاريع المدرجة من خلال موضفين القسم"
+    "subTitle": " المشاريع المدرجة من خلال موظفين القسم"
   },
   "ProjectListReceive": {
     "title": "قائمة المشاريع المستلمة ",
     "table": {
       "DepartmentName": "اسم القسم",
       "ProjectName": "اسم المشروع ",
-      "ProjectNotes": "ملاحظات المشاريع ",
+      "ProjectNotes": "ملاحظات المشروع  ",
       "date": "تاريخ الارسال ",
       "sender": "المرسل  ",
-      "SenderPhone": "موبايل المرسل ",
+      "SenderPhone": "هاتف المرسل ",
       "Action": "اجراء"
     }
   },

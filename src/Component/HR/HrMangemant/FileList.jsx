@@ -81,55 +81,7 @@ function FileList(props) {
           </div>
         </div>
       ))}
-
-      <div className="file bg-white p-10 rad-10">
-        <i className="">
-          <CloudDownload />
-        </i>
-        <div className="icon txt-c">
-          <img
-            src="/image/pdf_136522.png"
-            style={{ width: "80px", maxWidth: "100%" }}
-            className="mt-4 mb-4"
-          />
-        </div>
-        <div className="txt-c mb-10 fs-14">my-file.avi</div>
-        <div className="d-flex justify-content-between">
-          <p className="c-grey fs-13 mt-2">Name Department</p>
-          <span>
-            <DepartmentInHr />
-          </span>
-        </div>
-        <div className="info between-flex mt-10 pt-10 fs-13 c-grey">
-          <span>16/5/2021</span>
-          <span>12.5MB</span>
-        </div>
-      </div>
-      <div className="file bg-white p-10 rad-10">
-        <i className="">
-          <CloudDownload />
-        </i>
-        <div className="icon txt-c">
-          <img
-            src="/image/pdf_136522.png"
-            style={{ width: "80px", maxWidth: "100%" }}
-            className="mt-4 mb-4"
-          />
-        </div>
-        <div className="txt-c mb-10 fs-14">my-file.eps</div>
-        <div className="d-flex justify-content-between">
-          <p className="c-grey fs-13 mt-2">Name Department</p>
-          <span>
-            <DepartmentInHr />
-          </span>
-        </div>
-        <div className="info between-flex mt-10 pt-10 fs-13 c-grey">
-          <span>16/5/2021</span>
-          <span>2.7MB</span>
-        </div>
-      </div>
     </div>
   );
 }
-
 export default FileList;

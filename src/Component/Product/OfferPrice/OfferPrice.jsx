@@ -17,6 +17,8 @@ import { displayProductByProjectName } from "../../../redux/ProductSlice/Product
 import { ButtonSave } from "../../Config/Content.jsx";
 import CustomizedSteppers from "./Stepper.jsx";
 import "jspdf-autotable";
+import axios from "axios";
+import { BackendUrl } from "../../../redux/api/axios.js";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,6 +33,7 @@ function OfferPriceMain(props) {
   // @ts-ignore
   const { products, loading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+  const [dataFile,setDataFiles]=useState(null)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -49,11 +52,32 @@ function OfferPriceMain(props) {
   // @ts-ignore
   const { toPDF, targetRef } = usePDF(options);
 
-  const generatePDF = () => {
-    // @ts-ignore
-    toPDF(targetRef);
-  };
-
+  const generatePDF = async () => {
+    try {
+        const response = await axios.get(`${BackendUrl}/api/getPdfFileOfferPrice/${id}`, {
+            // responseType: 'blob' // Set the response type to 'blob' for binary data
+        });
+        setDataFiles(response.data.response)
+console.log( "hhhhhhhh",response.data);
+//         if (response && response.data) {
+//             const blob = new Blob([response.data], { type: 'application/pdf' });
+//             const url = window.URL.createObjectURL(blob);
+//             const a = document.createElement('a');
+//             a.href = url;
+//             a.download = `${response.data.response.filesName}`; // Set the file name for download
+//             document.body.appendChild(a);
+//             a.click();
+//             window.URL.revokeObjectURL(url);
+//             document.body.removeChild(a);
+//         }
+    } catch (error) {
+        console.log(error);
+    }
+};
+// useEffect(()=>{
+//   console.log(dataFile);
+// },[])
+ // toPDF(targetRef);
   const theme = useTheme();
   return (
 
@@ -80,6 +104,13 @@ function OfferPriceMain(props) {
             <Button autoFocus color="inherit" onClick={()=>generatePDF()}>
               Get Pdf
             </Button>
+            {dataFile && (
+        <a href={`${BackendUrl}/${dataFile?.filesName}`} download="offer.pdf">
+          Click here to download
+        </a>
+      )}
+
+          <a href={`${BackendUrl}/${dataFile?.filesName}`} download >hello  </a>
           </Toolbar>
         </AppBar>
         <div
