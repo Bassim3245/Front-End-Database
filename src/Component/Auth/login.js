@@ -46,7 +46,7 @@ function Login() {
         }, 500);
       } else if (Rol === "HR") {
         setTimeout(() => {
-          Navigateto("/Main/menu");
+          Navigateto("/HR");
         }, 500);
       }
     }
@@ -84,7 +84,7 @@ function Login() {
                             className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-3"
                             style={{ direction: "rtl" }}
                           >
-                            تسجبل الدخول
+                            تسجيل  الدخول
                           </p>
                           <form
                             className="mx-1 mx-md-4"

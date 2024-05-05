@@ -23,6 +23,7 @@ import { OpenInNew, Settings } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useQuery } from "react-query";
 import { getDataByProjectID, getDataProject } from "Component/Config/fetchData";
+import DropDownGrid from "Component/Config/CustomMennu";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
 
@@ -105,7 +106,6 @@ const Projects = () => {
       flex: 1,
       headerName: "Date Close",
     },
-
     {
       field: "Action",
       headerName: "Action",
@@ -113,27 +113,7 @@ const Projects = () => {
       renderCell: (params) => {
         return (
           <div>
-            <Button
-              id="demo-customized-button"
-              aria-label="delete"
-              aria-controls={open ? "demo-customized-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              variant="contained"
-              disableElevation
-              onClick={handleClick}
-            >
-              <Settings />
-            </Button>
-            <StyledMenu
-              id="demo-customized-menu"
-              MenuListProps={{
-                "aria-labelledby": "demo-customized-button",
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
+            <DropDownGrid>
               {info.user_type === "H.O.D" || info.user_type === "management"
                 ? [
                     <ModuleFormEditProject
@@ -158,7 +138,8 @@ const Projects = () => {
                 <OpenInNew />
                 Open Project
               </MenuItem>
-            </StyledMenu>
+            </DropDownGrid>
+           
           </div>
         );
       },
@@ -213,7 +194,8 @@ const Projects = () => {
     }
   }
   const HandelOpen = (id) => {
-    navigate(`/OpenProject/${id}`);
+    alert(id);
+    // navigate(`/OpenProject/${id}`);
   };
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
   const rows = setProject?.map((item, index) => ({
@@ -221,6 +203,7 @@ const Projects = () => {
     ...item,
     DepartmentID: item.DepartmentID?.departmentName,
   }));
+
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       {loading ? (
@@ -255,6 +238,9 @@ const Projects = () => {
               gridTheme={{
                 mainColor: "rgb(55, 81, 126)",
               }}
+              onStateChange={(state) => {
+                // console.log("asdadasdasdasd====>", state);
+              }}
               theme={theme}
               rows={rows}
               // @ts-ignore
@@ -262,7 +248,7 @@ const Projects = () => {
               columnVisibilityModel={{
                 _id: false,
               }}
-              getRowId={(row) => row.id}
+              // getRowId={(row) => row.id}
             />
           </Box>
         </Box>

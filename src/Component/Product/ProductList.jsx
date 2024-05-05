@@ -38,7 +38,6 @@ function Product() {
       // refetchInterval: 5000,
     }
   );
-  
   const { rtl } = useSelector((state) => {
     // @ts-ignore
     return state?.language;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Send } from "@mui/icons-material";
+import { Send, Share } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -13,33 +13,30 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useQuery } from "react-query";
-import { fetchDataAllDepartment } from "Component/Config/fetchData";
 import axios from "axios";
-import { BackendUrl } from "../../redux/api/axios";
-export default function DepartmentInHr(props) {
+import { BackendUrl, useGetDataInfo } from "../../../redux/api/axios";
+import { fetchDataUser } from "../../Config/fetchData";
+import { useQuery } from "react-query";
+export default function SendToUsers(props) {
   const [open, setOpen] = React.useState(false);
   const [departmentsData, setDepartmentsData] = React.useState([]);
   const [checkData, setCheckData] = React.useState([]);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [users, setUsers] = React.useState(() => {
+    return JSON.parse(localStorage.getItem("user")) || {};
+  });
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "fetchDataAllDepartment",
-    fetchDataAllDepartment,
+    () => fetchDataUser(users.DepartmentID),
     {
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     }
   );
-
-  React.useEffect(() => {
-    if (data) setDepartmentsData(data);
-  }, [data]);
-
   const [checkedItems, setCheckedItems] = React.useState({});
   const token = localStorage.getItem("token");
-
   const getDataCheckByIdBooKId = async () => {
     try {
       const response = await axios.get(
@@ -66,11 +63,9 @@ export default function DepartmentInHr(props) {
       )
     );
   };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleSubmit = async () => {
     try {
       const response = await axios.put(
@@ -96,7 +91,7 @@ export default function DepartmentInHr(props) {
     <>
       <React.Fragment>
         <IconButton onClick={handleClickOpen}>
-          <Send />
+          <Share />
         </IconButton>
         <Dialog
           fullScreen={fullScreen}
@@ -109,27 +104,31 @@ export default function DepartmentInHr(props) {
           </DialogTitle>
           <DialogContent>
             <FormGroup>
-              {departmentsData.map((item, index) => (
-                <FormControlLabel
-                  key={item._id}
-                  control={
-                    <Checkbox
-                      // disabled={checkData ? true : false}
-                      checked={
-                        checkedItems[item._id] ||
-                        item.sendProject ||
-                        (checkData &&
-                          checkData?.departmentId &&
-                          checkData?.departmentId?.includes(item._id))
-                          ? true
-                          : false
+              {data
+                ?.filter((item) => item.user_type !== "H.O.D") // Filter out items with user_type === "H.O.D"
+                .map((item, index) => (
+                  <div key={item?._id}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          // disabled={checkData ? true : false}
+                          // checked={
+                          //   checkedItems[item._id] ||
+                          //   item.sendProject ||
+                          //   (checkData &&
+                          //     checkData?.departmentId &&
+                          //     checkData?.departmentId?.includes(item._id))
+                          //     ? true
+                          //     : false
+                          // }
+                          onChange={handleCheckboxChange(item?._id)}
+                        />
                       }
-                      onChange={handleCheckboxChange(item._id)}
+                      label={item?.name}
                     />
-                  }
-                  label={item.departmentName}
-                />
-              ))}
+                    <span className="text-secondary" style={{fontSize:"13px"}}>{item?.user_type}</span>
+                  </div>
+                ))}
             </FormGroup>
           </DialogContent>
           <DialogActions>

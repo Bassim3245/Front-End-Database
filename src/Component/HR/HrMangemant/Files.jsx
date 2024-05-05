@@ -3,7 +3,7 @@ import "../Style/FileStyle.css";
 import UploadFile from "./UploadFile";
 import FileList from "./FileList";
 function Files() {
-  const [action, setAction] = useState();
+  const [action, setAction] = useState(false);
   return (
     <div>
       <div className="page">

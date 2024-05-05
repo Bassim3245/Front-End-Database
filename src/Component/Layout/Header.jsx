@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 const Header = ({title, subTitle, isDashboard=false ,dir}) => {
   const theme = useTheme();
   return (
-    <Box mb={ isDashboard? 2 :        4} dir={dir}>
+    <Box mb={ isDashboard? 2 : 4} dir={dir}>
     <Typography
       sx={{
         color: theme.palette.info.light,
@@ -14,8 +14,6 @@ const Header = ({title, subTitle, isDashboard=false ,dir}) => {
     </Typography>
     <Typography variant="body1">{subTitle}</Typography>
   </Box>
-  
   );
 }
-
 export default Header;

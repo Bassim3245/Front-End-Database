@@ -45,12 +45,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function MainForm(props) {
-  // @ts-ignore
-  const { getDtaInfo } = useSelector((state) => state.natural);
-  const { Ministries } = useSelector((state) => {
-    // @ts-ignore
-    return state.Ministries;
-  });
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token") || {};
   });
@@ -60,7 +54,6 @@ export default function MainForm(props) {
   const [open, setOpen] = useState(false);
   const [DateBook, setDateBook] = useState("");
   const [DateClose, setDateClose] = useState("");
-  const [OtherOption, setOtherOpthion] = useState(true);
   const [dataUserID, setDataUserID] = useState([]);
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
@@ -151,8 +144,6 @@ export default function MainForm(props) {
     // @ts-ignore
     dispatch(getData());
   }, []);
-  const handleSelectDropdown = () => setOtherOpthion(false);
-  const handleBack = () => setOtherOpthion(true);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   useEffect(() => {

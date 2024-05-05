@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import Pusher from "pusher-js";
 import { useNavigate } from "react-router";
+import ReceiveData from "./HRlayout/ReciveData";
 
 const drawerWidth = 270;
 
@@ -83,7 +84,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     const channel = pusher.subscribe("poll");
     channel.bind("vote", (eventData) => {
       console.log("departmentId:", eventData?.departmentId);
-      if (eventData?.departmentId == info?.DepartmentID) {
+      if (eventData?.departmentId === info?.DepartmentID) {
         setDepartmentId(eventData?.departmentId);
         setVotes((prevVotes) => {
           return prevVotes ? prevVotes + 1 : 0;
@@ -171,6 +172,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
           <Nonfiction votes={votes} />
           {/* start end */}
 
+          <ReceiveData info={info}/>
           <IconButton
             color="inherit"
             id="basic-button"

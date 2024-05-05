@@ -231,10 +231,7 @@ export default function OfferPrice(props) {
     }
   );
   const Products = props?.products;
-  // const formatNumberPrice = (data) => {
-  //   const formattedTotalSum = new Intl.NumberFormat().format(data);
-  //   return formattedTotalSum;
-  // };
+
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("CustomDataForPriceOffer")) || {}
   );
@@ -250,12 +247,13 @@ export default function OfferPrice(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [sumUSD, setSumUSD] = React.useState(0);
 
   const PriceConvertToIQD = info?.PriceConvertToIQD;
   const [dataSet, setDataSet] = React.useState({});
   const collectData = (Products) => {
     if (!Products) return;
-    const dataProject = data||{};
+    const dataProject = data || {};
     const priceProduct = Products.map((product) => calculatePrice(product));
     const priceProductQuantity = Products.map((product) =>
       calculateTotalPrice(product)
@@ -291,17 +289,11 @@ export default function OfferPrice(props) {
       calculateAfterPercentageWithQuantityAndConvertToUsd,
       calculateAfterPercentageWithoutQuantityAndConvertToUsd,
     };
-
     setDataSet(newData);
   };
-
   React.useEffect(() => {
     collectData(Products);
   }, [Products]);
-
-  React.useEffect(() => {
-    console.log("Data Set Updated:", dataSet);
-  }, [dataSet]);
   const [loading, setLoading] = React.useState(false);
   const handelDataPdf = async (label) => {
     try {
@@ -311,25 +303,25 @@ export default function OfferPrice(props) {
       formData.append("label", label);
       const response = await axios.post(
         `${BackendUrl}/api/setDataAsPdf`,
-        {dataSet,label},
+        { dataSet, label },
         {
           headers: {
             "Content-Type": "application/json", // Corrected header name
           },
-          responseType: 'blob' ,
+          responseType: "blob",
         }
       );
       if (response) {
         console.log(response);
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${data.nameProject}.pdf`; // Change filename accordingly
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      setLoading(false);
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${data.nameProject}.pdf`; // Change filename accordingly
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        setLoading(false);
         // setAnchorEl(null);
       }
     } catch (error) {
@@ -404,7 +396,7 @@ export default function OfferPrice(props) {
           </MenuItem>
         </StyledMenu>
       </div>
-      {loading ? 'Downloading...' : 'Download PDF'}
+      {loading ? "Downloading..." : "Download PDF"}
       <Table
         striped
         bordered
@@ -437,21 +429,20 @@ export default function OfferPrice(props) {
             <th>#</th>
           </tr>
         </thead>
-        <tr
-          style={{
-            background:
-              theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.6)" : "#9e9e9e",
-            width: "100%",
-            border: "1px solid #e0e0e0",
-          }}
-        >
-          <th></th>
-          <th></th>
-          <th className=" p-3"> {data?.nameProject} </th>
-          <th></th>
-          <th></th>
-        </tr>
+
         <tbody>
+          <tr
+            style={{
+              background:
+                theme.palette.mode === "dark"
+                  ? "rgba(0, 0, 0, 0.6)"
+                  : "#9e9e9e",
+              width: "100%",
+              border: "1px solid #e0e0e0",
+            }}
+          >
+            <th className=" p-3" colSpan={"6"} style={{textAlign:"center"}}> {data?.nameProject} </th>
+          </tr>
           {props?.products &&
             Array.isArray(props?.products) &&
             props?.products.map((item, index) => (

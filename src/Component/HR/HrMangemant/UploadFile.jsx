@@ -1,10 +1,11 @@
 import { Button, TextField } from "@mui/material";
 import { VisuallyHiddenInput } from "Component/Config/Content";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
+import { validateFileType } from "Component/Config/Function";
 function UploadFile(props) {
   const [file, setFile] = React.useState(null);
   const [token, setToken] = React.useState(localStorage.getItem("token"));
@@ -25,11 +26,9 @@ function UploadFile(props) {
           },
         }
       );
-
       if (response && response.data && response.data.message) {
-        // Check if response contains message
         toast.success(response.data.message); // Assuming you're using toast for notifications
-        props?.setAction();
+        props?.setAction(true);
       } else {
         toast.error("An error occurred while uploading the file.");
       }
@@ -38,9 +37,13 @@ function UploadFile(props) {
       toast.error("An error occurred while uploading the file."); // Notify the user about the error
     }
   };
-  
+  const fileTypeValidation = validateFileType(file);
+useEffect(()=>{
+  toast.error(fileTypeValidation)
+},[file])
   return (
     <div className="files-stats p-20 bg-white rad-10">
+      <ToastContainer/>
       <h2 className="mt-0 mb-15 txt-c-mobile">Files Statistics</h2>
       <div className="d-flex align-center border-eee p-10 rad-6 mb-15 fs-13">
         <img

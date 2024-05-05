@@ -11,7 +11,6 @@ export const ColorButton = styled(Button)(({ theme }) => ({
     backgroundColor: purple[700],
   },
 }));
-
 export const ColorButtonEdit = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(indigo[50]),
   backgroundColor: purple[50],
@@ -19,7 +18,6 @@ export const ColorButtonEdit = styled(Button)(({ theme }) => ({
     backgroundColor: purple[700],
   },
 }));
-
 export const ColorLink = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
   backgroundColor: purple[500],

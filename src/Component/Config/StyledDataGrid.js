@@ -57,7 +57,7 @@ const StyledDataGrid = styled(DataGrid)(
         spaceWord: "break-word !important",
         whiteSpace: "break-spaces !important",
         overflow: "auto",
-        padding:"5px",
+        padding: "10px",
         textOverflow: "ellipsis",
         // @ts-ignore
         whiteSpace: "wrap",
@@ -65,7 +65,7 @@ const StyledDataGrid = styled(DataGrid)(
       },
     // @ts-ignore
     "& .MuiDataGrid-cell": {
-      minHeight: "50px !important",
+      minHeight: "60px !important",
       border: "none !important",
       outline: "none !important",
     },
@@ -76,12 +76,11 @@ const StyledDataGrid = styled(DataGrid)(
         wordWrap: "break-word !important",
         spaceWord: "break-word !important",
         whiteSpace: "break-spaces !important",
-        overflow: "auto",
-        // textOverflow: 'ellipsis',
+        // overflow: "hidden",
+        textOverflow: 'ellipsis',
         // lineBreak: 'anywhere !important',
         display: "flex !important",
         fontSize: "14px",
-        // justifyContent:'flex-end !important':'start !important',
       },
     "& .MuiDataGrid-cell .MuiDataGrid-cell ": {
       fontFamily: "Cairo-Medium",
@@ -89,7 +88,7 @@ const StyledDataGrid = styled(DataGrid)(
       wordWrap: "break-word !important",
       spaceWord: "break-word !important",
       whiteSpace: "break-spaces !important",
-      // textOverflow: 'ellipsis',
+      textOverflow: 'ellipsis',
       // lineBreak: 'anywhere !important',
       display: "flex !important",
     },
@@ -115,12 +114,13 @@ const StyledDataGrid = styled(DataGrid)(
       // position: 'absolute !important', top: '0', left: '0',
       padding: "0 3px !important",
       backgroundColor: gridTheme.mainColor,
-      minHeight: "55px !important",
-      maxHeight: "55px !important",
+      minHeight: "60px !important",
+      maxHeight: "60px !important",
+      // fontSize:"20px"
     },
 
     "& .MuiDataGrid-columnHeaderTitle,& .MuiSvgIcon-root": {
-      color: "#fff",
+      // color: "#eee",
     },
     "& .MuiDataGrid-columnSeparator": {
       display: "none",
@@ -141,7 +141,7 @@ const StyledDataGrid = styled(DataGrid)(
         direction == "rtl" ? "flex-start !important" : "flex-end !important",
       alignItems: "start",
       alignSelf: direction == "rtl" ? "flex-end !important" : "start",
-      fontSize: "10px !important",
+      fontSize: "13px !important",
     },
 
     "& .MuiDataGrid-virtualScrollerContent": {
@@ -152,7 +152,7 @@ const StyledDataGrid = styled(DataGrid)(
       fill: "#000 !important",
     },
     "& .MuiDataGrid-columnHeaderTitleContainerContent,& .MuiDataGrid-cell": {
-      fontSize: "11.5px !important",
+      fontSize: "13px !important",
     },
     "& .customeHeaderClassName": {
       alignItems:
@@ -160,7 +160,7 @@ const StyledDataGrid = styled(DataGrid)(
     },
     // @ts-ignore
     "& .MuiDataGrid-cell": {
-      padding: "5px 3px !important",
+      padding: "10px 7px !important",
       border: "0 !important",
     },
   })

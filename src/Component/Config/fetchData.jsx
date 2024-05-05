@@ -158,3 +158,31 @@ export const getDataProject=async(info,token)=>{
     }
   }
 }
+export const getDatFileUploadByIdDepartment=async(id)=>{
+  try {
+    const response =await axios.get(`${BackendUrl}/api/getDataFileUploadBySelectTheIdFromHrTOdEPARTMENT/${id}`);
+    if(response){
+
+      return response?.data
+    }
+  } catch (error) {
+    if (error || error.response) {
+      return error.response.data.message;
+    }
+  }
+}
+export const fetchDataUser = async (id) => {
+  try {
+    const response = await axios.get(
+      `${BackendUrl}/api/getallDataUser/${id}`
+    );
+    console.log(response);
+    return response.data
+  } catch (error) {
+    console.error(
+      error.response
+        ? `Error response: ${error.response.data.message}`
+        : `Network error: ${error.message}`
+    );
+  }
+};

@@ -10,32 +10,15 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { ListItemIcon, MenuList, Paper } from "@mui/material";
-import { ContentCut } from "@mui/icons-material";
-import { Button } from "react-bootstrap";
-import Notifction from "../Notifction";
 import ReceiveData from "./ReciveData";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/userSlice/userSlice";
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-
-export default function HrLayoutAppBr() {
+export default function HrLayoutAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -46,47 +29,21 @@ export default function HrLayoutAppBr() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
   };
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-  const [openMenu, setOpenMenu] = React.useState(null);
-  const open = Boolean(openMenu);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const MenuHr="Menu-Hr";
-const renderMenuList=(
-  <Menu
-  anchorEl={anchorEl}
-  anchorOrigin={{
-    vertical: "top",
-    horizontal: "right",
-  }}
-  id={MenuHr}
-  keepMounted
-  transformOrigin={{
-    vertical: "top",
-    horizontal: "right",
-  }}
-  open={isMenuOpen}
-  onClose={handleMenuClose}
->
-  <MenuItem onClick={handleMenuClose}>Files Upload</MenuItem>
-  <MenuItem onClick={handleMenuClose}>Departments</MenuItem>
-</Menu>
-);
+  const dispatch = useDispatch();
+const handleLogout=()=>{
+    dispatch(logout());
+}
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -104,8 +61,11 @@ const renderMenuList=(
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+        <MenuItem onClick={handleMenuClose}>Files Upload</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Departments</MenuItem>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -150,7 +110,7 @@ const renderMenuList=(
         <IconButton
           size="large"
           aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
+          aria-controls={menuId}
           aria-haspopup="true"
           color="inherit"
         >
@@ -165,17 +125,17 @@ const renderMenuList=(
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            aria-controls={MenuHr}
-            sx={{ mr: 2 }}
+            aria-controls={menuHr}
             onClick={handleProfileMenuOpen}
+            aria-haspopup="true"
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography
             variant="h6"
             noWrap
@@ -195,7 +155,7 @@ const renderMenuList=(
                 <MailIcon />
               </Badge>
             </IconButton>
-            <ReceiveData/>
+            <ReceiveData />
             <IconButton
               size="large"
               edge="end"
@@ -205,7 +165,7 @@ const renderMenuList=(
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <MenuIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -224,7 +184,7 @@ const renderMenuList=(
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      {renderMenuList}
+      {/* {renderMenuListHr} */}
     </Box>
   );
 }

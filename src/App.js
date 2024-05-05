@@ -80,7 +80,6 @@ export default function App() {
             {/* end Rout Child one */}
             <Route path="/Edit/:id" element={<Edit />} />
             <Route path="/OpenProject/:id" element={<OpenProject />} />
-
             <Route path="/Main/menu" element={<Menu />} />
             <Route path="/HR" element={<HR />}>
               <Route index element={<Files />} />
