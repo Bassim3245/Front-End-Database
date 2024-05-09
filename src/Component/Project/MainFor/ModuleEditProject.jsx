@@ -213,7 +213,8 @@ export default function ModuleFormEditProject(props) {
     <React.Fragment>
       <MenuItem onClick={handleClickOpen}>
         <EditIcon />
-        Edit
+        <span className="ms-2">Edit</span>
+        
       </MenuItem>
       <Dialog
         fullScreen

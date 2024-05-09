@@ -49,7 +49,6 @@
     width: 100%;
     max-width: 100%;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;

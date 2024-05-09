@@ -10,7 +10,7 @@ import { IconButton, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
-import { CancelScheduleSend } from "@mui/icons-material";
+import { CancelScheduleSend, Send } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
@@ -82,6 +82,41 @@ function Product() {
       }
     });
   };
+  const handelSendData = (id) => {
+    Swal.fire({
+      title: "هل تريد الاستمرار؟",
+      icon: "question",
+      iconHtml: "؟",
+      confirmButtonText: "نعم",
+      cancelButtonText: "لا",
+      showCancelButton: true,
+      showCloseButton: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios
+          .put(
+            `${BackendUrl}/api/sendProjectToManger/${id}`,
+            {},
+            {
+              headers: {
+                token: token,
+              },
+            }
+          )
+          .then((response) => {
+            if (response) {
+              console.log(response.data);
+              toast(response.data.message);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("User clicked لا or closed the dialog");
+      }
+    });
+  };
   return (
     <>
       {isLoading ? (
@@ -97,7 +132,7 @@ function Product() {
           style={{ margin: "auto", width: "100%", maxWidth: "100%" }}
           dir={rtl?.dir}
         >
-          <ToastContainer/>
+          <ToastContainer />
           <h2 className="mt-0 mb-20">{t("ProjectListReceive.title")}</h2>
           <div className="" style={{ overflowX: "auto" }}>
             <Table
@@ -138,6 +173,11 @@ function Product() {
                           />
                           <IconButton onClick={() => showSwal(Project?._id)}>
                             <CancelScheduleSend />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handelSendData(Project?._id)}
+                          >
+                            <Send />
                           </IconButton>
                         </div>
                       </td>

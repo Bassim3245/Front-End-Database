@@ -1,14 +1,14 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
+import {
+  IconButton,
+  Typography,
+  Badge,
+  MenuItem,
+  Menu,
+  Box,
+  AppBar,
+  Toolbar,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
@@ -17,33 +17,32 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ReceiveData from "./ReciveData";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/userSlice/userSlice";
-
+import { useNavigate } from "react-router";
 export default function HrLayoutAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
   const dispatch = useDispatch();
-const handleLogout=()=>{
+  const handleLogout = () => {
     dispatch(logout());
-}
+  };
+  const handeMenuFileRecived = () => {
+    navigate("FilesReceived");
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -61,14 +60,14 @@ const handleLogout=()=>{
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-        <MenuItem onClick={handleMenuClose}>Files Upload</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Files Upload</MenuItem>
       <MenuItem onClick={handleMenuClose}>Departments</MenuItem>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handeMenuFileRecived}>Files Received</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
-
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -120,22 +119,10 @@ const handleLogout=()=>{
       </MenuItem>
     </Menu>
   );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            aria-controls={menuHr}
-            onClick={handleProfileMenuOpen}
-            aria-haspopup="true"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography
             variant="h6"
             noWrap

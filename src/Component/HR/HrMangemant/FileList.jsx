@@ -1,9 +1,13 @@
 import { CloudDownload } from "@mui/icons-material";
-import DepartmentInHr from "../Departments";
+import DepartmentInHr from "./Departments";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
-import { formatDate, getFileIcon } from "Component/Config/Function";
+import {
+  formatDate,
+  getFileIcon,
+  handleDownload,
+} from "Component/Config/Function";
 import { IconButton } from "@mui/material";
 function FileList(props) {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -22,15 +26,7 @@ function FileList(props) {
       console.error(error); // Log any errors for debugging
     }
   };
-  const handleDownload = (file) => {
-    const link = document.createElement("a");
-    link.href = `${BackendUrl}/${file}`;
-    link.setAttribute("download", "");
-    link.setAttribute("target", "_blank");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+
   useEffect(() => {
     getAllDataFileUpload();
   }, [props?.action]);

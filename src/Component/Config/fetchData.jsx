@@ -105,11 +105,9 @@ export const getDataSystemPrice = async () => {
     console.log(error?.response?.data?.message);
   }
 };
-export const fetchDataAllDepartment= async () => {
+export const fetchDataAllDepartment = async () => {
   try {
-    const response = await axios.get(
-      `${BackendUrl}/api/getData/Department`
-    );
+    const response = await axios.get(`${BackendUrl}/api/getData/Department`);
     if (response) {
       return response.data;
     }
@@ -117,25 +115,25 @@ export const fetchDataAllDepartment= async () => {
     console.log(error);
   }
 };
-export const getDataUserById= async (id,token) => {
-    try {
-      const response = await axios({
-        method: "get",
-        url: `${BackendUrl}/api/getDataUserById/${id}`,
-        headers: {
-          Accept: "application/json",
-          token:token
-        },
-        
-      });
-      if (response&&response?.data) {
-        // console.log(response.data?.response);
-        return response?.data?.response;
-      }
+export const getDataUserById = async (id, token) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BackendUrl}/api/getDataUserById/${id}`,
+      headers: {
+        Accept: "application/json",
+        token: token,
+      },
+    });
+    if (response && response?.data) {
+      // console.log(response.data?.response);
+      return response?.data?.response;
+    }
   } catch (error) {
-return error.response.data.message  }
+    return error.response.data.message;
+  }
 };
-export const getDataProject=async(info,token)=>{
+export const getDataProject = async (info, token) => {
   try {
     const response = await axios({
       method: "get",
@@ -157,32 +155,92 @@ export const getDataProject=async(info,token)=>{
       return error.response.data.message;
     }
   }
-}
-export const getDatFileUploadByIdDepartment=async(id)=>{
+};
+export const getDatFileUploadByIdDepartment = async (id) => {
   try {
-    const response =await axios.get(`${BackendUrl}/api/getDataFileUploadBySelectTheIdFromHrTOdEPARTMENT/${id}`);
-    if(response){
-
-      return response?.data
+    const response = await axios.get(
+      `${BackendUrl}/api/getDataFileUploadBySelectTheIdFromHrTOdEPARTMENT/${id}`
+    );
+    if (response) {
+      return response?.data;
     }
   } catch (error) {
     if (error || error.response) {
       return error.response.data.message;
     }
   }
-}
+};
+
 export const fetchDataUser = async (id) => {
   try {
-    const response = await axios.get(
-      `${BackendUrl}/api/getallDataUser/${id}`
-    );
+    const response = await axios.get(`${BackendUrl}/api/getallDataUser/${id}`);
     console.log(response);
-    return response.data
+    return response.data;
   } catch (error) {
     console.error(
       error.response
         ? `Error response: ${error.response.data.message}`
         : `Network error: ${error.message}`
     );
+  }
+};
+export const getDatFileUploadByIdDepartmentToSendEmploy = async (id) => {
+  try {
+    const response = await axios.get(
+      `${BackendUrl}/api/getDataFileBySendFilefromHOD/${id}`
+    );
+    if (response) {
+      console.log("tt", response);
+      return response?.data;
+    }
+  } catch (error) {
+    if (error || error.response) {
+      return error.response.data.message;
+    }
+  }
+};
+export const getDataHasBeenSendByDepartmentToManger = async (token) => {
+  try {
+    const response = await axios.get(
+      `${BackendUrl}/api/getDataHasBeenSendByDepartmentToManger`,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    if (response) {
+      console.log("tt", response);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      return error.message;
+    }
+  }
+};
+
+export const getDataFileINMangerSection = async (id,token) => {
+  try {
+    const response = await axios.get(
+      `${BackendUrl}/api/getDataFileINMangerSection/${id}`,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    if (response) {
+      console.log("tt", response);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      return error.message;
+    }
   }
 };

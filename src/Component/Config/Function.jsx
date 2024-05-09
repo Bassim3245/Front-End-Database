@@ -1,4 +1,5 @@
 import moment from "moment";
+import { BackendUrl } from "../../redux/api/axios";
 
 export function getFileIcon(fileName) {
   if (typeof fileName !== "string") {
@@ -52,4 +53,13 @@ export const validateFileType = (file) => {
 
 export const formatDate = (date) => {
     return moment(date).format("YYYY/MM/DD HH:mm"); // Return the formatted date
+  };
+  export const handleDownload = (file) => {
+    const link = document.createElement("a");
+    link.href = `${BackendUrl}/${file}`;
+    link.setAttribute("download", "");
+    link.setAttribute("target", "_blank");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };

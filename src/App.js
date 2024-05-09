@@ -30,9 +30,11 @@ import Files from "Component/HR/HrMangemant/Files";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Edit } from "@mui/icons-material";
-import Test from "./Component/Product/test.jsx";
+import FilesReceived from "./Component/HR/HrMangemant/FileRecievd/FilesRecived";
+import DataFileINHrSection from "./Component/HR/HrMangemant/FileRecievd/showOfferPrice.jsx";
+import Received from "Component/HR/HrMangemant/FileRecievd/Ricevid";
 export default function App() {
-  const { Rol } = useSelector((state) => state.user);
+  const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -83,11 +85,15 @@ export default function App() {
             <Route path="/Main/menu" element={<Menu />} />
             <Route path="/HR" element={<HR />}>
               <Route index element={<Files />} />
+              <Route path="FilesReceived" element={<FilesReceived />}></Route>
             </Route>
+            <Route
+              path="/Received/:id"
+              element={<Received />}
+            />
             <Route path="/Manger" element={<Manger />} />
             <Route path="/Authorized" element={<Authorized />} />
           </Route>
-          <Route path="/test" element={<Test />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
 import { GridToolbar } from "@mui/x-data-grid";
-import { Box, Button, Divider, MenuItem, useTheme } from "@mui/material";
+import { Box, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../Config/Loader";
@@ -18,16 +18,13 @@ import StyledDataGrid from "../Config/StyledDataGrid";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import { StyledMenu } from "Component/Config/Content";
-import { OpenInNew, Settings } from "@mui/icons-material";
+import { OpenInNew } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import { useQuery } from "react-query";
-import { getDataByProjectID, getDataProject } from "Component/Config/fetchData";
 import DropDownGrid from "Component/Config/CustomMennu";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
 
-  const [info, setInfo] = useState(
+  const [info] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
   const { rtl } = useSelector((state) => {
@@ -64,7 +61,7 @@ const Projects = () => {
   //   }
   // );
   const columns = [
-    { field: "_id", headerName: "_id" },
+    { field: "_id", headerName: "_id" ,hideable: false },
     { field: "id", headerName: "ID", width: 33 },
     {
       field: "Code",
@@ -126,7 +123,7 @@ const Projects = () => {
                       disableRipple
                     >
                       <DeleteIcon />
-                      Delete
+                      <span className="ms-2">Delete</span>
                     </MenuItem>,
                   ]
                 : null}
@@ -136,10 +133,9 @@ const Projects = () => {
                 disableRipple
               >
                 <OpenInNew />
-                Open Project
+                <span className="ms-2"> Open Project</span>
               </MenuItem>
             </DropDownGrid>
-           
           </div>
         );
       },
@@ -194,8 +190,7 @@ const Projects = () => {
     }
   }
   const HandelOpen = (id) => {
-    alert(id);
-    // navigate(`/OpenProject/${id}`);
+    navigate(`/OpenProject/${id}`);
   };
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
   const rows = setProject?.map((item, index) => ({
@@ -203,7 +198,7 @@ const Projects = () => {
     ...item,
     DepartmentID: item.DepartmentID?.departmentName,
   }));
-
+  
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       {loading ? (
@@ -248,7 +243,7 @@ const Projects = () => {
               columnVisibilityModel={{
                 _id: false,
               }}
-              // getRowId={(row) => row.id}
+              getRowId={(row) => row.id}
             />
           </Box>
         </Box>

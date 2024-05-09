@@ -111,9 +111,7 @@ function calculatePriceAfterPercentageWithQuantity(item) {
   const price = Number(item.Price);
   const priceConvert = Number(item.PriceConvert);
   const quantity = Number(item.Quantity);
-
   const priceAfterPercent = price * (1 + percentage);
-
   if (item.PriceType === "USD") {
     const priceTotalEachProductAfterPercentage = Math.ceil(
       priceAfterPercent * priceConvert * quantity
@@ -253,7 +251,7 @@ export default function OfferPrice(props) {
   const [dataSet, setDataSet] = React.useState({});
   const collectData = (Products) => {
     if (!Products) return;
-    const dataProject = data || {};
+    const dataProject = data&&data ;
     const priceProduct = Products.map((product) => calculatePrice(product));
     const priceProductQuantity = Products.map((product) =>
       calculateTotalPrice(product)
@@ -292,6 +290,7 @@ export default function OfferPrice(props) {
     setDataSet(newData);
   };
   React.useEffect(() => {
+    console.log("hhghhg",data,dataSet?.dataProject);
     collectData(Products);
   }, [Products]);
   const [loading, setLoading] = React.useState(false);

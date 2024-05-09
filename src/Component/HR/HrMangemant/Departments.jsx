@@ -16,7 +16,8 @@ import {
 import { useQuery } from "react-query";
 import { fetchDataAllDepartment } from "Component/Config/fetchData";
 import axios from "axios";
-import { BackendUrl } from "../../redux/api/axios";
+import { BackendUrl } from "../../../redux/api/axios";
+import { toast } from "react-toastify";
 export default function DepartmentInHr(props) {
   const [open, setOpen] = React.useState(false);
   const [departmentsData, setDepartmentsData] = React.useState([]);
@@ -38,8 +39,28 @@ export default function DepartmentInHr(props) {
   }, [data]);
 
   const [checkedItems, setCheckedItems] = React.useState({});
-  const token = localStorage.getItem("token");
 
+  const [isActive, setIsActive] = React.useState({});
+  React.useEffect(() => {
+    // Initialize department states based on checked items, sendProject, and checkData
+    const initialStates = departmentsData.reduce((acc, item) => {
+      acc[item._id] =
+        checkedItems[item._id] ||
+        item.sendProject ||
+        (checkData &&
+          checkData.departmentId &&
+          checkData.departmentId.includes(item._id));
+      return acc;
+    }, {});
+    setIsActive(initialStates);
+  }, [checkedItems, departmentsData, checkData]);
+  const handleCheckboxChange = (id) => () => {
+    setIsActive((prevState) => ({
+      ...prevState,
+      [id]: prevState && !prevState[id], // Toggle the state of the department
+    }));
+  };
+  const token = localStorage.getItem("token");
   const getDataCheckByIdBooKId = async () => {
     try {
       const response = await axios.get(
@@ -55,17 +76,17 @@ export default function DepartmentInHr(props) {
     getDataCheckByIdBooKId();
   }, [open]);
 
-  const handleCheckboxChange = (itemId) => (event) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [itemId]: event.target.checked,
-    }));
-    setDepartmentsData((prevDepartmentsData) =>
-      prevDepartmentsData.map((item) =>
-        item._id === itemId ? { ...item, checked: event.target.checked } : item
-      )
-    );
-  };
+  // const handleCheckboxChange = (itemId) => (event) => {
+  //   setCheckedItems((prevCheckedItems) => ({
+  //     ...prevCheckedItems,
+  //     [itemId]: event.target.checked,
+  //   }));
+  //   setDepartmentsData((prevDepartmentsData) =>
+  //     prevDepartmentsData.map((item) =>
+  //       item._id === itemId ? { ...item, checked: event.target.checked } : item
+  //     )
+  //   );
+  // };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,9 +94,10 @@ export default function DepartmentInHr(props) {
 
   const handleSubmit = async () => {
     try {
+      const check = checkData ? checkData?._id : null; // Assuming checkData is an object, checking if it exists
       const response = await axios.put(
         `${BackendUrl}/api/sendProjectToDepartment/${props?.UploadId}`,
-        departmentsData.filter((item) => checkedItems[item._id]),
+        { isActive, check }, // Corrected the syntax for data object
         {
           headers: {
             token: token,
@@ -83,6 +105,7 @@ export default function DepartmentInHr(props) {
         }
       );
       if (response) {
+        toast(response.data.message);
         setOpen(false);
       }
     } catch (error) {
@@ -115,15 +138,7 @@ export default function DepartmentInHr(props) {
                   control={
                     <Checkbox
                       // disabled={checkData ? true : false}
-                      checked={
-                        checkedItems[item._id] ||
-                        item.sendProject ||
-                        (checkData &&
-                          checkData?.departmentId &&
-                          checkData?.departmentId?.includes(item._id))
-                          ? true
-                          : false
-                      }
+                      checked={isActive[item._id]}
                       onChange={handleCheckboxChange(item._id)}
                     />
                   }
