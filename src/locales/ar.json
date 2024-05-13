@@ -78,14 +78,14 @@
     "table": {
       "Action": "اجراء",
       "Unit": "الوحدة",
-      "AdditionPercentage": "النسبة المظافة",
+      "AdditionPercentage": "النسبة المضافة",
       "Price": "السعر",
       "Quantity":"الكمية",
       "PriceType":" سعر الصرف",
       "priceConvert":"معامل التحويل  ",
       "Specifications":"المواصفات",
       "Notes":"الملاحظات",
-      "ProductName":"اسم النتج ",
+      "ProductName":"اسم المنتج ",
       "test":"test"
     }
   }
