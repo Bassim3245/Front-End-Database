@@ -30,7 +30,16 @@ export function getFileIcon(fileName) {
         src="/image/photo.png"
         style={{ width: "80px", maxWidth: "100%" }}
         className="mt-4 mb-4"
-        alt="DOCX Icon"
+        alt="PNG Icon"
+      />
+    );
+  } else if (extension === "xlsx") {
+    return (
+      <img
+        src="/image/icons8-excel-48.png"
+        style={{ width: "80px", maxWidth: "100%" }}
+        className="mt-4 mb-4"
+        alt="Excel Icon"
       />
     );
   } else {
@@ -44,22 +53,228 @@ export const validateFileType = (file) => {
     "image/png",
     "application/pdf",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   ];
   if (!allowedTypes.includes(file.type)) {
-    return "Please upload only images (jpeg, png) or documents (pdf, docx).";
+    return "Please upload only images (jpeg, png) or documents (pdf, docx, xlsx).";
   }
   return "valid";
 };
 
 export const formatDate = (date) => {
-    return moment(date).format("YYYY/MM/DD HH:mm"); // Return the formatted date
-  };
-  export const handleDownload = (file) => {
-    const link = document.createElement("a");
-    link.href = `${BackendUrl}/${file}`;
-    link.setAttribute("download", "");
-    link.setAttribute("target", "_blank");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  return moment(date).format("YYYY/MM/DD HH:mm"); // Return the formatted date
+};
+export const handleDownload = (file) => {
+  const link = document.createElement("a");
+  link.href = `${BackendUrl}/${file}`;
+  link.setAttribute("download", "");
+  link.setAttribute("target", "_blank");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+export function calculateTotalPriceOFproject(Products) {
+  const selectPriceType = "Normal";
+  if (selectPriceType === "Normal") {
+    const totalSum = Products.reduce((accumulator, currentItem) => {
+      let PriceInUSD = 0; // Initialize to 0
+      let PriceInIQD = 0; // Initialize to 0
+      if (currentItem.PriceType === "IQD") {
+        PriceInIQD = currentItem?.Price;
+      }
+      if (currentItem.PriceType === "USD") {
+        PriceInUSD = currentItem?.Price * currentItem?.PriceConvert || 1600; // Convert USD price to IQR
+      }
+      // Calculate total price after conversion
+      const PriceAfterConvert = PriceInUSD + PriceInIQD;
+      const PriceInIQR = PriceAfterConvert;
+      return accumulator + PriceInIQR * (currentItem.Quantity || 1);
+    }, 0);
+    const formattedTotalSum = new Intl.NumberFormat().format(totalSum);
+    return formattedTotalSum;
+  }
+}
+// culcolat loop data
+export function SumTotalPriceAfterAddPercentage(Products) {
+  const selectPriceType = "Normal";
+  if (selectPriceType === "Normal") {
+    const totalSum = Products.reduce((accumulator, currentItem) => {
+      // Convert to number and provide fallback to 0 if NaN
+      let PriceInUSD =
+        Number(currentItem?.Price) * Number(currentItem?.PriceConvert) || 0;
+      let PriceInIQD = Number(currentItem?.Price) || 0;
+      let Quantity = Number(currentItem?.Quantity) || 0;
+      let percentage = Number(currentItem?.percent) / 100 || 0;
+
+      if (currentItem.PriceType === "IQD") {
+        PriceInUSD = 0; // Reset to 0 if the price type is not USD
+      }
+      if (currentItem.PriceType === "USD") {
+        PriceInIQD = 0; // Reset to 0 if the price type is not IQD
+      }
+
+      const PriceAfterConvert = PriceInUSD + PriceInIQD;
+      const priceAfterPercent = PriceAfterConvert * (1 + percentage);
+      const PriceInIQR = priceAfterPercent;
+
+      return accumulator + PriceInIQR * Quantity;
+    }, 0);
+
+    const formattedTotalSum = new Intl.NumberFormat().format(totalSum);
+    return formattedTotalSum;
+  }
+}
+export function SumTotalPriceAfterAddPercentageAnddConvertToUSD(
+  Products,
+  PriceConvertToIQD
+) {
+  const selectPriceType = "Normal";
+  if (selectPriceType === "Normal") {
+    const totalSum = Products.reduce((accumulator, currentItem) => {
+      let PriceInUSD = 0; // Initialize to 0
+      let PriceInIQD = 0; // Initialize to 0
+      if (currentItem.PriceType === "IQD") {
+        PriceInIQD = currentItem?.Price;
+      }
+      if (currentItem.PriceType === "USD") {
+        PriceInUSD = currentItem?.Price * currentItem?.PriceConvert || 0; // Convert USD price to IQR
+      }
+      const percentage = currentItem?.percent / 100;
+
+      const PriceAfterConvert = PriceInUSD + PriceInIQD;
+      const priceAfterPercent = PriceAfterConvert * (1 + percentage);
+      const PriceInIQR = priceAfterPercent;
+
+      return (
+        accumulator +
+        (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
+      );
+    }, 0);
+    const formattedTotalSum = new Intl.NumberFormat().format(
+      Math.ceil(totalSum)
+    );
+    return formattedTotalSum;
+  }
+}
+
+// end function to sum total price
+// start Function Each Item
+export function calculatePriceAfterPercentageWithQuantity(item) {
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+  const priceAfterPercent = price * (1 + percentage);
+  if (item.PriceType === "USD") {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * priceConvert * quantity
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  } else {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * quantity
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  }
+}
+
+export function calculatePriceAfterPercentageWithoutQuantity(item) {
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+
+  const priceAfterPercent = price * (1 + percentage);
+
+  if (item.PriceType === "USD") {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent * priceConvert
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  } else {
+    const priceTotalEachProductAfterPercentage = Math.ceil(priceAfterPercent);
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  }
+}
+
+export function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
+  item,
+  PriceConvertToIQD
+) {
+  const priceToConvert = 1600;
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const priceAfterPercent = price * (1 + percentage);
+
+  if (item.PriceType === "USD") {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * priceConvert) / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  } else {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      priceAfterPercent / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  }
+}
+
+export function calculatePriceAfterPercentageWithQuantityAndConvertToUsd(
+  item,
+  PriceConvertToIQD
+) {
+  const priceToConvert = 1600;
+  const percentage = Number(item.percent) / 100;
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+  const priceAfterPercent = price * (1 + percentage);
+
+  if (item.PriceType === "USD") {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * priceConvert * quantity) /
+        (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  } else {
+    const priceTotalEachProductAfterPercentage = Math.ceil(
+      (priceAfterPercent * quantity) / (PriceConvertToIQD || priceToConvert)
+    );
+    return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
+  }
+}
+
+export function calculatePrice(item) {
+  if (!item) return 0;
+  // Convert to number in case they are strings
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+
+  if (isNaN(price) || isNaN(priceConvert)) return 0; // Check if conversion is successful
+
+  return item.PriceType === "USD"
+    ? new Intl.NumberFormat().format(price * priceConvert)
+    : new Intl.NumberFormat().format(price);
+}
+
+export const calculateTotalPrice = (item) => {
+  if (!item) return 0;
+  // Convert to number in case they are strings
+  const price = Number(item.Price);
+  const priceConvert = Number(item.PriceConvert);
+  const quantity = Number(item.Quantity);
+
+  if (isNaN(price) || isNaN(priceConvert) || isNaN(quantity)) return 0; // Check if conversion is successful
+
+  return item.PriceType === "USD"
+    ? new Intl.NumberFormat().format(price * priceConvert * quantity)
+    : new Intl.NumberFormat().format(price * quantity);
+};
+
+export const formatSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};

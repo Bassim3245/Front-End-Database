@@ -20,11 +20,15 @@ export default function AllowEdit(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   const handleSend = async () => {
     try {
       console.log(token);
-      const response = await axios.put( `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`, {},  {  headers: { token: token} } );
+      const response = await axios.put(
+        `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`,
+        {},
+        { headers: { token: token } }
+      );
       toast.success(response.data.message);
       setOpen(false);
     } catch (error) {

@@ -58,7 +58,7 @@ const StyledDataGrid = styled(DataGrid)(
         whiteSpace: "break-spaces !important",
         overflow: "auto",
         padding: "10px",
-        textOverflow: "ellipsis",
+        // textOverflow: "ellipsis",
         // @ts-ignore
         whiteSpace: "wrap",
         lineBreak: "anywhere !important",
@@ -87,7 +87,7 @@ const StyledDataGrid = styled(DataGrid)(
       textAlign: direction == "rtl" ? "right !important" : "left !important",
       wordWrap: "break-word !important",
       spaceWord: "break-word !important",
-      whiteSpace: "break-spaces !important",
+      whiteSpace: "wrap !important",
       textOverflow: 'ellipsis',
       // lineBreak: 'anywhere !important',
       display: "flex !important",
@@ -103,7 +103,7 @@ const StyledDataGrid = styled(DataGrid)(
       //  top:'-4px !important',
       position: "relative !important",
       right: "0 !important",
-      height: "73.5px !important",
+      height: "150px !important",
     },
     "& .MuiDataGrid-cell,& .MuiDataGrid-columnHeaderTitleContainer": {
       display: "flex !important",

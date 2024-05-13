@@ -12,7 +12,6 @@ import { BackendUrl } from "../../../../../redux/api/axios";
 import { fetchDataAllDepartment } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-
 export default function ShowData(props) {
   const [open, setOpen] = React.useState(false);
   const [message,setMessage]=React.useState("")

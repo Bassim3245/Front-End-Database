@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Send } from "@mui/icons-material";
+import { Send, Share } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  IconButton,
   Dialog,
   Button,
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { fetchDataAllDepartment } from "Component/Config/fetchData";
@@ -48,8 +48,8 @@ export default function DepartmentInHr(props) {
         checkedItems[item._id] ||
         item.sendProject ||
         (checkData &&
-          checkData.departmentId &&
-          checkData.departmentId.includes(item._id));
+          checkData?.departmentId &&
+          checkData?.departmentId?.includes(item._id));
       return acc;
     }, {});
     setIsActive(initialStates);
@@ -118,9 +118,10 @@ export default function DepartmentInHr(props) {
   return (
     <>
       <React.Fragment>
-        <IconButton onClick={handleClickOpen}>
-          <Send />
-        </IconButton>
+        <MenuItem onClick={handleClickOpen} className="m-0">
+          <Share />
+          <span className="ms-3">send</span>
+        </MenuItem>
         <Dialog
           fullScreen={fullScreen}
           open={open}

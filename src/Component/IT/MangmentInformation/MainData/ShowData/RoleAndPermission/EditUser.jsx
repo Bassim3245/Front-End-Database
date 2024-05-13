@@ -45,7 +45,7 @@ export default function ModuleEdit(props) {
   const [password, setPassword] = useState("");
   const [user_type, setUser_type] = useState("");
   const [DepartmentID, setDepartmentId] = useState("");
-
+  const [dataDepartment, setDataDepartment] = useState([]);
   React.useEffect(() => {
     if (data) {
       setUname(data?.name);
@@ -56,10 +56,25 @@ export default function ModuleEdit(props) {
       setDepartmentId(data?.DepartmentID);
     }
   }, [open]);
+  // React.useEffect(() => {
+  //   // @ts-ignore
+  //   console.log("thise data", data);
+  //   dispatch(getallDepartment());
+  // }, []);
   React.useEffect(() => {
-    // @ts-ignore
-    console.log("thise data", data);
-    dispatch(getallDepartment());
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${BackendUrl}/api/getData/Department`
+        );
+        if (response) {
+          setDataDepartment(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, []);
   const HandleSubmit = async () => {
     try {
@@ -70,17 +85,17 @@ export default function ModuleEdit(props) {
       formData.append("username", username || "");
       formData.append("user_type", user_type || "");
       formData.append("DepartmentID", DepartmentID || "");
-      const response = await axios({
-        method: "put",
-        url: `${BackendUrl}/api/updateUserById/${id}`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          token: token,
-        },
-        data: formData,
-      });
-
+      const response = await axios.put(
+        `${BackendUrl}/api/updateUserById/${id}`,
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+            token: `${token}`,
+          },
+        }
+      );
       if (response.status === 200) {
         console.log(response.data);
         toast.success(response?.data?.message);
@@ -192,7 +207,7 @@ export default function ModuleEdit(props) {
             value={DepartmentID}
             onChange={(e) => setDepartmentId(e.value.target)}
           >
-            {department?.map((option) => (
+            {dataDepartment?.map((option) => (
               <MenuItem key={option?._id} value={option?._id}>
                 {option?.departmentName}
               </MenuItem>

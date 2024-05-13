@@ -1,7 +1,7 @@
 import "./StyleMiddle.css"
 function Authorized() {
   return (
-    <div id="sec-1" className="section">
+    <div id="sec-1" className="sectionAuth">
       <div id="ctn">
         <div className="marquee">
           <div className="marquee-text"></div>

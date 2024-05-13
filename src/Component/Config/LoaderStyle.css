@@ -2,12 +2,6 @@
 .bodyLodeing {
   overflow: hidden;
 }
-
-.bodyLodeing {
-  background: #1e2029 ;
-}
-
-
 canvas {
   background: #1e2029 ;
   position: absolute;
@@ -18,7 +12,6 @@ canvas {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-
 .bodyLodeing div {
   width: 100px;
   height: 85px;

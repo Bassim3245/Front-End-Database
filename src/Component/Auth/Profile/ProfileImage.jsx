@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BackendUrl } from "../../../redux/api/axios";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   ButtonClearState,
@@ -9,12 +9,12 @@ import {
 } from "../../Config/Content";
 import axios from "axios";
 import { toast } from "react-toastify";
-function ProfileImage({  setFile, file, token, theme,data }) {
+function ProfileImage({ setFile, file, token, theme, data }) {
   const [loading, setLoading] = useState(true);
   const handleImageEdit = async () => {
     try {
-      const formData=new FormData();
-      formData.append("image",file)
+      const formData = new FormData();
+      formData.append("image", file);
       const response = await axios({
         method: "put",
         url: `${BackendUrl}/api/update_image_profile`,
@@ -23,15 +23,14 @@ function ProfileImage({  setFile, file, token, theme,data }) {
           "Content-Type": "multipart/form-data",
           token: token,
         },
-        data:formData,
+        data: formData,
       });
       if (response.status === 200) {
         console.log(response.data);
-        toast.success(response?.data?.message)
-      
+        toast.success(response?.data?.message);
+
         setLoading(false);
         window.location.reload(true);
-
       } else {
         toast.error("Failed to update user.");
       }
@@ -53,9 +52,7 @@ function ProfileImage({  setFile, file, token, theme,data }) {
         className="card"
         style={{
           background:
-            theme?.palette?.mode === "dark"
-              ? "rgba(255, 255, 255, 0.12)"
-              : "",
+            theme?.palette?.mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "",
         }}
       >
         <div className="card-body">

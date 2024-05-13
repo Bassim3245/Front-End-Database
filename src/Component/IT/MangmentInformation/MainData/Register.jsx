@@ -184,10 +184,10 @@ function Register(props) {
                         onChange={(e) => setDepartmentID(e.target.value)}
                       >
                         <option value="">Open this select Department</option>
-                        {props.DataDepartment &&
-                          props.DataDepartment.map((data) => (
-                            <option key={data._id} value={data._id}>
-                              {data.departmentName}
+                        {props?.DataDepartment &&
+                          props?.DataDepartment?.map((data) => (
+                            <option key={data?._id} value={data?._id}>
+                              {data?.departmentName}
                             </option>
                           ))}
                       </select>

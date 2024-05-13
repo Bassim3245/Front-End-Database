@@ -38,13 +38,13 @@ function UploadFile(props) {
     }
   };
   const fileTypeValidation = validateFileType(file);
-useEffect(()=>{
-  toast.error(fileTypeValidation)
-},[file])
+  useEffect(() => {
+    toast.error(fileTypeValidation);
+  }, [file]);
   return (
     <div className="files-stats p-20 bg-white rad-10">
-      <ToastContainer/>
-      <h2 className="mt-0 mb-15 txt-c-mobile">Files Statistics</h2>
+      <ToastContainer />
+      <h2 className="mt-0 mb-15 txt-c-mobile">Files </h2>
       <div className="d-flex align-center border-eee p-10 rad-6 mb-15 fs-13">
         <img
           src="/image/pdf_136522.png"
@@ -63,6 +63,17 @@ useEffect(()=>{
         />
         <div className="info">
           <span>word Files</span>
+          <span className="c-grey d-block mt-5">99 Files</span>
+        </div>
+        <div className="size c-grey">2.9GB</div>
+      </div>
+      <div className="d-flex align-center border-eee p-10 rad-6 fs-13 mt-3 mb-3">
+        <img
+          src="/image/icons8-excel-48.png"
+          style={{ width: "75px", maxWidth: "100%" }}
+        />
+        <div className="info">
+          <span>excel Files</span>
           <span className="c-grey d-block mt-5">99 Files</span>
         </div>
         <div className="size c-grey">2.9GB</div>

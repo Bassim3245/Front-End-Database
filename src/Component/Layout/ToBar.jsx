@@ -28,9 +28,8 @@ import { toast } from "react-toastify";
 import Pusher from "pusher-js";
 import { useNavigate } from "react-router";
 import ReceiveData from "./HRlayout/ReciveData";
-
-const drawerWidth = 270;
-
+import { getDataDepartmentID } from "../../redux/DepartmentState/DepartmentAction";
+const drawerWidth = 340;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
   // @ts-ignore
@@ -54,6 +53,10 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   const { rtl } = useSelector((state) => {
     // @ts-ignore
     return state.language;
+  });
+  const { department } = useSelector((state) => {
+    // @ts-ignore
+    return state?.Department;
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,6 +82,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   useEffect(() => {
     const pusher = new Pusher("981e65db6d4dc90983b4", {
       cluster: "us3",
+      // @ts-ignore
       encrypted: true,
     });
     const channel = pusher.subscribe("poll");
@@ -106,6 +110,13 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   const HandleProfile = () => {
     navigate("Profile");
   };
+
+  useEffect(() => {
+    const DepartmentID = info?.DepartmentID;
+    // @ts-ignore
+    dispatch(getDataDepartmentID(DepartmentID));
+    console.log("dddd", department);
+  }, []);
   return (
     <AppBar
       position="fixed"
@@ -134,6 +145,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
         </IconButton>
         <Typography component="h1" sx={{ fontSize: "20px" }}>
           {t("appBar.userName", { name: info?.name })}
+          <span className="ms-3" style={{color:"inherit"}}>({department?.departmentName})</span>
         </Typography>
         <Box flexGrow={1} />
         <Stack direction={"row"}>
@@ -172,7 +184,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
           <Nonfiction votes={votes} />
           {/* start end */}
 
-          <ReceiveData info={info}/>
+          <ReceiveData info={info} />
           <IconButton
             color="inherit"
             id="basic-button"

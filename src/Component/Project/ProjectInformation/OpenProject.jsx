@@ -90,7 +90,6 @@ export default function OpenProject() {
         toast(response?.data?.message);
         // setMessage(response?.data?.message);
         window.location.reload();
-
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -103,7 +102,7 @@ export default function OpenProject() {
 
   useEffect(() => {
     fetchDataByProjectId();
-  }, [message,token]);
+  }, [message, token]);
 
   return (
     <div className={`w-100 `}>

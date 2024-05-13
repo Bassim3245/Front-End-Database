@@ -55,7 +55,7 @@ const Event = () => {
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      refetchInterval: 5000,
+      // refetchInterval: 5000,
     }
   );
   const theme = createTheme({
@@ -79,10 +79,13 @@ const Event = () => {
     const date = new Date(Data);
     return moment(date).format(" h:m:s YYYY/MM/DD ");
   };
+
   return (
     <>
       {isLoading ? (
-        <Loader />
+          <div className="eventLoaderCenter">
+            <Loader />
+        </div>
       ) : (
         <ThemeProvider theme={theme}>
           <ToastContainer />
@@ -126,9 +129,7 @@ const Event = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="align-items-center row">
-                    <div className="col-lg-8">
-                     
-                    </div>
+                    <div className="col-lg-8"></div>
                     <div className="col-lg-4">
                       <div className="candidate-list-widgets">
                         <div className="row">

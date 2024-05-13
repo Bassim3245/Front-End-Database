@@ -36,7 +36,7 @@ import { logout } from "../../redux/userSlice/userSlice";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { BackendUrl } from "../../redux/api/axios";
 import { setLanguage } from "../../redux/LanguageState";
-const drawerWidth = 270;
+const drawerWidth = 340;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {

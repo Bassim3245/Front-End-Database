@@ -1,10 +1,11 @@
 import { getDataFileINMangerSection } from "Component/Config/fetchData";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import { BackendUrl } from "../../../../redux/api/axios";
-import { IconButton } from "@mui/material";
-import { CloudDownload } from "@mui/icons-material";
-import { formatDate, getFileIcon, handleDownload } from "Component/Config/Function";
+import {
+  formatDate,
+  getFileIcon,
+  handleDownload,
+} from "Component/Config/Function";
 import "../../Style/FileStyle.css";
 function DataFileINHrSection({ id }) {
   const [token] = useState(localStorage.getItem("token"));
@@ -15,10 +16,9 @@ function DataFileINHrSection({ id }) {
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
-      refetchInterval: 5000,
+      // refetchInterval: 5000,
     }
   );
-
   return (
     <div className="page bg-white">
       <div className="content w-full">

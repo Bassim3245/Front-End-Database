@@ -72,10 +72,10 @@ section h1 {
     display: flex;
 }
 
-h1 span {
+/* h1 span {
     color: transparent;
     -webkit-text-stroke: 4px yellow;
-}
+} */
 
 #pointer {
     z-index: 5;

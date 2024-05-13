@@ -9,7 +9,7 @@ import MainForm from "./MainFor/Modul";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
-import { GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Box, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
 import { toast, ToastContainer } from "react-toastify";
@@ -23,10 +23,7 @@ import Swal from "sweetalert2";
 import DropDownGrid from "Component/Config/CustomMennu";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
-
-  const [info] = useState(
-    () => JSON.parse(localStorage.getItem("user")) || {}
-  );
+  const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -41,27 +38,13 @@ const Projects = () => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const fetchDataProject = () => {
     // @ts-ignore
     dispatch(getProjectByDepartment({ info, token }));
   };
-  // const { isLoading, data, isError, error, isFetching } = useQuery(
-  //   "dataSendByUser",
-  //   () => getDataProject(info,token),
-  //   {
-  //     refetchIntervalInBackground: true,
-  //     refetchOnWindowFocus: true,
-  //     refetchInterval: 5000,
-  //   }
-  // );
   const columns = [
-    { field: "_id", headerName: "_id" ,hideable: false },
+    { field: "_id", headerName: "_id", hideable: false },
     { field: "id", headerName: "ID", width: 33 },
     {
       field: "Code",
@@ -198,7 +181,7 @@ const Projects = () => {
     ...item,
     DepartmentID: item.DepartmentID?.departmentName,
   }));
-  
+
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       {loading ? (
@@ -222,17 +205,17 @@ const Projects = () => {
             sx={{
               fontSize: "20px",
               "& .MuiDataGrid-cellContent": {
-                textOverflow: "initial !important",
+                // textOverflow: "initial !important",
               },
             }}
           >
-            <StyledDataGrid
+            <DataGrid
               slots={{
                 toolbar: GridToolbar,
               }}
-              gridTheme={{
-                mainColor: "rgb(55, 81, 126)",
-              }}
+              // gridTheme={{
+              //   mainColor: "rgb(55, 81, 126)",
+              // }}
               onStateChange={(state) => {
                 // console.log("asdadasdasdasd====>", state);
               }}
