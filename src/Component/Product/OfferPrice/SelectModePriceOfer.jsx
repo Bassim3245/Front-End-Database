@@ -1,5 +1,6 @@
 import { useTheme } from "@mui/material";
 import "../STyle.css";
+import { useTranslation } from "react-i18next";
 function SelectModePriceOffer(props) {
   const handleSelectModeNormal = () => {
     props?.setSelectModeNormal(true);
@@ -11,6 +12,7 @@ function SelectModePriceOffer(props) {
     props?.setSelectModeNormal(false);
   };
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <div className="Project">
       <div
@@ -23,7 +25,7 @@ function SelectModePriceOffer(props) {
           style={{
             backgroundColor:
               theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "",
-              borderRadius:"10px"
+            borderRadius: "10px",
           }}
         >
           <div className="container ">
@@ -35,9 +37,11 @@ function SelectModePriceOffer(props) {
               <div className="img-holder">
                 <img src="/image/discount2.png" alt="Custom mode" />
               </div>
-              <h2>Without percentage </h2>
-              <p>select normal price offer</p>
-              <button onClick={handleSelectModeNormal}>Normal</button>
+              <h2> {t("ProductList.PriceOffer.Normal")} </h2>
+              <p> {t("ProductList.PriceOffer.NormalText")}</p>
+              <button onClick={handleSelectModeNormal}>
+                {t("ProductList.PriceOffer.Normal")}
+              </button>
             </div>
             <div
               className={`boxSelect time ${
@@ -47,9 +51,12 @@ function SelectModePriceOffer(props) {
               <div className="img-holder">
                 <img src="/image/features-03.jpg" alt="Custom mode" />
               </div>
-              <h2>Add Percentage</h2>
-              <p>Custom mode Offer price</p>
-              <button onClick={handleSelectModeCustom}>Custom</button>
+              <h2> {t("ProductList.PriceOffer.Custom")}</h2>
+              <p> {t("ProductList.PriceOffer.CustomText")}</p>
+              <button onClick={handleSelectModeCustom}>
+                {" "}
+                {t("ProductList.PriceOffer.Custom")}
+              </button>
             </div>
           </div>
         </div>

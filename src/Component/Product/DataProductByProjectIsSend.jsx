@@ -1,13 +1,16 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { IconButton, useTheme } from "@mui/material";
+import { Button, IconButton, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../redux/ProductSlice/ProductAction";
 import OfferPriceMain from "./OfferPrice/OfferPrice";
+import { useTranslation } from "react-i18next";
 const DataProductByProjectIsSend = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const theme = useTheme();
+
   // @ts-ignore
   const { products, loading } = useSelector((state) => state.products);
   const projectId = props?.projectId;
@@ -17,23 +20,34 @@ const DataProductByProjectIsSend = (props) => {
   };
   useEffect(() => {
     getDataProductById();
-  }, [dispatch,open]);
+  }, [dispatch, open]);
   const handleOpenDataProject = () => {
     setOpen(!open);
   };
-  const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <>
       {open ? (
-        <IconButton aria-label="delete" onClick={handleOpenDataProject}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleOpenDataProject}
+        >
           <KeyboardArrowDown />
-        </IconButton>
+        </Button>
       ) : (
-        <IconButton aria-label="delete" onClick={handleOpenDataProject}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleOpenDataProject}
+        >
           <KeyboardArrowUp />
-        </IconButton>
+        </Button>
       )}
-      <div className={`PostionTable container ${open ? "table-container" : ""}`}>
+      <div
+        className={`PostionTable  ${open ? "table-container" : ""}`}
+        style={{ maxWidth: "100%" }}
+      >
         {open && (
           <div className="w-100 ">
             {loading && <div>loading..</div>}
@@ -53,19 +67,19 @@ const DataProductByProjectIsSend = (props) => {
                   hover
                   variant={theme.palette.mode === "dark" ? "dark" : ""}
                   dir="rtl"
-                responsive
+                  responsive
                 >
                   <thead>
                     <tr>
-                    <th>#</th>
-                    <th>اسم المنتج</th>
-                    <th>الملاحضات</th>
-                    <th>المواصفات</th>
-                    <th>العدد</th>
-                      <th>الوحدة</th>
-                      <th>السعر</th>
-                      <th>معامل التحويل</th>
-                      <th>سعر الصرف</th>
+                      <th>#</th>
+                      <th>{t("ProductList.table.ProductName")}</th>
+                      <th>{t("ProductList.table.Notes")}</th>
+                      <th>{t("ProductList.table.Specifications")}</th>
+                      <th>{t("ProductList.table.Quantity")}</th>
+                      <th>{t("ProductList.table.Unit")}</th>
+                      <th>{t("ProductList.table.Price")}</th>
+                      <th> {t("ProductList.table.PriceType")}</th>
+                      <th> {t("ProductList.table.priceConvert")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -73,15 +87,15 @@ const DataProductByProjectIsSend = (props) => {
                       Array.isArray(products) &&
                       products.map((item, index) => (
                         <tr key={index}>
-                          <td >{index + 1}</td>
-                          <td >{item?.nameProduct}</td>
-                          <td >{item?.comments}</td>
-                          <td >{item?.description}</td>
-                          <td >{item?.Quantity}</td>
-                          <td >{item?.UnitId?.Unit}</td>
-                          <td >{item?.Price}</td>
-                          <td >{item?.PriceConvert||"0"}</td>
-                          <td >{item?.PriceType}</td>
+                          <td>{index + 1}</td>
+                          <td>{item?.nameProduct}</td>
+                          <td>{item?.comments}</td>
+                          <td>{item?.description}</td>
+                          <td>{item?.Quantity}</td>
+                          <td>{item?.UnitId?.Unit}</td>
+                          <td>{item?.Price}</td>
+                          <td>{item?.PriceConvert || "0"}</td>
+                          <td>{item?.PriceType}</td>
                         </tr>
                       ))}
                   </tbody>

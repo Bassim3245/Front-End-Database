@@ -15,7 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Edit } from "@mui/icons-material";
 import { getallDepartment } from "../../../../../../redux/DepartmentState/DepartmentAction";
-import { getDataUserById } from "../../../../..//Config/fetchData";
+import { getDataUserById, getRole } from "../../../../..//Config/fetchData";
 import { useQuery } from "react-query";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -23,10 +23,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 export default function ModuleEdit(props) {
-  const { department, isLoading } = useSelector((state) => {
-    return state?.Department;
-  });
-
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const token = localStorage.getItem("token") || {};
@@ -38,7 +34,6 @@ export default function ModuleEdit(props) {
       // refetchInterval: 500,
     }
   );
-
   const [name, setUname] = useState("");
   const [username, setUsername] = useState("");
   const [Phone, setPhone] = useState("");
@@ -56,11 +51,7 @@ export default function ModuleEdit(props) {
       setDepartmentId(data?.DepartmentID);
     }
   }, [open]);
-  // React.useEffect(() => {
-  //   // @ts-ignore
-  //   console.log("thise data", data);
-  //   dispatch(getallDepartment());
-  // }, []);
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,6 +67,10 @@ export default function ModuleEdit(props) {
     };
     fetchData();
   }, []);
+  const { isLoading, dataRole, refetch } = useQuery("getRole", getRole, {});
+React.useEffect(()=>{
+refetch()
+},[])
   const HandleSubmit = async () => {
     try {
       const formData = new FormData();
@@ -210,6 +205,22 @@ export default function ModuleEdit(props) {
             {dataDepartment?.map((option) => (
               <MenuItem key={option?._id} value={option?._id}>
                 {option?.departmentName}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="outlined-select-currency"
+            sx={{ width: "500px", maxWidth: "100%" }}
+            className="mb-4 me-3"
+            select
+            label="Role "
+            name="Role"
+            // value={DepartmentID}
+            // onChange={(e) => setDepartmentId(e.value.target)}
+          >
+            {dataRole?.map((option) => (
+              <MenuItem key={option?._id} value={option?._id}>
+                {option?.RoleName}
               </MenuItem>
             ))}
           </TextField>

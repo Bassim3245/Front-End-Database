@@ -68,26 +68,31 @@
       "ProjectName": "الطلبات المستلمة "
     }
   },
-  "ProductList":{
+  "ProductList": {
     "title": "قائمة المنتجات ",
     "BackButton": "رجوع",
-    "SendButton":"ارسال المشروع",
-    "InsertButton":"اضافة منتج",
-    "ButtonUpload":"رفع فايل",
-
+    "SendButton": "ارسال المشروع",
+    "InsertButton": "اضافة منتج",
+    "ButtonUpload": "رفع فايل",
     "table": {
       "Action": "اجراء",
       "Unit": "الوحدة",
       "AdditionPercentage": "النسبة المضافة",
       "Price": "السعر",
-      "Quantity":"الكمية",
-      "PriceType":" سعر الصرف",
-      "priceConvert":"معامل التحويل  ",
-      "Specifications":"المواصفات",
-      "Notes":"الملاحظات",
-      "ProductName":"اسم المنتج ",
-      "test":"test"
+      "Quantity": "الكمية",
+      "PriceType": " سعر الصرف",
+      "priceConvert": "معامل التحويل  ",
+      "Specifications": "المواصفات",
+      "Notes": "الملاحظات",
+      "ProductName": "اسم المنتج ",
+      "test": "test"
+    },
+    "PriceOffer": {
+      "PriceOffer": " العرض السعري",
+      "Normal": "العادي",
+      "NormalText": "العرض السعري العادي",
+      "Custom": "المخصص",
+      "CustomText": "العرض السعري المخصص"
     }
   }
-
 }

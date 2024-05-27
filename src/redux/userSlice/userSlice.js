@@ -4,7 +4,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     loading: false,
-    data: [],
+    dataUsers: [],
     Rol:null,
     code:false,
     isFetching: false,
@@ -66,7 +66,7 @@ export const userSlice = createSlice({
      .addCase(getAllDataUser.fulfilled, (state, {payload}) => {
         state.loading = false
         state.isSuccessMessage = true 
-        state.data = payload
+        state.dataUsers = payload
       })
       .addCase(getAllDataUser.rejected, (state, {payload}) => {
         state.loading = false
@@ -83,7 +83,7 @@ export const userSlice = createSlice({
      .addCase(getAllDataUserById.fulfilled, (state, {payload}) => {
         state.loading = false
         state.isSuccessMessage = true 
-        state.data = payload
+        state.dataUsers = payload
       })
       .addCase(getAllDataUserById.rejected, (state, {payload}) => {
         state.loading = false

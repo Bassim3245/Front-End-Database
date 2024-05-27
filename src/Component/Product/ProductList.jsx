@@ -6,7 +6,7 @@ import DataProductByProjectIsSend from "./DataProductByProjectIsSend";
 import "./STyle.css";
 import Loader from "../Config/Loader";
 import { Table } from "react-bootstrap";
-import { IconButton, useTheme } from "@mui/material";
+import { IconButton, MenuItem, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,8 @@ import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { ToastContainer, toast } from "react-toastify";
+import DropDownGrid from "Component/Config/CustomMennu";
+import { formatDate } from "../Config/Function";
 function Product() {
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
@@ -24,11 +26,6 @@ function Product() {
   const { t } = useTranslation();
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const theme = useTheme();
-
-  const formatDate = (Data) => {
-    const date = new Date(Data);
-    return moment(date).format(" HH:mm YYYY/MM/DD ");
-  };
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "dataSendByUser",
     () => getDataBySendUserProjectAndProduct(DepartmentID),
@@ -161,25 +158,33 @@ function Product() {
                       <td>{index + 1}</td>
                       <td>{Project?.DepartmentID?.departmentName}</td>
                       <td>{Project?.nameProject}</td>
-                      <td style={{ direction: "rtl" }}>
-                        {formatDate(Project?.createdAt)}
-                      </td>
+                      <td>{formatDate(Project?.createdAt)}</td>
                       <td>{Project?.userId?.name}</td>
                       <td>{Project?.userId?.Phone}</td>
-                      <td>
-                        <div className=" ">
+                      <td className="d-flex text-center">
+                        <DropDownGrid className="p-0">
+                          <MenuItem onClick={() => showSwal(Project?._id)}>
+                            <span className="me-2">
+                              {" "}
+                              <CancelScheduleSend />
+                            </span>
+                            Cancel sending
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => handelSendData(Project?._id)}
+                          >
+                            <span className="me-2">
+                              {" "}
+                              <Send />
+                            </span>
+                            send
+                          </MenuItem>
+                        </DropDownGrid>
+                        <span className="ms-3">
                           <DataProductByProjectIsSend
                             projectId={Project?._id}
                           />
-                          <IconButton onClick={() => showSwal(Project?._id)}>
-                            <CancelScheduleSend />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => handelSendData(Project?._id)}
-                          >
-                            <Send />
-                          </IconButton>
-                        </div>
+                        </span>
                       </td>
                     </tr>
                   ))}

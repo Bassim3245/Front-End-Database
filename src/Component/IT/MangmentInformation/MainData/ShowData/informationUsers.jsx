@@ -16,13 +16,13 @@ import {
 import { useNavigate } from "react-router";
 import ModuleEdit from "./RoleAndPermission/EditUser";
 import Swal from "sweetalert2";
+import Loader from "../../../../Config/Loader";
 function InformationUsers({ dataEmploy, theme }) {
   // @ts-ignore
-
-  const { data } = useSelector((state) => state.user);
+  const { dataUsers, loading } = useSelector((state) => state.user);
   const [message, setMessage] = useState("");
   // @ts-ignore
-  const [UpdateDataUser,setDataUser]=useState(false);
+  const [UpdateDataUser, setDataUser] = useState(false);
   // @ts-ignore
   const dispatch = useDispatch();
   const Navigate = useNavigate();
@@ -45,15 +45,14 @@ function InformationUsers({ dataEmploy, theme }) {
         cancelButtonText: "No, cancel!",
         reverseButtons: true,
       });
-  
+
       if (result.isConfirmed) {
         // @ts-ignore
         const response = await axios({
           method: "DELETE",
           url: `${BackendUrl}/api/deleteUserById/${Id}`,
         });
-        setMessage(response?.data?.message)
-      toast.success(message);
+        setMessage(response?.data?.message);
         swalWithBootstrapButtons.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
@@ -69,7 +68,7 @@ function InformationUsers({ dataEmploy, theme }) {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   // @ts-ignore
   const FetchDataUser = () => {
     // @ts-ignore
@@ -78,12 +77,13 @@ function InformationUsers({ dataEmploy, theme }) {
   const handleEdit = () => {};
   useEffect(() => {
     FetchDataUser();
-  }, [dataEmploy, toast, setMessage, message,UpdateDataUser]);
+  }, [dataEmploy, message, UpdateDataUser]);
   const handelAccess = (id) => {
-    Navigate(`PermissionUsers/${id}`);
+    Navigate(`/Home/PermissionUsers/${id}`);
   };
   return (
     <>
+      {loading && <Loader />}
       <ToastContainer />
       <Table
         striped
@@ -103,8 +103,8 @@ function InformationUsers({ dataEmploy, theme }) {
           </tr>
         </thead>
         <tbody>
-          {data && Array.isArray(data)
-            ? data?.map((item, index) => (
+          {dataUsers && Array.isArray(dataUsers)
+            ? dataUsers?.map((item, index) => (
                 <tr key={item?._id}>
                   <td>{index + 1}</td>
                   <td>{item?.name}</td>

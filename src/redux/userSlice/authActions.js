@@ -77,14 +77,14 @@ const getAllDataUser = createAsyncThunk(
 );
 const getAllDataUserById = createAsyncThunk(
   "auth/getAllUserById",
-  async ({id,token}, { rejectWithValue }) => {
+  async ({ id, token }, { rejectWithValue }) => {
     try {
       const response = await axios({
         method: "get",
         url: `${BackendUrl}/api/getDataUserById/${id}`,
         headers: {
           Accept: "application/json",
-          token:token
+          token: token,
         },
       });
       if (response || response?.data) {

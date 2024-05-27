@@ -8,6 +8,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
 import { ButtonClearState, ButtonSave } from "../../../../Config/Content";
+import { useQuery } from "react-query";
+import { getRole } from "../../../../Config/fetchData";
 
 export default function ShowDataUnitAndRole({
   themeMode,
@@ -26,7 +28,11 @@ export default function ShowDataUnitAndRole({
   const handleClose = () => {
     setOpen(false);
   };
-
+  const { isLoading, data, error, refetch } = useQuery("getRole", getRole, {});
+  React.useEffect(() => {
+    refetch();
+    console.log(data);
+  }, [open]);
   return (
     <Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -75,7 +81,7 @@ export default function ShowDataUnitAndRole({
                   </tr>
                 ))}
               {label === "Role" &&
-                RoleData?.map((data, index) => (
+                data?.map((data, index) => (
                   <tr key={data?._id}>
                     <td>{index + 1}</td>
                     <td>{data?.RoleName}</td>

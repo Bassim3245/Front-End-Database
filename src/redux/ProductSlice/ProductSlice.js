@@ -32,13 +32,14 @@ const ProductSlice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.products = action?.payload;
+          state.loading=false
+
         }
       })
       .addCase(displayProductByProjectName.rejected, (state, { payload }) => {
         state.isError = true;
         state.loading = false;
         state.isSuccess = false;
-        state.message = payload;
       })
 
   },

@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { ColorButton, VisuallyHiddenInput } from "../../../Config/Content";
 import { Button, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { getRole } from "../../../Config/fetchData";
+import { useQuery } from "react-query";
 function Register(props) {
   // @ts-ignore
   const { isSuccess, isError, message } = useSelector((state) => state?.user);
@@ -16,8 +18,14 @@ function Register(props) {
   const [Phone, setPhone] = useState("");
   const [user_type, setUserType] = useState("");
   const [DepartmentID, setDepartmentID] = useState("");
+  const [RoleId, setRoleId] = useState("");
   const dispatch = useDispatch();
+  const { isLoading, data, error, refetch } = useQuery("getRole", getRole, {});
 
+  useEffect(() => {
+    refetch();
+    console.log(data);
+  }, [name, password, username]);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(image);
@@ -29,6 +37,7 @@ function Register(props) {
     formData.append("user_type", user_type);
     formData.append("DepartmentID", DepartmentID);
     formData.append("image", image);
+    formData.append("RoleId", RoleId);
     // @ts-ignore
     dispatch(registerUser(formData));
     setName("");
@@ -67,7 +76,7 @@ function Register(props) {
                   className="h1 fw-bold mb-3 mx-1 mx-md-4 mt-3"
                   style={{ direction: "rtl" }}
                 >
-                  تسجيل الموظفين
+                  بيانات الموظفين
                 </p>
                 <form className="mx-1 mx-md-4" onSubmit={handleSubmit}>
                   <div className="d-flex flex-row align-items-center mb-1">
@@ -166,6 +175,8 @@ function Register(props) {
                         <option value="Employ">Employ</option>
                         <option value="H.O.D">Head of Department</option>
                         <option value="HR">HR</option>
+                        <option value="Assistance">Assistance</option>
+                        <option value="manager">Manager</option>
                       </select>
                     </div>
                   </div>
@@ -190,6 +201,33 @@ function Register(props) {
                               {data?.departmentName}
                             </option>
                           ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-row align-items-center mb-1">
+                    <div className="form-outline flex-fill mb-0">
+                      <label className="form-label" htmlFor="DepartmentID">
+                        Role:
+                      </label>
+                      <select
+                        data-bs-theme={
+                          theme.palette.mode === "dark" ? "dark" : ""
+                        }
+                        className="form-select"
+                        name="DepartmentID"
+                        value={RoleId}
+                        onChange={(e) => setRoleId(e.target.value)}
+                      >
+                        <option value="">Open this select role</option>
+                        {data &&
+                          data
+                            ?.filter((option) => option.RoleName !== "Root")
+                            .map((item) => (
+                              <option key={item?._id} value={item?._id}>
+                                {item?.RoleName}
+                              </option>
+                            ))}
                       </select>
                     </div>
                   </div>

@@ -15,15 +15,12 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useSelector, useDispatch } from "react-redux";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {  useDispatch } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { useState, useEffect } from "react";
 import {
   LevelOfAchevment,
   PerformenceLevel,
-  currencies,
-  optionMethod,
 } from "../../Config/SelectDrobdown";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
@@ -55,6 +52,9 @@ export default function MainForm(props) {
   const [DateBook, setDateBook] = useState("");
   const [DateClose, setDateClose] = useState("");
   const [dataUserID, setDataUserID] = useState([]);
+  const [startTime, setStartTime] = React.useState("");
+  const [endTime, setEndTime] = React.useState("");
+
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
     nameProject: "",
@@ -101,6 +101,8 @@ export default function MainForm(props) {
       formData.append("LevelPerformance", LevelPerformance);
       formData.append("DateBook", DateBook);
       formData.append("DateClose", DateClose);
+      formData.append("startTime", startTime);
+      formData.append("endTime", endTime);
       formData.append("comments", comments);
       // @ts-ignore
       const response = await axios({
@@ -165,6 +167,7 @@ export default function MainForm(props) {
   }, [open]);
   useEffect(() => {
     // @ts-ignore
+    console.log(endTime);
     dispatch(getDataNatural());
   }, [AddWorkNutral]);
   const theme = createTheme({
@@ -222,10 +225,8 @@ export default function MainForm(props) {
                   dir="rtl"
                   value={WorkNatural}
                   onChange={handleInputChange}
-                >
-            
-                </TextField>
-         
+                ></TextField>
+
                 {/* end WorkNatural */}
 
                 <TextField
@@ -237,8 +238,7 @@ export default function MainForm(props) {
                   dir="rtl"
                   value={MethodOption}
                   onChange={handleInputChange}
-                >
-                </TextField>
+                ></TextField>
                 {/* end MethodOption */}
 
                 <TextField
@@ -250,9 +250,7 @@ export default function MainForm(props) {
                   dir="rtl"
                   value={Stage}
                   onChange={handleInputChange}
-                >
-             
-                </TextField>
+                ></TextField>
 
                 {/* end Stage */}
                 {/*textarea  */}
@@ -376,6 +374,18 @@ export default function MainForm(props) {
                     </LocalizationProvider>
                   </div>
                 </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                    <DatePicker
+                      label="start"
+                      onChange={(value) => setStartTime(value)}
+                    />
+                    <DatePicker
+                      label="end"
+                      onChange={(value) => setEndTime(value)}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
                 {/* end Date for the project  */}
                 {/* start select */}
                 {/* start beneficiary*/}
@@ -408,7 +418,13 @@ export default function MainForm(props) {
                 >
                   {dataUserID.map((option) => (
                     <MenuItem key={option._id} value={option._id}>
-                      {option.name} <span className="text-secondary ms-3" style={{fontSize:"15px"}}>{option.user_type}</span>
+                      {option.name}{" "}
+                      <span
+                        className="text-secondary ms-3"
+                        style={{ fontSize: "15px" }}
+                      >
+                        {option.user_type}
+                      </span>
                     </MenuItem>
                   ))}
                 </TextField>

@@ -8,6 +8,7 @@ import notificationSlice from "./Notification/NotificationState";
 import DepartmentSlice from "./DepartmentState/DepartmentSlice";
 import languageSlice from "./LanguageState"
 import CustomDataFormPriceOfferPrice  from "./OfferPriceCustomStat/OfferPriceCustomSlice";
+import  RolesReducer  from "./RoleSlice/RoleSlice";
 // @ts-ignore
 const enhance = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const store = configureStore(
@@ -21,7 +22,8 @@ const store = configureStore(
       notification: notificationSlice,
       Department:DepartmentSlice,
       language: languageSlice,
-      CustomDataPrice:CustomDataFormPriceOfferPrice
+      CustomDataPrice:CustomDataFormPriceOfferPrice,
+      RolesData:RolesReducer
     },
   },
   // @ts-ignore

@@ -110,7 +110,6 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   const HandleProfile = () => {
     navigate("Profile");
   };
-
   useEffect(() => {
     const DepartmentID = info?.DepartmentID;
     // @ts-ignore
@@ -145,7 +144,9 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
         </IconButton>
         <Typography component="h1" sx={{ fontSize: "20px" }}>
           {t("appBar.userName", { name: info?.name })}
-          <span className="ms-3" style={{color:"inherit"}}>({department?.departmentName})</span>
+          <span className="ms-3" style={{ color: "inherit" }}>
+            ({department?.departmentName})
+          </span>
         </Typography>
         <Box flexGrow={1} />
         <Stack direction={"row"}>
@@ -183,8 +184,8 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
           {/* start Notifction */}
           <Nonfiction votes={votes} />
           {/* start end */}
+          {info.user_type !== "IT" ? <ReceiveData info={info} /> : null}
 
-          <ReceiveData info={info} />
           <IconButton
             color="inherit"
             id="basic-button"

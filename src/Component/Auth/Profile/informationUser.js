@@ -13,12 +13,11 @@ import { ToastContainer, toast } from "react-toastify";
 import { BackendUrl } from "../../../redux/api/axios";
 import axios from "axios";
 import { getAllDataUserById } from "../../../redux/userSlice/authActions";
-
 export default function PersonalProfile(props) {
   const { department } = useSelector((state) => {
     return state.Department;
   });
-  const { data, loading } = useSelector((state) => {
+  const { dataUsers, loading } = useSelector((state) => {
     return state.user;
   });
   const [info, setInfo] = useState(
@@ -26,8 +25,6 @@ export default function PersonalProfile(props) {
   );
   const theme = useTheme();
   const [file, setFile] = useState([]);
-  if (data) {
-  }
   const [name, setUname] = useState("");
   const [username, setUsername] = useState("");
   const [Phone, setPhone] = useState("");
@@ -36,7 +33,7 @@ export default function PersonalProfile(props) {
   const [isloading, setLoading] = useState(true);
   const [DepartmentID, setDepartment] = useState(info?.DepartmentID || "");
   useEffect(() => {
-    if (data) {
+    if (dataUsers) {
       setUname(info?.name);
       setUsername(info?.username);
       setPassword(info?.password);
@@ -120,14 +117,14 @@ export default function PersonalProfile(props) {
               setFile={setFile}
               token={token}
               theme={theme}
-              data={data}
+              data={dataUsers}
             />
             {!edit ? (
               <InformationUserList
                 info={info}
                 department={department}
                 theme={theme}
-                data={data}
+                data={dataUsers}
               />
             ) : (
               <Edit
@@ -141,7 +138,7 @@ export default function PersonalProfile(props) {
                 setPassword={setPassword}
                 info={info}
                 theme={theme}
-                data={data}
+                data={dataUsers}
               />
             )}
             <div>

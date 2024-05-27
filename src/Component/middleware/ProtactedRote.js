@@ -1,43 +1,115 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Preloading from "./Preload/Preloading";
-import { toast } from "react-toastify";
-
 import { useDispatch, useSelector } from "react-redux";
-
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import * as FaIcons from "react-icons/fa";
-import * as BsIcons from "react-icons/bs";
-import * as ImIcons from "react-icons/im";
-import * as MdIcons from "react-icons/md";
-import * as BiIocns from "react-icons/bi";
-import * as GiIcons from "react-icons/gi";
-import * as AiIcons from "react-icons/ai";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
-import { Outlet } from "react-router-dom";
-
-import AppsSharpIcon from "@mui/icons-material/AppsSharp";
-import BookmarkAddedSharpIcon from "@mui/icons-material/BookmarkAddedSharp";
-import AssignmentSharpIcon from "@mui/icons-material/AssignmentSharp";
-import DashboardSharpIcon from "@mui/icons-material/DashboardSharp";
-import BeenhereIcon from "@mui/icons-material/Beenhere";
-import PeopleAltSharpIcon from "@mui/icons-material/PeopleAltSharp";
-import SmsFailedSharpIcon from "@mui/icons-material/SmsFailedSharp";
 import RedirectPages from "./RedirectPages/RedirectPages";
 import axios from "axios";
-import { setRolesRedux } from "../reduxStore/RolesReducer";
+import { setRolesRedux } from "../../redux/RoleSlice/RoleSlice";
 import rolesApi from "../Network/Role";
 import { setGlobalLoading } from "../reduxStore/SettingsReducer";
 import Pusher from "pusher-js";
-import PathListRoutes from './PathListRoutes'
-import notificationAPI from "../Network/Notification";
-import { setTotalUnreadNotificationsCountRedux } from "../reduxStore/NotificationReducer";
+// import PathListRoutes from './PathListRoutes'
 Pusher.logToConsole = true;
-
 const cookies = new Cookies();
+const PathListRoutes = [
+  {
+    index: 1,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "MangeUser",
+  },
+  {
+    index: 2,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "GeneralDataInformation",
+  },
+
+  {
+    index: 3,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "ProjectList",
+  },
+
+  {
+    index: 4,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "/Dashboard",
+  },
+  {
+    index: 5,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "ProjectList",
+  },
+  {
+    index: 6,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "ProductList",
+  },
+  {
+    index: 7,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "Event",
+  },
+
+  {
+    index: 8,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "AnalyticsData",
+  },
+  {
+    index: 9,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "BusinessPersonsMain",
+  },
+  {
+    index: 10,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "PerformsnceAnalytcsMain",
+  },
+  {
+    index:11,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "ProjectList",
+  },
+  {
+    index: 12,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "ProductList",
+  },
+  {
+    index: 13,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "Event",
+  },
+
+  {
+    index: 14,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "AnalyticsData",
+  },
+  {
+    index:15,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "BusinessPersonsMain",
+  },
+  {
+    index:16,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "PerformsnceAnalytcsMain",
+  },
+
+  {
+    index: 17,
+    Check:  (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "HR",
+  },
+  {
+    index:18,
+    Check: (setRolesRedux)=>{setRolesRedux.Add_General_Data.value},
+    path: "FilesReceived",
+  },
+];
 
 export default function ProtectionAdmin(props) {
   const [t] = useTranslation("common");
@@ -53,48 +125,48 @@ export default function ProtectionAdmin(props) {
   const rolesRedux = useSelector((state) => state.rolesData.roles);
   const userData = useSelector((state) => state.userData.data);
   const tokenData = useSelector((state) => state.userData.token);
-  const [firstLoading,setFirstLoading] = useState(true);
+  const [firstLoading, setFirstLoading] = useState(true);
   // console.log('rolesRedux==>', rolesRedux)
   let location = useLocation();
-  const pathsList = PathListRoutes
+  const pathsList = PathListRoutes;
 
   const getRoles = async () => {
-    if(!firstLoading) return;
+    if (!firstLoading) return;
     let data = null;
     try {
-      setRoleLoading(true)
-      setLoading(true)
+      setRoleLoading(true);
+      setLoading(true);
       data = await rolesApi.userRoles();
-      setFirstLoading(false)
+      setFirstLoading(false);
       if (data && data?.status) {
-        console.log('datadadasdsadas==>', data?.data)
-        let arr = []
+        console.log("datadadasdsadas==>", data?.data);
+        let arr = [];
         if (data?.data && data?.data?.length)
-          arr = data?.data?.map(item => item?.id);
+          arr = data?.data?.map((item) => item?.id);
 
         setUserRoles(arr);
-        setRoleLoading(false)
-        setLoading(false)
+        setRoleLoading(false);
+        setLoading(false);
       } else {
-        setRoleLoading(false)
-        setLoading(false)
+        setRoleLoading(false);
+        setLoading(false);
       }
     } catch (err) {
-      setFirstLoading(false)
-      dispatch(setGlobalLoading(false))
-      setRoleLoading(false)
-      setLoading(false)
+      setFirstLoading(false);
+      dispatch(setGlobalLoading(false));
+      setRoleLoading(false);
+      setLoading(false);
       console.log(err?.message);
     }
   };
   useEffect(() => {
-    console.log('protected admin called===>',firstLoading)
+    console.log("protected admin called===>", firstLoading);
     getRoles();
   }, []);
-  useEffect(() => {
-    if(tokenData)
-    loadNotificationsData()
-  }, [tokenData]);
+  // useEffect(() => {
+  //   if(tokenData)
+  //   loadNotificationsData()
+  // }, [tokenData]);
   const dispatch = useDispatch();
   const hadleCheckIdExists = (roles) => {
     const updatedRoles = Object.entries(rolesRedux).reduce(
@@ -125,8 +197,8 @@ export default function ProtectionAdmin(props) {
     let abortController = new AbortController();
     if (rolesRedux) {
       routeChange();
-      window.pusher = null;
-      subscribeToNotifications()
+      // window.pusher = null;
+      // subscribeToNotifications()
     }
     return () => {
       abortController.abort();
@@ -141,7 +213,6 @@ export default function ProtectionAdmin(props) {
       abortController.abort();
     };
   }, [location?.pathname]);
-
   const routeChange = async () => {
     setLoading(true);
     if (userRoles && userRoles?.length > 0) {
@@ -153,7 +224,7 @@ export default function ProtectionAdmin(props) {
           if (!check) {
             if (location?.pathname == `${mainpath}/${itm?.to}`) {
               let checkIsInRole = false;
-              if (itm?.roles(rolesRedux, userData) == true) {
+              if (itm?.roles(rolesRedux) == true) {
                 checkIsInRole = true;
               }
               if (checkIsInRole) {
@@ -186,117 +257,115 @@ export default function ProtectionAdmin(props) {
     setLoading(false);
   };
   var timer;
+  // useEffect(() => {
+  //   subscribeToNotifications();
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, []);
+  // const subscribeToNotifications = () => {
+  //   if (!window?.pusher) {
+  //     var pusher = null;
+  //     window.pusher = pusher = new Pusher("d95c44395f081fd6bb8f", {
+  //       cluster: "ap1",
+  //     });
+  //     subscribeToChangeOrderStatusNotifications(pusher)
+  //   }
+  // };
+  // const subscribeToChangeOrderStatusNotifications = (pusher) => {
+  //   console.log('asdasdasdasasdas=========>entered')
+  //   const current_user_id = cookies.get("user_id");
+  //   const channelName = `new-order`;
+  //   const eventName = 'new-order-event'
+  //   const newOrderData = pusher.subscribe(channelName);
+  //   console.log('asdasdasdasasdas=========>1')
+  //   newOrderData.bind(eventName, (notification) => {
+  //     console.log('asdasdasdasasdas=========>', notification)
+  //     if (
+  //       (userData && userData?.group?.id == 1) && rolesRedux?.show_notification?.value
+  //     ) {
+  //       var data = notification?.notification
+  //       console.log('asdasdasdasasdas=========>2', data)
 
-  useEffect(() => {
-    subscribeToNotifications();
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-  const subscribeToNotifications = () => {
-    if (!window?.pusher) {
-      var pusher = null;
-      window.pusher = pusher = new Pusher("d95c44395f081fd6bb8f", {
-        cluster: "ap1",
-      });
-      subscribeToChangeOrderStatusNotifications(pusher)
-    }
-  };
-  const subscribeToChangeOrderStatusNotifications = (pusher) => {
-    console.log('asdasdasdasasdas=========>entered')
-    const current_user_id = cookies.get("user_id");
-    const channelName = `new-order`;
-    const eventName = 'new-order-event'
-    const newOrderData = pusher.subscribe(channelName);
-    console.log('asdasdasdasasdas=========>1')
-    newOrderData.bind(eventName, (notification) => {
-      console.log('asdasdasdasasdas=========>', notification)
-      if (
-        (userData && userData?.group?.id == 1) && rolesRedux?.show_notification?.value
-      ) {
-        var data = notification?.notification
-        console.log('asdasdasdasasdas=========>2', data)
+  //       const title = data?.body;
+  //       if ("Notification" in window) {
+  //         console.log('asdasdasdasasdas=========>Notification API is supported')
 
-        const title = data?.body;
-        if ("Notification" in window) {
-          console.log('asdasdasdasasdas=========>Notification API is supported')
-
-          // Notification API is supported
-          if (Notification.permission === "granted") {
-            console.log('asdasdasdasasdas=========>3')
-            const notification = new Notification(data?.title, {
-              body: title,
-              icon: require("../assets/img/logo.png").default,
-              data: { url: window.location.origin + mainpath + `/notifications?id=${data?.id}` },
-            });
-            console.log('asdasdasdasasdas=========>4')
-            notification.onclick = function (event) {
-              event.preventDefault();
-              window.focus();
-              const url = event.target.data.url;
-              window.open(url, "_blank");
-            };
-          } else {
-            console.log('asdasdasdasasdas=========>5')
-            Notification.requestPermission().then(function (permission) {
-              console.log('asdasdasdasasdas=========>6')
-              if (permission === "granted") {
-                console.log('asdasdasdasasdas=========>7')
-                // User has granted permission
-                const notification = new Notification(data?.title, {
-                  body: title,
-                  icon: require("../assets/img/logo.png").default,
-                  data: { url: window.location.origin + mainpath + `/notifications?id=${data?.id}` },
-                });
-                console.log('asdasdasdasasdas=========>8')
-                notification.onclick = function (event) {
-                  event.preventDefault();
-                  window.focus();
-                  const url = event.target.data.url;
-                  window.open(url, "_blank");
-                };
-              }
-            });
-          }
-        }
-        let titleText = title && title?.length > 45 ? (title?.slice(0, 45) + '...') : title
-        toast.info(titleText, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          toastId: data?.id,
-        });
-        loadNotificationsData();
-      }
-    });
-  };
-  const loadNotificationsData = async () => {
-    try {
-      // setLoading(true);
-      let result = await notificationAPI.unReadedNotifications({
-        noLoading: true,
-        params:{
-          get_count:1,
-        }
-      })
-      // setLoading(false);
-      if (result?.status) {
-        dispatch(setTotalUnreadNotificationsCountRedux(result?.data?.data?.un_readed_count));
-      } else {
-      }
-    } catch (err) {
-      setLoading(false);
-    }
-  };
-  
+  //         // Notification API is supported
+  //         if (Notification.permission === "granted") {
+  //           console.log('asdasdasdasasdas=========>3')
+  //           const notification = new Notification(data?.title, {
+  //             body: title,
+  //             icon: require("../assets/img/logo.png").default,
+  //             data: { url: window.location.origin + mainpath + `/notifications?id=${data?.id}` },
+  //           });
+  //           console.log('asdasdasdasasdas=========>4')
+  //           notification.onclick = function (event) {
+  //             event.preventDefault();
+  //             window.focus();
+  //             const url = event.target.data.url;
+  //             window.open(url, "_blank");
+  //           };
+  //         } else {
+  //           console.log('asdasdasdasasdas=========>5')
+  //           Notification.requestPermission().then(function (permission) {
+  //             console.log('asdasdasdasasdas=========>6')
+  //             if (permission === "granted") {
+  //               console.log('asdasdasdasasdas=========>7')
+  //               // User has granted permission
+  //               const notification = new Notification(data?.title, {
+  //                 body: title,
+  //                 icon: require("../assets/img/logo.png").default,
+  //                 data: { url: window.location.origin + mainpath + `/notifications?id=${data?.id}` },
+  //               });
+  //               console.log('asdasdasdasasdas=========>8')
+  //               notification.onclick = function (event) {
+  //                 event.preventDefault();
+  //                 window.focus();
+  //                 const url = event.target.data.url;
+  //                 window.open(url, "_blank");
+  //               };
+  //             }
+  //           });
+  //         }
+  //       }
+  //       let titleText = title && title?.length > 45 ? (title?.slice(0, 45) + '...') : title
+  //       toast.info(titleText, {
+  //         position: "bottom-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "dark",
+  //         toastId: data?.id,
+  //       });
+  //       loadNotificationsData();
+  //     }
+  //   });
+  // };
+  // const loadNotificationsData = async () => {
+  //   try {
+  //     // setLoading(true);
+  //     let result = await notificationAPI.unReadedNotifications({
+  //       noLoading: true,
+  //       params:{
+  //         get_count:1,
+  //       }
+  //     })
+  //     // setLoading(false);
+  //     if (result?.status) {
+  //       dispatch(setTotalUnreadNotificationsCountRedux(result?.data?.data?.un_readed_count));
+  //     } else {
+  //     }
+  //   } catch (err) {
+  //     setLoading(false);
+  //   }
+  // };
   if (!loading) {
     if (hasAccessToThisRoute && token) {
-      return props?.children
+      return props?.children;
     } else {
       if (code === 404)
         return (
@@ -330,23 +399,13 @@ export default function ProtectionAdmin(props) {
           />
         );
       else if (!token) {
-
-        if (cookies.get('username'))
-          cookies.remove("username");
-
-        if (localStorage.getItem('userData'))
+        if (cookies.get("username")) cookies.remove("username");
+        if (localStorage.getItem("userData"))
           localStorage.removeItem("userData");
-
-        if (cookies.get('user_id'))
-          cookies.remove("user_id");
-
-        if (localStorage.getItem('roles'))
-          localStorage.removeItem("roles");
-        if (cookies.get('token'))
-          cookies.remove("token");
-        if (cookies.get('default_route'))
-          cookies.remove("default_route")
-
+        if (cookies.get("user_id")) cookies.remove("user_id");
+        if (localStorage.getItem("roles")) localStorage.removeItem("roles");
+        if (cookies.get("token")) cookies.remove("token");
+        if (cookies.get("default_route")) cookies.remove("default_route");
         window.location.href = "/";
       }
     }

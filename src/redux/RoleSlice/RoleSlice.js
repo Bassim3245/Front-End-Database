@@ -1,223 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { getRoleAndUserId } from "./rolAction";
 const initialState = {
+  Permission: [],
+  isError: false,
+  isSuccess: false,
+  loading: false,
   roles: {
-    view_user_profile: {
-      value: true,
-      id: 2000,
-    },
-    view_landing: {
-      value: true,
-      id: 2000,
-    },
-    view_user: {
-      value: false,
-      id: 1,
-    },
-    add_user: {
-      value: false,
-      id: 2,
-    },
-    update_user: {
-      value: false,
-      id: 3,
-    },
-    delete_user: {
-      value: false,
-      id: 4,
-    },
-    view_group: {
-      value: false,
-      id: 5,
-    },
-    assign_role_to_group: {
-      value: false,
-      id: 6,
-    },
-    assign_group_to_user: {
-      value: false,
-      id: 7,
-    },
-    show_roles: {
-      value: false,
-      id: 8,
-    },
-    view_image_type: {
-      value: false,
-      id: 9,
-    },
-    add_image_type: {
-      value: false,
-      id: 10,
-    },
-    update_image_type: {
-      value: false,
-      id: 11,
-    },
-    delete_image_type: {
-      value: false,
-      id: 12,
-    },
-
-    view_image: {
-      value: false,
-      id: 13,
-    },
-    add_image: {
-      value: false,
-      id: 14,
-    },
-    update_image: {
-      value: false,
-      id: 15,
-    },
-    delete_image: {
-      value: false,
-      id: 16,
-    },
-
-    view_driver_id_type: {
-      value: false,
-      id: 17,
-    },
-    view_vehicle_type: {
-      value: false,
-      id: 18,
-    },
-    view_vehicle_plate_type: {
-      value: false,
-      id: 19,
-    },
-    add_image_to_vehicle_plate_type: {
-      value: false,
-      id: 20,
-    },
-    view_vehicle_plate_government: {
-      value: false,
-      id: 21,
-    },
-    view_vehicle_plate_letter: {
-      value: false,
-      id: 22,
-    },
-    view_order_status: {
-      value: false,
-      id: 23,
-    },
-    view_order: {
-      value: false,
-      id: 24,
-    },
-    add_order: {
-      value: false,
-      id: 25,
-    },
-    update_order: {
-      value: false,
-      id: 26,
-    },
-    delete_order: {
-      value: false,
-      id: 27,
-    },
-    view_vehicle: {
-      value: false,
-      id: 28,
-    },
-    add_vehicle: {
-      value: false,
-      id: 29,
-    },
-    update_vehicle: {
-      value: false,
-      id: 30,
-    },
-    delete_vehicle: {
-      value: false,
-      id: 31,
-    },
-    change_order_status: {
-      value: false,
-      id: 32,
-    },
-    view_takeel_issue_source: {
-      value: false,
-      id: 33,
-    },
-    add_takeel_issue_source: {
-      value: false,
-      id: 34,
-    },
-    update_takeel_issue_source: {
-      value: false,
-      id: 35,
-    },
-    delete_takeel_issue_source: {
-      value: false,
-      id: 36,
-    },
-    export_as_pdf: {
-      value: false,
-      id: 37,
-    },
-    view_user_list_for_search: {
-      value: false,
-      id: 38,
-    },
-    view_transfer_type: {
-      value: false,
-      id: 39,
-    },
-    add_transfer_type: {
-      value: false,
-      id: 40,
-    },
-    update_transfer_type: {
-      value: false,
-      id: 41,
-    },
-    delete_transfer_type: {
-      value: false,
-      id: 42,
-    },
-    show_notification: {
-      value: false,
-      id: 43,
-    },
-    add_receipt_number: {
-      value: false,
-      id: 44,
-    },
-  },
-
-  Permission: {
     Add_General_Data: {
       value: false,
-      _id: "661387b29e90980ff43478f6",
+      _id: "6652ff121aa5fccdbf9bc15d",
     },
     Delete_General_Data: {
       value: false,
-      _id: "661387b29e90980ff43478f6",
+      _id: "6652ff2c1aa5fccdbf9bc1a1",
     },
     Update_General_Data: {
       value: false,
-      _id: "661387ba9e90980ff43478fa",
+      _id: "6652ff631aa5fccdbf9bc1e5",
     },
     View_General_Data: {
       value: false,
-      _id: "661387c99e90980ff43478fe",
+      _id: "6652ff771aa5fccdbf9bc208",
     },
     ADD_Data_Users: {
       value: false,
-      _id: "661387e79e90980ff4347902",
+      _id: "6649dec0fc1a4f7c44fe04c5",
     },
     Delete_Data_Users: {
       value: false,
-      _id: "661387f19e90980ff4347906",
+      _id: "6649deddfc1a4f7c44fe04cd",
     },
     Update_Data_Users: {
       value: false,
-      _id: "661387f99e90980ff434790a",
+      _id: "6649ded0fc1a4f7c44fe04c9",
     },
     Edit_Permission_Users: {
       value: false,
@@ -225,49 +40,192 @@ const initialState = {
     },
     Add_data_project: {
       value: false,
-      _id: "6613882e9e90980ff4347912",
+      _id: "6649defefc1a4f7c44fe04d1",
     },
     Delete_data_project: {
       value: false,
-      _id: "6613883c9e90980ff4347916",
+      _id: "6649df17fc1a4f7c44fe04d9",
     },
     Update_data_project: {
       value: false,
-      _id: "661388469e90980ff434791a",
+      _id: "6649df09fc1a4f7c44fe04d5",
     },
     View_data_project: {
       value: false,
-      _id: "661388639e90980ff434791e",
+      _id: "6649df6cfc1a4f7c44fe04ed",
     },
     View_data_Product: {
       value: false,
-      _id: "6613886e9e90980ff4347922",
+      _id: "6649df78fc1a4f7c44fe04f1",
     },
     Add_data_Product: {
       value: false,
-      _id: "6613887d9e90980ff4347926",
+      _id: "6649df29fc1a4f7c44fe04dd",
     },
     Delete_data_Product: {
       value: false,
-      _id: "661388889e90980ff434792a",
+      _id: "6649df40fc1a4f7c44fe04e5",
     },
     Update_data_Product: {
       value: false,
-      _id: "6613888f9e90980ff434792e",
+      _id: "6649df34fc1a4f7c44fe04e1",
+    },
+    Delay_Projects: {
+      value: false,
+      _id: "6652ebe5a224c4f61e6ecb24",
+    },
+    set_Permission_to_user: {
+      value: false,
+      _id: "664c6075fd728c88a9349dad",
+    },
+    view_data_Received: {
+      value: false,
+      _id: "664c60e7fd728c88a9349db1",
+    },
+    view_data_send: {
+      value: false,
+      _id: "664c6149fd728c88a9349dc6",
+    },
+    view_data_CancelSend: {
+      value: false,
+      _id: "664c613ffd728c88a9349dc4",
+    },
+    view_data_dashboard: {
+      value: false,
+      _id: "664c60aefd728c88a9349daf",
+    },
+    view_data_Business_representatives: {
+      value: false,
+      _id: "6649e29efc1a4f7c44fe055a",
+    },
+    view_data_Performance_analytics: {
+      value: false,
+      _id: "6649e295fc1a4f7c44fe0556",
+    },
+    view_data_Business_requirements_analysis: {
+      value: false,
+      _id: "6649e2b1fc1a4f7c44fe055e",
+    },
+    view_data_price_offer: {
+      value: false,
+      _id: "6649e25bfc1a4f7c44fe0551",
+    },
+    view_data_delay_Project: {
+      value: false,
+      _id: "6652edaaa224c4f61e6ecb26",
+    },
+    send_Project_from_HR_to_heade_Of_Department: {
+      value: false,
+      _id: "6649e129fc1a4f7c44fe050b",
+    },
+    send_Project_from_Assistance_to_heade_Of_Department: {
+      value: false,
+      _id: "6649e16bfc1a4f7c44fe053a",
+    },
+    send_Project_from_HR_to_Assistance: {
+      value: false,
+      _id: "6649e181fc1a4f7c44fe053e",
+    },
+    show_Profily: {
+      value: false,
+      _id: "6649e52afc1a4f7c44fe0564",
+    },
+    Export_data_aS_pdf: {
+      value: false,
+      _id: "665378ffcf020c0b9cc881dc",
+    },
+    Export_data_aS_excel: {
+      value: false,
+      _id: "66537906cf020c0b9cc881de",
+    },
+    open_Project: {
+      value: false,
+      _id: "66537941cf020c0b9cc881e5",
+    },
+    request_edit: {
+      value: false,
+      _id: "66537950cf020c0b9cc881e7",
+    },
+    send_project_from_Employ_to_HOD: {
+      value: false,
+      _id: "66537985cf020c0b9cc881f2",
+    },
+    view_notifction: {
+      value: false,
+      _id: "665379e0cf020c0b9cc88205",
+    },
+    view_filles: {
+      value: false,
+      _id: "665379eecf020c0b9cc88207",
+    },
+    view_data_mutual_projects: {
+      value: false,
+      _id: "66543b3d349d96377f2a327f",
+    },
+    Assistance_Task: {
+      value: false,
+      _id: "66543eec349d96377f2a33f1",
+    },
+    Technical_Department: {
+      value: false,
+      _id: "66543f71349d96377f2a341b",
+    },
+    Event_Assistance: {
+      value: false,
+      _id: "665443c9349d96377f2a343c",
+    },
+    form_Mutual_projects: {
+      value: false,
+      _id: "66544555349d96377f2a34b1",
+    },
+    data_project_send_from_HOD_to_HR_Assistance: {
+      value: false,
+      _id: "66544648349d96377f2a34e3",
+    },
+    add_file_project: {
+      value: false,
+      _id: "6649e020fc1a4f7c44fe0503",
+    },
+    add_file_project: {
+      value: false,
+      _id: "6649e020fc1a4f7c44fe0503",
+    },
+    delete_file_project: {
+      value: false,
+      _id: "6649e020fc1a4f7c44fe0503",
     },
   },
 };
 
 export const RolesReducer = createSlice({
-  name: "rolesData",
+  name: "RolesData",
   initialState: initialState,
   reducers: {
     setRolesRedux: (state, action) => {
-      state.roles = action.payload;c
+      state.roles = action.payload;
+    },
+    getRoleRedux: (state) => {
+      return state.roles;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getRoleAndUserId.pending, (state) => {
+        state.loading = true;
+        state.isError = null;
+      })
+      .addCase(getRoleAndUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true; // registration isSuccessful
+        state.Permission = action.payload;
+      })
+      .addCase(getRoleAndUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = action.payload;
+        state.message = action.payload;
+      });
+  },
 });
-
-export const { setRolesRedux } = RolesReducer.actions;
-
+export const { setRolesRedux, getRoleRedux } = RolesReducer.actions;
 export default RolesReducer.reducer;
+export const userSelector = (state) => state.RolesData;

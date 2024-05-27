@@ -10,12 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "../../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
 function AnalyticsData() {
-  const [info, setInfo] = useState(JSON.parse(localStorage.getItem("user")) || {});
-  const { rtl } = useSelector((state) => {return state?.language});
+  const [info, setInfo] = useState(
+    JSON.parse(localStorage.getItem("user")) || {}
+  );
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
   const dispatch = useDispatch();
   const theme = useTheme();
-
-  useEffect(() => {dispatch(setLanguage())}, [dispatch]);
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
   const { t } = useTranslation();
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "DataProductByDEPARTMENT",
@@ -26,6 +31,7 @@ function AnalyticsData() {
       refetchInterval: 5000,
     }
   );
+
   // Function to export data as Excel
   const exportToExcel = () => {
     const fileName = "AnalyticsData.xlsx";
@@ -92,12 +98,15 @@ function AnalyticsData() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{t("AnalyticsData.table.Notes")}</th>
+                  <th>{t("AnalyticsData.table.NameProduct")}</th>
+
                   <th>{t("AnalyticsData.table.WorkNatural")}</th>
-                  <th>{t("AnalyticsData.table.BeneficiaryEntity")}</th>
-                  <th>{t("AnalyticsData.table.BeneficiaryEntity")}</th>
                   <th>{t("AnalyticsData.table.Specifications")}</th>
                   <th>{t("AnalyticsData.table.Quantity")}</th>
+
+                  <th>{t("AnalyticsData.table.BeneficiaryEntity")}</th>
+
+                  <th>{t("AnalyticsData.table.Notes")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,12 +114,12 @@ function AnalyticsData() {
                   data.map((item, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{item?.comments}</td>
+                      <td>{item?.nameProduct}</td>
                       <td>{item?.projectId?.WorkNatural}</td>
-                      <td>{item?.projectId?.beneficiary}</td>
                       <td>{item?.description}</td>
                       <td>{item?.Quantity}</td>
-                      <td>{item?.nameProduct}</td>
+                      <td>{item?.projectId?.beneficiary}</td>
+                      <td>{item?.comments}</td>
                     </tr>
                   ))
                 ) : (

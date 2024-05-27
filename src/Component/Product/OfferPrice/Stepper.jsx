@@ -28,7 +28,6 @@ export default function CustomizedSteppers(props) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-
   const dispatch=useDispatch()
   const handleNextAndSaveData = () => {
     console.log(formData.ExpirePeriod);
@@ -111,7 +110,7 @@ export default function CustomizedSteppers(props) {
   };
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep} sx={{ overflow: "auto" }}>
+      <Stepper activeStep={activeStep} sx={{ overflowX: "auto" }}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};

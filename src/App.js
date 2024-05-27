@@ -23,7 +23,6 @@ import Dashboard from "./Component/Dashboard/dashboard/Dashboard.jsx";
 import SettingInformation from "./Component/IT/Mange.jsx";
 import UsersMange from "./Component/IT/UsersMange";
 import Permission from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/Permission";
-import HR from "Component/HR/HR";
 import Manger from "Component/Manger/Manger";
 import Authorized from "Component/middleware/Anuthorized";
 import Files from "Component/HR/HrMangemant/Files";
@@ -32,32 +31,59 @@ import { useSelector } from "react-redux";
 import { Edit } from "@mui/icons-material";
 import FilesReceived from "./Component/HR/HrMangemant/FileRecievd/FilesRecived";
 import Received from "Component/HR/HrMangemant/FileRecievd/Ricevid";
+import ProjectDelay from "./Component/ProjectDelay/ProjectDelay";
+import Assistance from "Component/Assistance/assIStanceTask/AssistanceSteper";
+import ProjectMutual from "Component/Assistance/assIStanceTask/ProjectMuluat";
+import DepartmentsList from "./Component/Assistance/TechnicalDepartments/DepartmentsList";
+import AllProjectsEchDepartment from "./Component/Assistance/TechnicalDepartments/AllProjectsToechDepartment";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
+  const [stateRote, setStatRote] = useState(localStorage.getItem("statRote"));
+
   const queryClient = new QueryClient();
+  const renderDefaultRoute = () => {
+    switch (info?.user_type || Rol) {
+      case "H.O.D":
+        if (stateRote === "ProjectRote") {
+          return <Route index element={<Projects />} />;
+        } else if (stateRote === "QuantityTables") {
+          return <Route index element={<BusinessPersonsMain />} />;
+        } else if (stateRote === "Dashboard") {
+          return <Route index element={<Dashboard />} />;
+        } else {
+          return null;
+        }
+      case "management":
+      case "Employ":
+        return <Route index element={<Projects />} />;
+        break;
+      case "IT":
+        return <Route index element={<UsersMange />} />;
+        break;
+      case "HR":
+        return <Route index element={<Files />} />;
+        break;
+      case "Assistance":
+        return <Route index element={<Assistance />} />;
+        break;
+      default:
+        return <Route path="Authorized" element={<Authorized />} />;
+    }
+  };
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route element={<PrivateRoutes />}>
-            <Route path="/Dashboard" element={<Root />}>
-              {Rol === "H.O.D" || info?.user_type === "H.O.D" ? (
-                <Route index element={<Dashboard />} />
-              ) : Rol === "management" || info?.user_type === "management" ? (
-                <Route index element={<Projects />} />
-              ) : Rol === "Employ" || info?.user_type === "Employ" ? (
-                <Route index element={<Projects />} />
-              ) : Rol === "IT" || info?.user_type === "IT" ? (
-                <Route index element={<UsersMange />} />
-              ) : (
-                <Route path="Authorized" element={<Authorized />} />
-              )}
+            <Route path="/Home" element={<Root />}>
+              {renderDefaultRoute()}
               <Route path="ProjectList" element={<Projects />} />
               <Route path="ProductList" element={<Product />} />
+              <Route path="ProjectDelay" element={<ProjectDelay />} />
               <Route path="MainForm" element={<MainForm />} />
               <Route path="Event" element={<Event />} />
               <Route
@@ -67,7 +93,6 @@ export default function App() {
               <Route path="MangeUser" element={<UsersMange />} />
               <Route path="AnalyticsData" element={<AnalyticsData />} />
               <Route path="Profile" element={<PersonalProfile />}></Route>
-
               <Route path="PermissionUsers/:id" element={<Permission />} />
               <Route
                 path="BusinessPersonsMain"
@@ -77,16 +102,23 @@ export default function App() {
                 path="PerformsnceAnalytcsMain"
                 element={<PerformsnceAnalytcsMain />}
               />
+              <Route path="HR" element={<Files />} />
+              <Route path="OpenProject/:id" element={<OpenProject />} />
+              <Route path="FilesReceived" element={<FilesReceived />} />
+              <Route path="Assistance" element={<Assistance />} />
+              <Route path="ProjectMutual" element={<ProjectMutual />} />
+              <Route path="DepartmentsList" element={<DepartmentsList />} />
+              <Route
+                path="AllProjectsEchDepartment/:id"
+                element={<AllProjectsEchDepartment />}
+              />
+              <Route path="OpenProject/:id" element={<OpenProject />} />
+              <Route path="Received/:id" element={<Received />} />
+              <Route path="Authorized" element={<Authorized />} />
             </Route>
-            {/* end Rout Child one */}
             <Route path="/Edit/:id" element={<Edit />} />
-            <Route path="/OpenProject/:id" element={<OpenProject />} />
+
             <Route path="/Main/menu" element={<Menu />} />
-            <Route path="/HR" element={<HR />}>
-              <Route index element={<Files />} />
-              <Route path="FilesReceived" element={<FilesReceived />}></Route>
-            </Route>
-            <Route path="/Received/:id" element={<Received />} />
             <Route path="/Manger" element={<Manger />} />
             <Route path="/Authorized" element={<Authorized />} />
           </Route>

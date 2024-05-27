@@ -15,7 +15,7 @@ function BusinessPersonsMain() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || {});
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { setProject, isLoading } = useSelector((state) => state.Project);
+  const { setProject, isLoading } = useSelector((state) => state?.Project);
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -23,7 +23,8 @@ function BusinessPersonsMain() {
     dispatch(setLanguage());
   }, [dispatch]);
   const fetchDataProject = () => {
-    dispatch(getProjectByDepartment({ info, token }));
+    const departmentID = info.DepartmentID;
+    dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
   useEffect(() => fetchDataProject(), []);
   const theme = useTheme();
@@ -85,10 +86,11 @@ function BusinessPersonsMain() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{t("BusinessPersonsMain.table.Notes")} </th>
-                  <th> {t("BusinessPersonsMain.table.PerformanceLevel")} </th>
-                  <th>{t("BusinessPersonsMain.table.ThePerson")} </th>
                   <th>{t("BusinessPersonsMain.table.ProjectName")} </th>
+                  <th>{t("BusinessPersonsMain.table.ThePerson")} </th>
+                  <th> {t("BusinessPersonsMain.table.PerformanceLevel")} </th>
+
+                  <th>{t("BusinessPersonsMain.table.Notes")} </th>
                 </tr>
               </thead>
               <tbody>
@@ -96,10 +98,10 @@ function BusinessPersonsMain() {
                   setProject.map((item, index) => (
                     <tr key={item?._id}>
                       <td>{index + 1}</td>
-                      <td>{item.comments}</td>
-                      <td>{item?.LevelPerformance}</td>
-                      <td> {item?.userId?.name}</td>
                       <td> {item?.nameProject}</td>
+                      <td> {item?.userId?.name}</td>
+                      <td>{item?.LevelPerformance}</td>
+                      <td>{item.comments}</td>
                     </tr>
                   ))
                 ) : (

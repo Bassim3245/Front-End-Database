@@ -222,7 +222,7 @@ export const getDataHasBeenSendByDepartmentToManger = async (token) => {
   }
 };
 
-export const getDataFileINMangerSection = async (id,token) => {
+export const getDataFileINMangerSection = async (id, token) => {
   try {
     const response = await axios.get(
       `${BackendUrl}/api/getDataFileINMangerSection/${id}`,
@@ -235,6 +235,22 @@ export const getDataFileINMangerSection = async (id,token) => {
     if (response) {
       console.log("tt", response);
       return response.data;
+    }
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      return error.message;
+    }
+  }
+};
+
+export const getRole = async (token) => {
+  try {
+    const response = await axios.get(`${BackendUrl}/api/getRole`);
+    if (response) {
+      console.log("tt", response);
+      return response.data.response;
     }
   } catch (error) {
     if (error.response) {

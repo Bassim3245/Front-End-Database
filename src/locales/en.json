@@ -45,7 +45,7 @@
       "BeneficiaryEntity": "Beneficiary entity",
       "Specifications": "Specifications",
       "Quantity": "Quantity",
-      "NameProduct": "Product name or system"
+      "NameProduct": "Product name "
     }
   },
   "BusinessPersonsMain": {
@@ -68,25 +68,31 @@
       "ProjectName": "Requests received"
     }
   },
-  "ProductList":{
+  "ProductList": {
     "title": "Product list ",
     "BackButton": "Bake",
-    "SendButton":"Send Project",
-    "InsertButton":"Insert Product",
-    "ButtonUpload":"File Upload",
+    "SendButton": "Send Project",
+    "InsertButton": "Insert Product",
+    "ButtonUpload": "File Upload",
     "table": {
       "Action": "Action",
       "Unit": "Unit",
       "AdditionPercentage": "Addition Percentage",
       "Price": "Price",
-      "Quantity":"Quantity",
-      "PriceType":"Price Type",
-      "priceConvert":"Conversion factor",
-      "Specifications":"Specifications",
-      "Notes":"Notes",
-      "ProductName":"Product Name",
-      "test":"tes"
-
+      "Quantity": "Quantity",
+      "PriceType": "Price Type",
+      "priceConvert": "Conversion factor",
+      "Specifications": "Specifications",
+      "Notes": "Notes",
+      "ProductName": "Product Name",
+      "test": "tes"
+    },
+    "PriceOffer": {
+      "PriceOffer": "Price Offer",
+      "Normal": "Normal",
+      "NormalText": " price offer select normal",
+      "Custom": "Custom",
+      "CustomText": " Offer price Custom mode"
     }
   }
 }

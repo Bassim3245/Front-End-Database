@@ -6,6 +6,8 @@ import { BackendUrl } from "../../../../redux/api/axios";
 import { ButtonSave } from "../../../Config/Content";
 import { useTheme } from "@mui/material";
 import ShowDataUnitAndRole from "./ShowData/ShowDataUnitAndRole";
+import { useQuery } from "react-query";
+import { getRole } from "../../../Config/fetchData";
 function RoleSystem() {
   const [RoleName, setRoleName] = useState("");
   const [open, setOpen] = useState(true);
@@ -26,21 +28,11 @@ function RoleSystem() {
       }
     }
   };
-  const getDataSystemUnit= async () => {
-    try {
-      const response = await axios.get(`${BackendUrl}/api/getRole`);
-      setRoleData(response?.data?.response);
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
 
-    }
-  };
-  // @ts-ignore
-  useEffect(() => getDataSystemUnit, [RoleName]);
   const handleEdit = () => {
     setOpen(!open);
   };
-  const theme=useTheme()
+  const theme = useTheme();
   return (
     <div className="">
       <ToastContainer />
@@ -52,7 +44,7 @@ function RoleSystem() {
       </p>
       <form onSubmit={handleSubmit}>
         <input
-         data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
+          data-bs-theme={theme.palette.mode === "dark" ? "dark" : ""}
           type="text"
           style={{ direction: "rtl" }}
           className="form-control p-10 rad-6 mb-3"
@@ -65,9 +57,7 @@ function RoleSystem() {
           <ButtonSave className="me-3" onClick={handleSubmit}>
             ادراج
           </ButtonSave>
-          <
-// @ts-ignore
-          ShowDataUnitAndRole RoleData={RoleData} themeMode={theme} label={"Role"} />
+          <ShowDataUnitAndRole themeMode={theme} label={"Role"} />
         </div>
       </form>
     </div>

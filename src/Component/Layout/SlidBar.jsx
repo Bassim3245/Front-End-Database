@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
@@ -14,21 +14,22 @@ import {
   List,
   Divider,
   IconButton,
+  Button,
 } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import {
   Analytics,
+  CloudUpload,
   Dataset,
   Event,
   GroupAdd,
+  Home,
+  HourglassBottom,
   PermDataSetting,
   StackedLineChart,
   WaterfallChart,
 } from "@mui/icons-material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { useLocation, useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +37,8 @@ import { logout } from "../../redux/userSlice/userSlice";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { BackendUrl } from "../../redux/api/axios";
 import { setLanguage } from "../../redux/LanguageState";
+import { getRoleRedux, setRolesRedux } from "../../redux/RoleSlice/RoleSlice";
+import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 const drawerWidth = 340;
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -92,125 +95,205 @@ const SideBar = ({ open, handleDrawerClose }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [stateRote, setStatRote] = useState(localStorage.getItem("statRote"));
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
   const { Rol } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token") || {};
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   // @ts-ignore
+
+  const getPermmission = () => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  };
+  useEffect(() => {
+    console.log(Permission?.permissionIds);
+    getPermmission();
+  }, []);
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-  // const generalInfo = [
-  //   { text: "Profile", icon: <PersonOutlinedIcon />, path: "Profile" },
-  // ];
+  useEffect(() => {
+    dispatch(getRoleRedux());
+    console.log(stateRote);
+  }, [dispatch]);
+  useEffect(() => {
+    const updatedRoles = {
+      ...roles,
+      Add_General_Data: {
+        ...roles.Add_General_Data,
+        value: true, // Update the value
+      },
+    };
+    dispatch(setRolesRedux(updatedRoles));
+  }, []);
 
   let Route1 = [];
   let Route2 = [];
-  switch (Rol||info?.user_type) {
-    case "IT":
+  switch (stateRote) {
+    case "default":
       Route1 = [
+        {
+          text: " List Projects",
+          icon: <Dataset />,
+          path: "ProjectList",
+          checkPermission: roles?.View_data_project?._id,
+        },
         {
           text: "Management Users",
           icon: <GroupAdd />,
           path: "MangeUser",
+          checkPermission: roles?.ADD_Data_Users?._id,
         },
         {
           text: "General Data",
           icon: <PermDataSetting />,
           path: "GeneralDataInformation",
+          checkPermission: roles?.Add_General_Data?._id,
         },
-      ];
-      break;
-    case "Employ":
-      Route1 = [
         {
-          text: "Project",
+          text: "Files",
           icon: <Dataset />,
-          path: "ProjectList",
-        },
-      ];
-      break;
-    case "H.O.D":
-      Route1 = [
-        {
-          text: "Dashboard",
-          icon: <HomeOutlinedIcon />,
-          path: "/Dashboard",
-        },
-        {
-          text: " List Projects",
-          icon: <Dataset />,
-          path: "ProjectList",
-        },
-        {
-          text: "Products ",
-          icon: <ReceiptOutlinedIcon />,
-          path: "ProductList",
-        },
-        {
-          text: "Event",
-          icon: <Event />,
-          path: "Event",
-        },
-      ];
-      Route2 = [
-        {
-          text: "Business requirements analysis",
-          icon: <Analytics />,
-          path: "AnalyticsData",
-        },
-        {
-          text: "Business representatives",
-          icon: <WaterfallChart />,
-          path: "BusinessPersonsMain",
-        },
-        {
-          text: "Performance analytics",
-          icon: <StackedLineChart />,
-          path: "PerformsnceAnalytcsMain",
-        },
-      ];
-      break;
-
-    case "management":
-      Route1 = [
-        {
-          text: "Project",
-          icon: <Dataset />,
-          path: "ProjectList",
+          path: "HR",
+          checkPermission: roles?.View_data_project?._id,
         },
         {
           text: "Products received",
           icon: <ReceiptOutlinedIcon />,
-          path: "ProductList",
+          path: "FilesReceived",
+          checkPermission: roles?.view_data_Received?._id,
         },
+      ];
+      break;
+    case "Dashboard":
+      Route1 = [
+        {
+          text: "Dashboard",
+          icon: <Home />,
+          path: "/Home",
+          checkPermission: roles?.view_data_dashboard?._id,
+        },
+      ];
+      break;
+    case "ProjectRote":
+      Route1 = [
+        {
+          text: " List Projects",
+          icon: <Dataset />,
+          path: "ProjectList",
+          checkPermission: roles?.View_data_project?._id,
+        },
+        {
+          text: "Projects delivered ",
+          icon: <ReceiptOutlinedIcon />,
+          path: "ProductList",
+          checkPermission: roles?.View_data_Product?._id,
+        },
+        {
+          text: "Delayed projects",
+          icon: <HourglassBottom />,
+          path: "ProjectDelay",
+          checkPermission: roles?.view_data_delay_Project?._id,
+        },
+
         {
           text: "Event",
           icon: <Event />,
           path: "Event",
+          checkPermission: roles?.view_notifction?._id,
         },
       ];
-      Route2 = [
+      break;
+    case "QuantityTables":
+      Route1 = [
         {
           text: "Business requirements analysis",
           icon: <Analytics />,
           path: "AnalyticsData",
+          checkPermission: roles?.view_data_Business_requirements_analysis?._id,
         },
         {
           text: "Business representatives",
           icon: <WaterfallChart />,
           path: "BusinessPersonsMain",
+          checkPermission: roles?.view_data_Business_representatives?._id,
         },
         {
           text: "Performance analytics",
           icon: <StackedLineChart />,
           path: "PerformsnceAnalytcsMain",
+          checkPermission: roles?.view_data_Performance_analytics?._id,
         },
       ];
       break;
-
+    case "AssistanceSection":
+      Route1 = [
+        {
+          text: "Assistance",
+          icon: <Dataset />,
+          path: "Assistance",
+          checkPermission: roles?.form_Mutual_projects?._id,
+        },
+        {
+          text: "Project Mutual",
+          icon: <Dataset />,
+          path: "ProjectMutual",
+          checkPermission: roles?.view_data_mutual_projects?._id,
+        },
+        {
+          text: "Files",
+          icon: <CloudUpload />,
+          path: "HR",
+          checkPermission: roles?.view_data_mutual_projects?._id,
+        },
+        {
+          text: "Products received",
+          icon: <ReceiptOutlinedIcon />,
+          path: "FilesReceived",
+          checkPermission:
+            roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
+        },
+      ];
+      break;
+    case "TechnicalDepartments":
+      Route1 = [
+        {
+          text: "departments list",
+          icon: <Analytics />,
+          path: "DepartmentsList",
+          checkPermission: roles?.Technical_Department?._id,
+        },
+        {
+          text: "Event",
+          icon: <Event />,
+          path: "Event",
+          checkPermission: roles?.Event_Assistance?._id,
+        },
+      ];
+      break;
     default:
       navigate("*");
+  }
+  const routeTest = [];
+
+  const hasPermission = (role, permissions) => {
+    return Array.isArray(permissions) && permissions.includes(role);
+  };
+  const [authorized, setAuthorized] = useState(true);
+  useEffect(() => {
+    let isAuthorized = routeTest.every((item) =>
+      hasPermission(item?.checkPermission, Permission?.permissionIds)
+    );
+    if (!isAuthorized) {
+      setAuthorized(false);
+      navigate("/Home/Authorized");
+    }
+  }, [routeTest, Permission, navigate]);
+
+  if (!authorized) {
+    return null;
   }
   return (
     // Anchor to male from dirction right
@@ -257,56 +340,62 @@ const SideBar = ({ open, handleDrawerClose }) => {
       >
         {info.user_type}
       </Typography>
-
       <Divider />
-
       <List dir={rtl.dir}>
-        {Route1?.map((item) => (
-          <ListItem
-            key={item.path}
-            disablePadding
-            sx={{ display: "block" }}
-            dir={rtl.dir}
-          >
-            <Tooltip title={open ? null : item.text} placement="left">
-              <ListItemButton
-                onClick={() => {
-                  navigate(item.path);
-                }}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                  dir: rtl?.dir,
-                  bgcolor:
-                    location.pathname === item.path
-                      ? theme.palette.mode === "dark"
-                        ? grey[800]
-                        : grey[300]
-                      : null,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
+        {Route1?.map((item) => {
+          // Check if the user has permission to view this item
+          const hasAccess = hasPermission(
+            item?.checkPermission,
+            Permission?.permissionIds
+          );
+          return (
+            hasAccess && (
+              <React.Fragment key={item.path}>
+                <ListItem
+                  disablePadding
+                  sx={{ display: "block" }}
+                  dir={rtl.dir}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Tooltip>
-          </ListItem>
-        ))}
+                  <Tooltip title={open ? null : item.text} placement="left">
+                    <ListItemButton
+                      onClick={() => {
+                        navigate(item.path);
+                      }}
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                        dir: rtl?.dir,
+                        bgcolor:
+                          location.pathname === item.path
+                            ? theme.palette.mode === "dark"
+                              ? grey[800]
+                              : grey[300]
+                            : null,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.text}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </Tooltip>
+                </ListItem>
+              </React.Fragment>
+            )
+          );
+        })}
       </List>
-
       <Divider />
-
       <List dir={rtl.dir}>
         {Route2?.map((item) => (
           <ListItem
@@ -352,46 +441,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
       </List>
       <Divider />
       <List dir={rtl.dir}>
-        {/* {generalInfo?.map((item) => (
-          <ListItem
-            key={item.path}
-            disablePadding
-            sx={{ display: "block" }}
-          >
-            <Tooltip title={open ? null : item.text} placement="left">
-              <ListItemButton
-                onClick={() => {
-                  navigate(item.path);
-                }}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                  bgcolor:
-                    location.pathname === item.path
-                      ? theme.palette.mode === "dark"
-                        ? grey[800]
-                        : grey[300]
-                      : null,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Tooltip>
-          </ListItem>
-        ))} */}
         <ListItem disablePadding sx={{ display: "block" }} dir={rtl.dir}>
           <Tooltip title={open ? null : "Logout"} placement="left">
             <ListItemButton
@@ -402,12 +451,6 @@ const SideBar = ({ open, handleDrawerClose }) => {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
-                //   bgcolor:
-                //     location.pathname === item.path
-                //       ? theme.palette.mode === "dark"
-                //         ? grey[800]
-                //         : grey[300]
-                //       : null,
               }}
             >
               <ListItemIcon
@@ -424,6 +467,22 @@ const SideBar = ({ open, handleDrawerClose }) => {
           </Tooltip>
         </ListItem>
       </List>
+      <Button
+        sx={{
+          position: "absolute",
+          bottom: "0px",
+          mb: "10px",
+          backgroundColor: "#e91e63",
+          color: "white",
+        }}
+        onClick={() => {
+          localStorage.removeItem("statRote");
+          navigate("/Main/menu");
+        }}
+      >
+        {" "}
+        back
+      </Button>
     </Drawer>
   );
 };

@@ -1,10 +1,8 @@
 // @ts-ignore
 import { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import moment from "moment";
-import { BackendUrl } from "../../redux/api/axios";
 import MainForm from "./MainFor/Modul";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
@@ -14,15 +12,16 @@ import { Box, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../Config/Loader";
-import StyledDataGrid from "../Config/StyledDataGrid";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import { OpenInNew } from "@mui/icons-material";
-import Swal from "sweetalert2";
+import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "Component/Config/CustomMennu";
+import { Delete, hasPermission, sendProjectEndTime } from "../Config/Function";
+import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const { rtl } = useSelector((state) => {
     return state?.language;
@@ -38,11 +37,16 @@ const Projects = () => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
   const fetchDataProject = () => {
-    // @ts-ignore
-    dispatch(getProjectByDepartment({ info, token }));
+    const departmentID = info.DepartmentID;
+    dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
+  const renderMenuItem = (key, onClick, IconComponent, text) => (
+    <MenuItem key={key} onClick={onClick} disableRipple>
+      <IconComponent />
+      <span className="ms-2">{text}</span>
+    </MenuItem>
+  );
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
     { field: "id", headerName: "ID", width: 33 },
@@ -94,22 +98,40 @@ const Projects = () => {
         return (
           <div>
             <DropDownGrid>
-              {info.user_type === "H.O.D" || info.user_type === "management"
-                ? [
-                    <ModuleFormEditProject
-                      key="edit"
-                      ProjectData={params?.row}
-                    />,
-                    <MenuItem
-                      key="delete"
-                      onClick={() => Delete(params?.row?._id)}
-                      disableRipple
-                    >
-                      <DeleteIcon />
-                      <span className="ms-2">Delete</span>
-                    </MenuItem>,
-                  ]
-                : null}
+              {hasPermission(
+                roles?.Update_data_project?._id,
+                Permission?.permissionIds
+              ) && (
+                <ModuleFormEditProject key="edit" ProjectData={params?.row} />
+              )}
+
+              {hasPermission(
+                roles?.Delete_data_project?._id,
+                Permission?.permissionIds
+              ) &&
+                renderMenuItem(
+                  "delete",
+                  () => Delete(params?.row?._id, setDelete, setAnchorEl),
+                  DeleteIcon,
+                  "Delete"
+                )}
+
+              {hasPermission(
+                roles?.Delay_Projects?._id,
+                Permission?.permissionIds
+              ) &&
+                renderMenuItem(
+                  "projectDelay",
+                  () =>
+                    sendProjectEndTime(
+                      params?.row?._id,
+                      token,
+                      setDelete,
+                      setAnchorEl
+                    ),
+                  HourglassBottom,
+                  "Project Delay"
+                )}
               <Divider sx={{ my: 0.5 }} />
               <MenuItem
                 onClick={() => HandelOpen(params.row._id)}
@@ -124,57 +146,17 @@ const Projects = () => {
       },
     },
   ];
-  async function Delete(_id) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success ms-3",
-        cancelButton: "btn btn-danger",
-      },
-      buttonsStyling: false,
-    });
-
-    try {
-      const result = await swalWithBootstrapButtons.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel!",
-        reverseButtons: true,
-      });
-
-      if (result.isConfirmed) {
-        // @ts-ignore
-        const response = await axios({
-          method: "DELETE",
-          url: `${BackendUrl}/api/deleteProject/${_id}`,
-          headers: {
-            token: token,
-          },
-        });
-
-        setDelete(toast.success(response?.data?.message));
-        setAnchorEl(null);
-        swalWithBootstrapButtons.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelled",
-          text: "Your imaginary file is safe :)",
-          icon: "error",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
   const HandelOpen = (id) => {
-    navigate(`/OpenProject/${id}`);
+    navigate(`/Home/OpenProject/${id}`);
   };
+  const getPermmission = () => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  };
+  useEffect(() => {
+    console.log(Permission?.permissionIds);
+    getPermmission();
+  }, []);
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
@@ -197,7 +179,13 @@ const Projects = () => {
           />
           <ToastContainer />
           <Box className={"mb-2"}>
-            {info?.user_type === "H.O.D" || info?.user_type === "management" ? (
+            {/* {info?.user_type === "H.O.D" || info?.user_type === "management" ? (
+              <MainForm fetchDataProject={fetchDataProject} />
+            ) : null} */}
+            {hasPermission(
+              roles?.Add_data_project?._id,
+              Permission?.permissionIds
+            ) ? (
               <MainForm fetchDataProject={fetchDataProject} />
             ) : null}
           </Box>
@@ -206,6 +194,13 @@ const Projects = () => {
               fontSize: "20px",
               "& .MuiDataGrid-cellContent": {
                 // textOverflow: "initial !important",
+              },
+              "& .css-128fb87-MuiDataGrid-toolbarContainer": {
+                // textOverflow: "initial !important",
+                backgroundColor: "rgb(55, 81, 126)",
+              },
+              "& .css-1knaqv7-MuiButtonBase-root-MuiButton-root": {
+                color: "white",
               },
             }}
           >

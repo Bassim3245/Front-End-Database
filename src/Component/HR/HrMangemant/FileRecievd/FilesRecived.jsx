@@ -23,7 +23,7 @@ function FilesReceived() {
 
   return (
     <div className="sectionFileRecived">
-      <section className="" style={{ backgroundColor: "#f1f5f9" }}>
+      <section className="">
         <div className="container">
           <h3 className="m-b-50 heading-line">Files Received</h3>
           {isLoading ? (
@@ -51,7 +51,7 @@ function FilesReceived() {
                     </div>
                   </div>
                   <div className="notification-list_feature-img">
-                    <Link to={`/Received/${item?._id}`}>
+                    <Link to={`/Home/Received/${item?._id}`}>
                       <img
                         src="/image/folder-icon-512x410-jvths5l6.png"
                         alt="Feature image"

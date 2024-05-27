@@ -18,7 +18,8 @@ function PerformsnceAnalytcsMain() {
   const { t } = useTranslation();
   const { setProject, isLoading } = useSelector((state) => state.Project);
   const fetchDataProject = () => {
-    dispatch(getProjectByDepartment({ info, token }));
+    const departmentID = info.DepartmentID;
+    dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
   useEffect(() => fetchDataProject(), []);
   const { rtl } = useSelector((state) => {
@@ -27,7 +28,6 @@ function PerformsnceAnalytcsMain() {
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-
   const getDataAsFileExcel = async () => {
     try {
       const response = await axios.get(`${BackendUrl}/api/getDateAsFileExcel`, {
@@ -36,7 +36,6 @@ function PerformsnceAnalytcsMain() {
         },
         responseType: "blob", // Set responseType to 'blob' to handle binary data
       });
-
       const blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
@@ -79,13 +78,14 @@ function PerformsnceAnalytcsMain() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>{t("PerformsnceAnalytcsMain.table.Notes")} </th>
+                  <th>{t("PerformsnceAnalytcsMain.table.ProjectName")} </th>
                   <th>
                     {" "}
                     {t("PerformsnceAnalytcsMain.table.CompletionRatio")}{" "}
                   </th>
                   <th>{t("PerformsnceAnalytcsMain.table.OfferPrice")} </th>
-                  <th>{t("PerformsnceAnalytcsMain.table.ProjectName")} </th>
+
+                  <th>{t("PerformsnceAnalytcsMain.table.Notes")} </th>
                 </tr>
               </thead>
               <tbody>
@@ -93,10 +93,11 @@ function PerformsnceAnalytcsMain() {
                   setProject.map((item, index) => (
                     <tr key={item?._id}>
                       <td>{index + 1}</td>
-                      <td>{item?.comments}</td>
+                      <td> {item?.nameProject}</td>
                       <td>{item?.CompletionRate}</td>
                       <td> {item?.OfferPrice}</td>
-                      <td> {item?.nameProject}</td>
+
+                      <td>{item?.comments}</td>
                     </tr>
                   ))
                 ) : (

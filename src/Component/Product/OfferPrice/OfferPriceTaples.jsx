@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import  { useEffect } from "react";
 import OfferPrice from "./showAllDataTable.jsx";
-import { Slide, Button, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
@@ -27,7 +27,6 @@ function OfferPriceTable(props) {
   return (
     <div className={`${theme.palette.mode === "dark" ? "bg-dark" : " bg-eee"}`}>
       {loading && <div>loading..</div>}
-
       <div className={` m-5  p-3 rad-10`}>
       <Button variant="outlined" startIcon={<Archive/>}> Archive</Button>
         <div className="container w-100" ref={props?.targetRef}>

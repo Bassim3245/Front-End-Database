@@ -19,39 +19,44 @@ import {
   calculatePriceAfterPercentageWithQuantityAndConvertToUsd,
   calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd,
 } from "Component/Config/Function";
+import { ToastContainer, toast } from "react-toastify";
 
 // start function total sum
 
 // end Calculater
 export default function OfferPrice(props) {
-  const { isLoading, data, isError, error, isFetching } = useQuery(
-    "DataProjectById",
-    () => getDataByProjectID(props?.projectId),
-    {
-      // refetchIntervalInBackground: true,
-      // refetchOnWindowFocus: true,
-      // refetchInterval: 5000,
-    }
-  );
-  const Products = props?.products;
-
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("CustomDataForPriceOffer")) || {}
   );
+  const PriceConvertToIQD = info?.PriceConvertToIQD;
+  const [dataSet, setDataSet] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const Products = props?.products;
   const theme = useTheme();
   const [textDark, setDark] = React.useState(
     theme.palette.mode === "dark" ? theme.palette.text.primary : ""
   );
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+    "DataProjectById",
+    () => getDataByProjectID(props?.projectId),
+    {
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: true,
+      // refetchInterval: 5000,
+    }
+  );
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const PriceConvertToIQD = info?.PriceConvertToIQD;
-  const [dataSet, setDataSet] = React.useState({});
+  }; 
+  React.useEffect(() => {
+    refetch();
+  }, [loading,open]);
+
   const collectData = (Products) => {
     if (!Products) return;
     const dataProject = data && data;
@@ -90,49 +95,61 @@ export default function OfferPrice(props) {
       calculateAfterPercentageWithQuantityAndConvertToUsd,
       calculateAfterPercentageWithoutQuantityAndConvertToUsd,
     };
-    setDataSet(newData);
+    if (newData.dataProject) {
+      setDataSet(newData);
+    }
   };
   React.useEffect(() => {
-    console.log("hhghhg", data, dataSet?.dataProject);
+    console.log("hhghhg", dataSet?.dataProject);
     collectData(Products);
+    // refetch()
   }, [Products]);
-  const [loading, setLoading] = React.useState(false);
+
   const handelDataPdf = async (label) => {
     try {
-      const formData = new FormData();
-      // @ts-ignore
-      formData.append("dataSet", dataSet);
-      formData.append("label", label);
-      const response = await axios.post(
-        `${BackendUrl}/api/setDataAsPdf`,
-        { dataSet, label },
-        {
-          headers: {
-            "Content-Type": "application/json", // Corrected header name
-          },
-          responseType: "blob",
+      if (dataSet?.dataProject !== null || dataSet?.dataProject) {
+        console.log(dataSet?.dataProject);
+        const formData = new FormData();
+        // @ts-ignore
+        formData.append("dataSet", dataSet);
+        formData.append("label", label);
+        const response = await axios.post(
+          `${BackendUrl}/api/setDataAsPdf`,
+          { dataSet, label },
+          {
+            headers: {
+              "Content-Type": "application/json", // Corrected header name
+            },
+            responseType: "blob",
+          }
+        );
+        if (response) {
+        
+          setLoading(true);
+          console.log(response);
+          const blob = new Blob([response.data], { type: "application/pdf" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${data.nameProject}.pdf`; // Change filename accordingly
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          // setAnchorEl(null);
         }
-      );
-      if (response) {
-        console.log(response);
-        const blob = new Blob([response.data], { type: "application/pdf" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${data.nameProject}.pdf`; // Change filename accordingly
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        setLoading(false);
-        // setAnchorEl(null);
+      }
+      else{
+        toast.error("error ")
       }
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
   };
   return (
     <div>
+      <ToastContainer/>
       <div className=" w-100 mb-3 mt-3">
         <div style={{ direction: "rtl", fontFamily: "Arial, sans-serif" }}>
           <p
@@ -342,8 +359,6 @@ export default function OfferPrice(props) {
             <p
               style={{ color: "white", fontSize: "20px", fontWeight: "bold" }}
               className=""
-              mt-0
-              mb-0
             >
               المجموع
             </p>

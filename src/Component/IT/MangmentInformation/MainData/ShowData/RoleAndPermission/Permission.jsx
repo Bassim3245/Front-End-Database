@@ -1,23 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box } from "@mui/material"; // Removed Typography import
-import Header from "../../../../../Layout/Header"; // Corrected import path
+import { Box, Button } from "@mui/material";
+import Header from "../../../../../Layout/Header";
 import { BackendUrl } from "../../../../../../redux/api/axios";
 import axios from "axios";
-import { toast } from "react-toastify";
+import StyledDataGrid from "../../../../../Config/StyledDataGrid";
+import { useParams } from "react-router";
+
 const Permission = () => {
   const columns = [
-    { field: "id", headerName: "ID", flex: 1 }, // Increased width of ID column to 150
+    { field: "_id", headerName: "ID" },
+    { field: "id", headerName: "ID", flex: 1 },
     {
       field: "permissionName",
       headerName: "Permission",
-      width: 200,
+      width: 300,
       cellClassName: "name-column--cell",
     },
   ];
 
-  const [permissionData, setPermissionData] = useState([]); // Initialized PermissionData as an empty array
+  const [permissionData, setPermissionData] = useState([]);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [dataRoleAndPermission, setDataRoleAndPermission] = useState({});
+  const [dataRoleUser, setDataRoleUser] = useState({});
+  const { id } = useParams();
+
+  const getRoleAndUserId = async () => {
+    try {
+      const response = await axios.get(
+        `${BackendUrl}/api/getDataRoleIdAndUserId/${id}`
+      );
+      setDataRoleUser(response?.data);
+    } catch (error) {
+      console.error(error?.response?.data?.message);
+    }
+  };
+  useEffect(() => {
+    getRoleAndUserId();
+  }, []);
 
   const getDataPermission = async () => {
     try {
@@ -25,53 +45,80 @@ const Permission = () => {
         `${BackendUrl}/api/getAllDataPermission`
       );
       setPermissionData(response?.data?.response);
-      console.log(response?.data);
     } catch (error) {
-      console.log(error?.response?.data?.message);
+      console.error(error?.response?.data?.message);
     }
   };
 
   useEffect(() => {
-    console.log(selectionModel);
     getDataPermission();
-  }, [selectionModel]);
+  }, []);
 
-  // @ts-ignore
-  const rows =
-    permissionData?.map((item, index) => {
-      return {
-        id: index + 1,
-        permissionName: item?.permissionName,
-      };
-    }) ?? [];
+  const getDataPermissionAndRole = async () => {
+    try {
+      const response = await axios.get(
+        `${BackendUrl}/api/getDataRoleIdAndPermissionId/${id}`
+      );
+      setDataRoleAndPermission(response?.data);
+      const selectedIds = response?.data?.permissionIds || [];
+      console.log("hhhhh", selectedIds);
+      setSelectionModel(selectedIds);
+    } catch (error) {
+      console.error(error?.response?.data?.message);
+    }
+  };
 
-  const handleSelectionModelChange = (item) => {
-    const selectedIDs = new Set(item);
-    const selectedRowData = rows.filter((row) =>
-      selectedIDs.has(row.id.toString())
-    );
-    console.log(item);
-    console.log(selectedRowData);
-    setSelectionModel(selectedRowData);
+  useEffect(() => {
+    getDataPermissionAndRole();
+  }, []);
+
+  const rows = permissionData.map((item, index) => ({
+    id: index + 1,
+    _id: item._id,
+    permissionName: item.permissionName,
+  }));
+
+  const handleSelectionModelChange = (newSelection) => {
+    setSelectionModel(newSelection);
+  };
+
+  const handleSetDataPermission = async () => {
+    try {
+      console.log("dfddddd", dataRoleAndPermission._id);
+      const roleIdPermission = dataRoleAndPermission._id || null;
+      const response = await axios.post(
+        `${BackendUrl}/api/setPermissionAndRole`,
+        { selectionModel, id, roleIdPermission }
+      );
+      if (response) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error?.response?.data?.message);
+    }
   };
 
   return (
     <Box>
-      <Header title="Permission" subTitle="List of Permission Data" />{" "}
-      {/* Updated subTitle */}
+      <Header title="Permission" subTitle="List of Permission Data" />
+      <Button onClick={handleSetDataPermission}>Save</Button>
       <Box sx={{ height: 650, mx: "auto" }}>
-        <DataGrid
+        <StyledDataGrid
           checkboxSelection
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectionModel(newRowSelectionModel);
+          onRowSelectionModelChange={handleSelectionModelChange}
+          gridTheme={{
+            mainColor: "rgb(55, 81, 126)",
           }}
           rowSelectionModel={selectionModel}
           slots={{
             toolbar: GridToolbar,
           }}
+          columnVisibilityModel={{
+            _id: false,
+          }}
           rows={rows}
-          // @ts-ignore
           columns={columns}
+          getRowId={(row) => row._id}
         />
       </Box>
     </Box>

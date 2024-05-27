@@ -17,8 +17,6 @@ import { displayProductByProjectName } from "../../../redux/ProductSlice/Product
 import { ButtonSave } from "../../Config/Content.jsx";
 import CustomizedSteppers from "./Stepper.jsx";
 import "jspdf-autotable";
-import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios.js";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;

@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
-import { AppBar, Toolbar, Typography, Avatar, IconButton } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Avatar,
+  IconButton,
+  useTheme,
+} from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/userSlice/userSlice";
@@ -12,11 +19,19 @@ function AppBarComponent({ drawerWidth }) {
     }
     return {};
   });
+  const theme = useTheme();
   const handleLogout = () => {
     dispatch(logout());
   };
   return (
-    <AppBar position="fixed" sx={{ width: { sm: `calc(100% - ${drawerWidth}px)` }, ml: { sm: `${drawerWidth}px` } }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        ml: { sm: `${drawerWidth}px` },
+        backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#1e6a99",
+      }}
+    >
       <Toolbar>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
           {info?.user_type}
@@ -34,4 +49,3 @@ function AppBarComponent({ drawerWidth }) {
 }
 
 export default AppBarComponent;
-

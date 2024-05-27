@@ -1,5 +1,7 @@
 import moment from "moment";
 import { BackendUrl } from "../../redux/api/axios";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export function getFileIcon(fileName) {
   if (typeof fileName !== "string") {
@@ -272,9 +274,114 @@ export const calculateTotalPrice = (item) => {
 };
 
 export const formatSize = (bytes) => {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return "0 Bytes";
   const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
+// export const formatDate = (Data) => {
+//   const date = new Date(Data);
+//   return moment(date).format(" HH:mm YYYY/MM/DD ");
+// };
+export const Delete = async (_id, token, setDelete, setAnchorEl) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success ms-3",
+      cancelButton: "btn btn-danger",
+    },
+    buttonsStyling: false,
+  });
+
+  try {
+    const result = await swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true,
+    });
+
+    if (result.isConfirmed) {
+      // @ts-ignore
+      const response = await axios({
+        method: "DELETE",
+        url: `${BackendUrl}/api/deleteProject/${_id}`,
+        headers: {
+          token: token,
+        },
+      });
+
+      setDelete(response?.data?.message);
+      setAnchorEl(null);
+      swalWithBootstrapButtons.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success",
+      });
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: "Your imaginary file is safe :)",
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const sendProjectEndTime=async(_id, token, setDelete, setAnchorEl)=>{
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success ms-3",
+      cancelButton: "btn btn-danger",
+    },
+    buttonsStyling: false,
+  });
+
+  try {
+    const result = await swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true,
+    });
+
+    if (result.isConfirmed) {
+      // @ts-ignore
+      const response = await axios({
+        method: "put",
+        url: `${BackendUrl}/api/delayProjectFinaltime/${_id}`,
+        headers: {
+          token: token,
+        },
+      });
+
+      setDelete(response?.data?.message);
+      setAnchorEl(null);
+      swalWithBootstrapButtons.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success",
+      });
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: "Your imaginary file is safe :)",
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const hasPermission = (role, permissions) => {
+  console.log(role);
+  console.log(permissions);
+  return Array.isArray(permissions) && permissions.includes(role);
 };

@@ -32,23 +32,9 @@ function Login() {
   useEffect(() => {
     console.log(Rol);
     if (isSuccess) {
-      // toast.success(message);
-      // Navigateto("/")
-
-      if (
-        Rol === "Employ" ||
-        Rol === "H.O.D" ||
-        Rol === "management" ||
-        Rol === "IT"
-      ) {
-        setTimeout(() => {
-          Navigateto("/Dashboard");
-        }, 500);
-      } else if (Rol === "HR") {
-        setTimeout(() => {
-          Navigateto("/HR");
-        }, 500);
-      }
+      setTimeout(() => {
+        Navigateto("/Main/menu");
+      }, 500);
     }
     if (isError) {
       console.log("error");
@@ -84,7 +70,7 @@ function Login() {
                             className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-3"
                             style={{ direction: "rtl" }}
                           >
-                            تسجيل  الدخول
+                            تسجيل الدخول
                           </p>
                           <form
                             className="mx-1 mx-md-4"
