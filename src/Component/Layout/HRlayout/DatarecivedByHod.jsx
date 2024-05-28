@@ -36,7 +36,7 @@ function DatarecivedByHod({ data }) {
                     <CloudDownload />
                   </IconButton>
                   <div className="icon txt-c">
-                    {getFileIcon(item?.UploadBookId.file)}
+                    {getFileIcon(item?.UploadBookId?.file)}
                   </div>
                   <div className="txt-c mb-10 fs-14">
                     {item?.UploadBookId?.BookName}

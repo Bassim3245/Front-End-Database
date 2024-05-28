@@ -103,5 +103,4 @@ function ProfileImage({ setFile, file, token, theme, data }) {
     </div>
   );
 }
-
 export default ProfileImage;

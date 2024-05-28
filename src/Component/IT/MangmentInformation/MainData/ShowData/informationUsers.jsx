@@ -17,9 +17,16 @@ import { useNavigate } from "react-router";
 import ModuleEdit from "./RoleAndPermission/EditUser";
 import Swal from "sweetalert2";
 import Loader from "../../../../Config/Loader";
+import { getRoleAndUserId } from "../../../../../redux/RoleSlice/rolAction";
+import { hasPermission } from "Component/Config/Function";
 function InformationUsers({ dataEmploy, theme }) {
   // @ts-ignore
   const { dataUsers, loading } = useSelector((state) => state.user);
+  const [info, setInfo] = React.useState(
+    () => JSON.parse(localStorage.getItem("user")) || {}
+  );
+  const token = localStorage.getItem("token") || {};
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [message, setMessage] = useState("");
   // @ts-ignore
   const [UpdateDataUser, setDataUser] = useState(false);
@@ -74,13 +81,21 @@ function InformationUsers({ dataEmploy, theme }) {
     // @ts-ignore
     dispatch(getAllDataUser());
   };
-  const handleEdit = () => {};
   useEffect(() => {
+    console.log('sss',dataUsers);
+
     FetchDataUser();
-  }, [dataEmploy, message, UpdateDataUser]);
+  }, []);
   const handelAccess = (id) => {
     Navigate(`/Home/PermissionUsers/${id}`);
   };
+  const getPermmission = () => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  };
+  useEffect(() => {
+    getPermmission();
+  }, [Navigate]);
   return (
     <>
       {loading && <Loader />}
@@ -98,20 +113,28 @@ function InformationUsers({ dataEmploy, theme }) {
             <th> Phone</th>
             <th>Password</th>
             <th>Name Of Department </th>
-            <th>Access</th>
+            {hasPermission(
+              roles.set_Permission_to_user._id,
+              Permission?.permissionIds
+            ) && <th>Access</th>}
             <th>Action </th>
           </tr>
         </thead>
         <tbody>
-          {dataUsers && Array.isArray(dataUsers)
-            ? dataUsers?.map((item, index) => (
-                <tr key={item?._id}>
-                  <td>{index + 1}</td>
-                  <td>{item?.name}</td>
-                  <td>{item?.username}</td>
-                  <td>{item?.Phone}</td>
-                  <td>{item?.password}</td>
-                  <td>{item?.DepartmentID?.departmentName}</td>
+          {dataUsers &&
+            Array.isArray(dataUsers) &&
+            dataUsers?.map((item, index) => (
+              <tr key={item?._id}>
+                <td>{index + 1}</td>
+                <td>{item?.name}</td>
+                <td>{item?.username}</td>
+                <td>{item?.Phone}</td>
+                <td>{item?.password}</td>
+                <td>{item?.DepartmentID?.departmentName}</td>
+                {hasPermission(
+                  roles.set_Permission_to_user._id,
+                  Permission?.permissionIds
+                ) && (
                   <td>
                     {item.user_type === "IT" ? (
                       <BottomRoot onClick={() => handelAccess(item?._id)}>
@@ -139,21 +162,22 @@ function InformationUsers({ dataEmploy, theme }) {
                       </Button>
                     )}
                   </td>
-                  <td>
-                    <div className="d-flex">
-                      <ModuleEdit id={item?._id} setDataUser={setDataUser} />
-                      <Button
-                        className="btn "
-                        onClick={() => handleDelete(item?._id)}
-                      >
-                        {" "}
-                        <Delete />{" "}
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            : null}
+                )}
+
+                <td>
+                  <div className="d-flex">
+                    <ModuleEdit id={item?._id} setDataUser={setDataUser} />
+                    <Button
+                      className="btn "
+                      onClick={() => handleDelete(item?._id)}
+                    >
+                      {" "}
+                      <Delete />{" "}
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </>

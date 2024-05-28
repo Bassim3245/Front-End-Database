@@ -17,6 +17,7 @@ import DropDownGrid from "../../Config/CustomMennu";
 import ModuleFormEditProject from "../../Project/MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Delete } from "../../Config/Function";
+import Loader from "Component/Config/Loader";
 const ProjectMutual = () => {
   const [selectionModel, setSelectionModel] = useState([]);
   const [DeleteItem, setDelete] = useState([]);
@@ -32,12 +33,12 @@ const ProjectMutual = () => {
   const navigate = useNavigate();
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
-    { field: "id", headerName: "ID" ,flex: 1, },
+    { field: "id", headerName: "ID", flex: 1 },
     {
       field: "Code",
       headerName: "Code",
     },
-    { field: "DepartmentID", headerName: " Department Name",flex: 1 },
+    // { field: "DepartmentID", headerName: " Department Name", flex: 1 },
     {
       field: "nameProject",
       headerName: "Project Name",
@@ -69,25 +70,25 @@ const ProjectMutual = () => {
       field: "DateBook",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       headerName: "Date Request",
-      flex: 1
+      flex: 1,
     },
     {
       field: "DateClose",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       headerName: "Date Close",
-      flex: 1
+      flex: 1,
     },
     {
       field: "startTime",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       headerName: "Starting Date",
-      flex: 1
+      flex: 1,
     },
     {
       field: "endTime",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       headerName: "Expiry Date",
-      flex: 1
+      flex: 1,
     },
     {
       field: "Action",
@@ -125,13 +126,11 @@ const ProjectMutual = () => {
                 <span className="ms-2"> Open Project</span>
               </MenuItem>
             </DropDownGrid>
-            <div>params.row.DepartmentID[0]</div>
           </div>
         );
       },
     },
   ];
-
   const fetchDataProject = () => {
     // @ts-ignore
     dispatch(getProjectByDepartmentMutual({ info, token }));
@@ -140,7 +139,7 @@ const ProjectMutual = () => {
     fetchDataProject();
   }, []);
   const HandelOpen = (id) => {
-    navigate(`/OpenProject/${id}`);
+    navigate(`/Home/OpenProject/${id}`);
   };
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
@@ -153,7 +152,14 @@ const ProjectMutual = () => {
   }));
   return (
     <Box>
-      <Header title="Project Delays" subTitle="List of Project Delays" />
+      {loading && (
+        <div className="handelLoader">
+          <div>
+            <Loader />
+          </div>
+        </div>
+      )}
+      <Header title="Project Mutual" subTitle="List of Project mutual" />
       <Box sx={{ height: 650, mx: "auto" }}>
         <StyledDataGrid
           checkboxSelection

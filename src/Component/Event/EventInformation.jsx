@@ -103,7 +103,7 @@ const Event = () => {
                   }
                 >
                   <option>اختيار القسم</option>
-                  {dataDepartment.map((item, index) => (
+                  {dataDepartment?.map((item, index) => (
                     <option key={index} value={item._id}>
                       {item?.departmentName}
                     </option>
@@ -261,9 +261,9 @@ const Event = () => {
                                       {item.actions === "Add"
                                         ? `${item?.userId?.name} add Product to ${item?.projectId?.nameProject}`
                                         : item.actions === "edit"
-                                        ? `${item.userId.name} request Edit`
+                                        ? `${item?.userId?.name} request Edit`
                                         : item.actions === "send"
-                                        ? `${item.userId.name} send the Project `
+                                        ? `${item?.userId?.name} send the Project `
                                         : null}
                                     </li>
                                   </ul>
@@ -284,7 +284,7 @@ const Event = () => {
                                     <Button
                                       variant="text"
                                       onClick={() =>
-                                        handleAccept(item.productId._id)
+                                        handleAccept(item?.productId?._id)
                                       }
                                     >
                                       accept

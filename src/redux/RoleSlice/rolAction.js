@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BackendUrl } from "../api/axios";
 const getRoleAndUserId = createAsyncThunk(
-  "auth/getAllUserById",
+  "auth/getPermissionByUIserId",
   async ({ userId, token }, { rejectWithValue }) => {
     try {
       const response = await axios({

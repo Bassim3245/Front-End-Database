@@ -45,10 +45,9 @@ const Dashboard = () => {
           </Button>
         </Box>
       </Stack>
-
       <Row1  />
-      <Row2  />
-      <Row3  />
+      {/* <Row2  /> */}
+      {/* <Row3  /> */}
     </div>
   );
 };

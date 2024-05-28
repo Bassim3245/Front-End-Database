@@ -32,7 +32,6 @@ function SettingInformation() {
               theme.palette.mode === "dark" ? "dark" : ""
             } rad-10`}
           >
-            {" "}
             <DepartmentInfo
               theme={theme}
               departmentName={departmentName}

@@ -52,7 +52,7 @@ const loginUser = createAsyncThunk(
   }
 );
 const getAllDataUser = createAsyncThunk(
-  "auth/getAllUserByDepartment",
+  "auth/getAllUser",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios({

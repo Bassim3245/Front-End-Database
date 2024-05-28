@@ -17,7 +17,7 @@ export default function PersonalProfile(props) {
   const { department } = useSelector((state) => {
     return state.Department;
   });
-  const { dataUsers, loading } = useSelector((state) => {
+  const { dataUserById, loading } = useSelector((state) => {
     return state.user;
   });
   const [info, setInfo] = useState(
@@ -33,7 +33,7 @@ export default function PersonalProfile(props) {
   const [isloading, setLoading] = useState(true);
   const [DepartmentID, setDepartment] = useState(info?.DepartmentID || "");
   useEffect(() => {
-    if (dataUsers) {
+    if (dataUserById) {
       setUname(info?.name);
       setUsername(info?.username);
       setPassword(info?.password);
@@ -117,14 +117,14 @@ export default function PersonalProfile(props) {
               setFile={setFile}
               token={token}
               theme={theme}
-              data={dataUsers}
+              data={dataUserById}
             />
             {!edit ? (
               <InformationUserList
                 info={info}
                 department={department}
                 theme={theme}
-                data={dataUsers}
+                data={dataUserById}
               />
             ) : (
               <Edit
@@ -138,7 +138,7 @@ export default function PersonalProfile(props) {
                 setPassword={setPassword}
                 info={info}
                 theme={theme}
-                data={dataUsers}
+                data={dataUserById}
               />
             )}
             <div>

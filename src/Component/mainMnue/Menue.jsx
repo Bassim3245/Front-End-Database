@@ -35,148 +35,113 @@ function Product() {
     console.log(permissions);
     return Array.isArray(permissions) && permissions.includes(role);
   };
-  let Route = [];
-  switch (Rol || info?.user_type) {
-    case "IT":
-      Route = [
-        {
-          image: "/image/information-technology.png",
-          name: "Information Technology",
-          url: info?.user_type === "IT" ? "/Home" : "/Authorized",
-          statRote: "default",
-        },
-      ];
-      break;
-    case "Assistance":
-      Route = [
-        {
-          image: "/image/icons8-assistance-64.png",
-          name: "Assistance",
-          url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
-          statRote: "AssistanceSection",
-        },
-        {
-          image: "/image/company-department.png",
-          name: "Technical Departments",
-          url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
-          statRote: "TechnicalDepartments",
-        },
-      ];
-      break;
-    case "H.O.D":
-      Route = [
-        {
-          image: "/image/task-management.png",
-          name: "Projects Manager",
-          url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
-          statRote: "ProjectRote",
-        },
-        {
-          image: "/image/business-report.png",
-          name: "Dashboards",
-          url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
-          statRote: "Dashboard",
-        },
-        {
-          image: "/image/folder.png",
-          name: "Store Data",
-          url:
-            info?.user_type === "management" || info?.user_type === "H.O.D"
-              ? "/Home"
-              : "/Authorized",
-          statRote: "QuantityTables",
-        },
-        {
-          image: "/image/task-management.png",
-          name: "Projects received ",
-          url: info?.user_type === "Employ" ? "/Manger" : "/Authorized",
-          statRote: "default",
-        },
-        {
-          image: "/image/inventory-management.png",
-          name: "Projects delivered",
-          url: info?.user_type === "management" ? "/Manger" : "/Authorized",
-          statRote: "default",
-        },
-        {
-          image: "/image/deadline.png",
-          name: "Delayed projects",
-          url: info?.user_type === "H.O.D" ? "/Manger" : "/Authorized",
-          statRote: "default",
-        },
-      ];
-      break;
-    case "Employ":
-      Route = [
-        {
-          image: "/image/task-management.png",
-          name: "Projects Manager",
-          url: info?.user_type === "Employ" ? "/Home" : "/Authorized",
-          statRote: "ProjectRote",
-        },
-      ];
-      break;
-    case "HR":
-      Route = [
-        {
-          image: "/image/management.png",
-          name: "Human Resource",
-          url: info?.user_type === "HR" ? "/Home" : "/Authorized",
-          statRote: "default",
-        },
-      ];
-      break;
+  // let Route = [];
+  // switch (Rol || info?.user_type) {
+  //   case "IT":
+  //     Route = [
+  //       {
+  //         image: "/image/information-technology.png",
+  //         name: "Information Technology",
+  //         url: info?.user_type === "IT" ? "/Home" : "/Authorized",
+  //         statRote: "default",
+  //       },
+  //     ];
+  //     break;
+  //   case "Assistance":
+  //     Route = [
+  //       {
+  //         image: "/image/icons8-assistance-64.png",
+  //         name: "Assistance",
+  //         url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
+  //         statRote: "AssistanceSection",
+  //       },
+  //       {
+  //         image: "/image/company-department.png",
+  //         name: "Technical Departments",
+  //         url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
+  //         statRote: "TechnicalDepartments",
+  //       },
+  //     ];
+  //     break;
+  //   case "H.O.D":
+  //     Route = [
+  //       {
+  //         image: "/image/task-management.png",
+  //         name: "Projects Manager",
+  //         url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
+  //         statRote: "ProjectRote",
+  //       },
+  //       {
+  //         image: "/image/business-report.png",
+  //         name: "Dashboards",
+  //         url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
+  //         statRote: "Dashboard",
+  //       },
+  //       {
+  //         image: "/image/folder.png",
+  //         name: "Store Data",
+  //         url:
+  //           info?.user_type === "management" || info?.user_type === "H.O.D"
+  //             ? "/Home"
+  //             : "/Authorized",
+  //         statRote: "QuantityTables",
+  //       },
+  //       {
+  //         image: "/image/task-management.png",
+  //         name: "Projects received ",
+  //         url: info?.user_type === "Employ" ? "/Manger" : "/Authorized",
+  //         statRote: "default",
+  //       },
+  //       {
+  //         image: "/image/inventory-management.png",
+  //         name: "Projects delivered",
+  //         url: info?.user_type === "management" ? "/Manger" : "/Authorized",
+  //         statRote: "default",
+  //       },
+  //       {
+  //         image: "/image/deadline.png",
+  //         name: "Delayed projects",
+  //         url: info?.user_type === "H.O.D" ? "/Manger" : "/Authorized",
+  //         statRote: "default",
+  //       },
+  //     ];
+  //     break;
+  //   case "Employ":
+  //     Route = [
+  //       {
+  //         image: "/image/task-management.png",
+  //         name: "Projects Manager",
+  //         url: info?.user_type === "Employ" ? "/Home" : "/Authorized",
+  //         statRote: "ProjectRote",
+  //       },
+  //     ];
+  //     break;
+  //   case "HR":
+  //     Route = [
+  //       {
+  //         image: "/image/management.png",
+  //         name: "Human Resource",
+  //         url: info?.user_type === "HR" ? "/Home" : "/Authorized",
+  //         statRote: "default",
+  //       },
+  //     ];
+  //     break;
 
-    default:
-      Navigate("*");
-      break;
-  }
-  const dataMenu = [
-    {
-      image: "/image/inventory-management.png",
-      name: "Projects delivered",
-      url: info?.user_type === "management" ? "/Manger" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/deadline.png",
-      name: "Delayed projects",
-      url: info?.user_type === "H.O.D" ? "/Manger" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/information-technology.png",
-      name: " Information Technology",
-      url: info?.user_type === "IT" ? "/Home" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/task-management.png",
-      name: "Projects Manger ",
-      url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
-      statRote: "ProjectRote",
-    },
-    {
-      image: "/image/business-report.png",
-      name: "Dashboards ",
-      url: info?.user_type === "H.O.D" ? "/Dashboards" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/folder.png",
-      name: " Store Data ",
-      url:
-        info?.user_type === "management" || info?.user_type === "H.O.D"
-          ? "/Home"
-          : "Authorized",
-      statRote: "QuantityTables",
-    },
-  ];
+  //   default:
+  //     Navigate("*");
+  //     break;
+  // }
+
   const dataRout = [
     {
       image: "/image/task-management.png",
       name: "Projects Manager",
-      url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
+      url:
+        info?.user_type === "H.O.D" ||
+        info.user_type === "Employ" ||
+        info.user_type === "management"
+          ? "/Home"
+          : "/Authorized",
       statRote: "ProjectRote",
     },
     {
@@ -187,7 +152,7 @@ function Product() {
     },
     {
       image: "/image/folder.png",
-      name: "Store Data",
+      name: "Quantity tables",
       url:
         info?.user_type === "management" || info?.user_type === "H.O.D"
           ? "/Home"
@@ -195,28 +160,10 @@ function Product() {
       statRote: "QuantityTables",
     },
     {
-      image: "/image/task-management.png",
-      name: "Projects received ",
-      url: info?.user_type === "Employ" ? "/Manger" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/inventory-management.png",
-      name: "Projects delivered",
-      url: info?.user_type === "management" ? "/Manger" : "/Authorized",
-      statRote: "",
-    },
-    {
-      image: "/image/deadline.png",
-      name: "Delayed projects",
-      url: info?.user_type === "H.O.D" ? "/Manger" : "/Authorized",
-      statRote: "",
-    },
-    {
       image: "/image/information-technology.png",
       name: "Information Technology",
-      url: info?.user_type === "IT" ? "/Home" : "/Authorized",
-      statRote: "",
+      url: "/Home",
+      statRote: "default",
     },
     {
       image: "/image/icons8-assistance-64.png",
@@ -231,16 +178,10 @@ function Product() {
       statRote: "TechnicalDepartments",
     },
     {
-      image: "/image/task-management.png",
-      name: "Projects Manager",
-      url: info?.user_type === "Employ" ? "/Home" : "/Authorized",
-      statRote: "ProjectRote",
-    },
-    {
       image: "/image/management.png",
       name: "Human Resource",
       url: info?.user_type === "HR" ? "/Home" : "/Authorized",
-      statRote: "",
+      statRote: "default",
     },
   ];
   const handleRole = (url, state) => {
@@ -255,7 +196,7 @@ function Product() {
       </div>
       <div className="Project vh-100 d-flex justify-content-center align-items-center">
         <div className="container boxContainer d-flex justify-content-center align-items-center  p-5 f-wrap gap-3">
-          {Route.map((item, index) => (
+          {dataRout?.map((item, index) => (
             <div className="box " key={index}>
               <img
                 src={item?.image}

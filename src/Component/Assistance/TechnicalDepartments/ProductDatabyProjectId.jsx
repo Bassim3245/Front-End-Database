@@ -5,6 +5,7 @@ import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
 import { useTranslation } from "react-i18next";
+import OfferPriceMain from "../../Product/OfferPrice/OfferPrice";
 const DataProductByProjectId = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -21,14 +22,15 @@ const DataProductByProjectId = (props) => {
   const handleOpenDataProject = () => {
     setOpen(!open);
   };
-
   const { t } = useTranslation();
   return (
     <>
       <div className="w-100 ">
         {loading && <div>loading..</div>}
-
         <div className="mb-3">
+          <div className="mb-2">
+            <OfferPriceMain projectId={projectId} />
+          </div>
           <Table
             bordered
             variant={theme.palette.mode === "dark" ? "dark" : ""}

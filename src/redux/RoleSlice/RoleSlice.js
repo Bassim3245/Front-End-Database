@@ -126,7 +126,7 @@ const initialState = {
       value: false,
       _id: "6649e181fc1a4f7c44fe053e",
     },
-    show_Profily: {
+    show_Profile: {
       value: false,
       _id: "6649e52afc1a4f7c44fe0564",
     },
@@ -186,13 +186,13 @@ const initialState = {
       value: false,
       _id: "6649e020fc1a4f7c44fe0503",
     },
-    add_file_project: {
-      value: false,
-      _id: "6649e020fc1a4f7c44fe0503",
-    },
     delete_file_project: {
       value: false,
       _id: "6649e020fc1a4f7c44fe0503",
+    },
+    view_filles: {
+      value: false,
+      _id: "665379eecf020c0b9cc88207",
     },
   },
 };

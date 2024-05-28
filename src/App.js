@@ -67,7 +67,13 @@ export default function App() {
         return <Route index element={<Files />} />;
         break;
       case "Assistance":
-        return <Route index element={<Assistance />} />;
+        if (stateRote === "AssistanceSection") {
+          return <Route index element={<Assistance />} />;
+        } else if (stateRote === "TechnicalDepartments") {
+          return <Route index element={<DepartmentsList />} />;
+        } else {
+          return null;
+        }
         break;
       default:
         return <Route path="Authorized" element={<Authorized />} />;

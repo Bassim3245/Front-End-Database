@@ -260,3 +260,19 @@ export const getRole = async (token) => {
     }
   }
 };
+export const getAllProJECTaNDcOUNT5 = async (token) => {
+  try {
+    const response = await axios.get(`${BackendUrl}/api/getNumberOfProjectsCurrently`);
+    if (response) {
+      console.log("tt", response.data);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response) {
+      return error.response.data.message;
+    } else {
+      return error.message;
+    }
+  }
+};
+

@@ -26,6 +26,7 @@ import {
   Home,
   HourglassBottom,
   PermDataSetting,
+  Person,
   StackedLineChart,
   WaterfallChart,
 } from "@mui/icons-material";
@@ -39,6 +40,8 @@ import { BackendUrl } from "../../redux/api/axios";
 import { setLanguage } from "../../redux/LanguageState";
 import { getRoleRedux, setRolesRedux } from "../../redux/RoleSlice/RoleSlice";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+import Loader from "Component/Config/Loader";
+import { hasPermission } from "Component/Config/Function";
 const drawerWidth = 340;
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -91,19 +94,21 @@ const SideBar = ({ open, handleDrawerClose }) => {
     // @ts-ignore
     return state?.language;
   });
-  let location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
   const dispatch = useDispatch();
+  let Route1 = [];
+  let Route2 = [];
   const [stateRote, setStatRote] = useState(localStorage.getItem("statRote"));
   const [info, setInfo] = React.useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
-  const { Rol } = useSelector((state) => state.user);
   const token = localStorage.getItem("token") || {};
-  const { Permission, roles } = useSelector((state) => state?.RolesData);
+  const { Permission, roles, loading } = useSelector(
+    (state) => state?.RolesData
+  );
   // @ts-ignore
-
+const location=useLocation()
   const getPermmission = () => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
@@ -111,7 +116,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
   useEffect(() => {
     console.log(Permission?.permissionIds);
     getPermmission();
-  }, []);
+  }, [navigate,location?.pathname]);
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -130,13 +135,11 @@ const SideBar = ({ open, handleDrawerClose }) => {
     dispatch(setRolesRedux(updatedRoles));
   }, []);
 
-  let Route1 = [];
-  let Route2 = [];
   switch (stateRote) {
     case "default":
       Route1 = [
         {
-          text: " List Projects",
+          text: "List Projects",
           icon: <Dataset />,
           path: "ProjectList",
           checkPermission: roles?.View_data_project?._id,
@@ -165,6 +168,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "FilesReceived",
           checkPermission: roles?.view_data_Received?._id,
         },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
+        },
       ];
       break;
     case "Dashboard":
@@ -174,6 +183,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           icon: <Home />,
           path: "/Home",
           checkPermission: roles?.view_data_dashboard?._id,
+        },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
         },
       ];
       break;
@@ -189,7 +204,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
           text: "Projects delivered ",
           icon: <ReceiptOutlinedIcon />,
           path: "ProductList",
-          checkPermission: roles?.View_data_Product?._id,
+          checkPermission: roles?.view_data_send?._id,
         },
         {
           text: "Delayed projects",
@@ -203,6 +218,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           icon: <Event />,
           path: "Event",
           checkPermission: roles?.view_notifction?._id,
+        },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
         },
       ];
       break;
@@ -226,6 +247,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "PerformsnceAnalytcsMain",
           checkPermission: roles?.view_data_Performance_analytics?._id,
         },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
+        },
       ];
       break;
     case "AssistanceSection":
@@ -246,7 +273,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
           text: "Files",
           icon: <CloudUpload />,
           path: "HR",
-          checkPermission: roles?.view_data_mutual_projects?._id,
+          checkPermission: roles?.view_filles?._id,
         },
         {
           text: "Products received",
@@ -254,6 +281,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "FilesReceived",
           checkPermission:
             roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
+        },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
         },
       ];
       break;
@@ -271,16 +304,18 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "Event",
           checkPermission: roles?.Event_Assistance?._id,
         },
+        {
+          text: "Profile",
+          icon: <Person />,
+          path: "profile",
+          checkPermission: roles?.show_Profile?._id,
+        },
       ];
       break;
     default:
       navigate("*");
   }
   const routeTest = [];
-
-  const hasPermission = (role, permissions) => {
-    return Array.isArray(permissions) && permissions.includes(role);
-  };
   const [authorized, setAuthorized] = useState(true);
   useEffect(() => {
     let isAuthorized = routeTest.every((item) =>
@@ -291,134 +326,167 @@ const SideBar = ({ open, handleDrawerClose }) => {
       navigate("/Home/Authorized");
     }
   }, [routeTest, Permission, navigate]);
-
   if (!authorized) {
     return null;
   }
   return (
     // Anchor to male from dirction right
-    <Drawer variant="permanent" open={open} anchor={rtl?.anchor}>
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
-      <Avatar
-        sx={{
-          mx: "auto",
-          width: open ? 88 : 44,
-          height: open ? 88 : 44,
-          my: 1,
-          border: "2px solid grey",
-          transition: "0.25s",
-        }}
-        alt="Remy Sharp"
-        src={
-          info.image
-            ? `${BackendUrl}/${info.image}`
-            : "https://media.allure.com/photos/5a26c1d8753d0c2eea9df033/3:4/w_1262,h_1683,c_limit/mostbeautiful.jpg"
-        }
-      />
-      <Typography
-        align="center"
-        sx={{ fontSize: open ? 17 : 0, transition: "0.25s" }}
-      >
-        {info.name}
-      </Typography>
-      <Typography
-        align="center"
-        sx={{
-          fontSize: open ? 15 : 0,
-          transition: "0.25s",
-          color: theme.palette.info.main,
-        }}
-      >
-        {info.user_type}
-      </Typography>
-      <Divider />
-      <List dir={rtl.dir}>
-        {Route1?.map((item) => {
-          // Check if the user has permission to view this item
-          const hasAccess = hasPermission(
-            item?.checkPermission,
-            Permission?.permissionIds
-          );
-          return (
-            hasAccess && (
-              <React.Fragment key={item.path}>
-                <ListItem
-                  disablePadding
-                  sx={{ display: "block" }}
-                  dir={rtl.dir}
-                >
-                  <Tooltip title={open ? null : item.text} placement="left">
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(item.path);
-                      }}
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? "initial" : "center",
-                        px: 2.5,
-                        dir: rtl?.dir,
-                        bgcolor:
-                          location.pathname === item.path
-                            ? theme.palette.mode === "dark"
-                              ? grey[800]
-                              : grey[300]
-                            : null,
-                      }}
-                    >
-                      <ListItemIcon
+    <>
+      {loading && <Loader />}
+      <Drawer variant="permanent" open={open} anchor={rtl?.anchor}>
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <Avatar
+          sx={{
+            mx: "auto",
+            width: open ? 88 : 44,
+            height: open ? 88 : 44,
+            my: 1,
+            border: "2px solid grey",
+            transition: "0.25s",
+          }}
+          alt="Remy Sharp"
+          src={
+            info.image
+              ? `${BackendUrl}/${info.image}`
+              : "https://media.allure.com/photos/5a26c1d8753d0c2eea9df033/3:4/w_1262,h_1683,c_limit/mostbeautiful.jpg"
+          }
+        />
+        <Typography
+          align="center"
+          sx={{ fontSize: open ? 17 : 0, transition: "0.25s" }}
+        >
+          {info.name}
+        </Typography>
+        <Typography
+          align="center"
+          sx={{
+            fontSize: open ? 15 : 0,
+            transition: "0.25s",
+            color: theme.palette.info.main,
+          }}
+        >
+          {info.user_type}
+        </Typography>
+        <Divider />
+        <List dir={rtl.dir}>
+          {Route1?.map((item) => {
+            // Check if the user has permission to view this item
+            const hasAccess = hasPermission(
+              item?.checkPermission,
+              Permission?.permissionIds
+            );
+            return (
+              hasAccess && (
+                <React.Fragment key={item.path}>
+                  <ListItem
+                    disablePadding
+                    sx={{ display: "block" }}
+                    dir={rtl.dir}
+                  >
+                    <Tooltip title={open ? null : item.text} placement="left">
+                      <ListItemButton
+                        onClick={() => {
+                          navigate(item.path);
+                        }}
                         sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
+                          minHeight: 48,
+                          justifyContent: open ? "initial" : "center",
+                          px: 2.5,
+                          dir: rtl?.dir,
+                          bgcolor:
+                            location.pathname === item.path
+                              ? theme.palette.mode === "dark"
+                                ? grey[800]
+                                : grey[300]
+                              : null,
                         }}
                       >
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item.text}
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                    </ListItemButton>
-                  </Tooltip>
-                </ListItem>
-              </React.Fragment>
-            )
-          );
-        })}
-      </List>
-      <Divider />
-      <List dir={rtl.dir}>
-        {Route2?.map((item) => (
-          <ListItem
-            key={item.path}
-            disablePadding
-            sx={{ display: "block" }}
-            dir={rtl.dir}
-          >
-            <Tooltip title={open ? null : item.text} placement="left">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={item.text}
+                          sx={{ opacity: open ? 1 : 0 }}
+                        />
+                      </ListItemButton>
+                    </Tooltip>
+                  </ListItem>
+                </React.Fragment>
+              )
+            );
+          })}
+        </List>
+        <Divider />
+        <List dir={rtl.dir}>
+          {Route2?.map((item) => (
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block" }}
+              dir={rtl.dir}
+            >
+              <Tooltip title={open ? null : item.text} placement="left">
+                <ListItemButton
+                  onClick={() => {
+                    navigate(item.path);
+                  }}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                    bgcolor:
+                      location.pathname === item.path
+                        ? theme.palette.mode === "dark"
+                          ? grey[800]
+                          : grey[300]
+                        : null,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </Tooltip>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List dir={rtl.dir}>
+          <ListItem disablePadding sx={{ display: "block" }} dir={rtl.dir}>
+            <Tooltip title={open ? null : "Logout"} placement="left">
               <ListItemButton
                 onClick={() => {
-                  navigate(item.path);
+                  dispatch(logout());
                 }}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
-                  bgcolor:
-                    location.pathname === item.path
-                      ? theme.palette.mode === "dark"
-                        ? grey[800]
-                        : grey[300]
-                      : null,
                 }}
               >
                 <ListItemIcon
@@ -428,62 +496,31 @@ const SideBar = ({ open, handleDrawerClose }) => {
                     justifyContent: "center",
                   }}
                 >
-                  {item.icon}
+                  <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
+                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </Tooltip>
           </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List dir={rtl.dir}>
-        <ListItem disablePadding sx={{ display: "block" }} dir={rtl.dir}>
-          <Tooltip title={open ? null : "Logout"} placement="left">
-            <ListItemButton
-              onClick={() => {
-                dispatch(logout());
-              }}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <ExitToAppIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </Tooltip>
-        </ListItem>
-      </List>
-      <Button
-        sx={{
-          position: "absolute",
-          bottom: "0px",
-          mb: "10px",
-          backgroundColor: "#e91e63",
-          color: "white",
-        }}
-        onClick={() => {
-          localStorage.removeItem("statRote");
-          navigate("/Main/menu");
-        }}
-      >
-        {" "}
-        back
-      </Button>
-    </Drawer>
+        </List>
+        <Button
+          sx={{
+            position: "absolute",
+            bottom: "0px",
+            mb: "10px",
+            backgroundColor: "#e91e63",
+            color: "white",
+          }}
+          onClick={() => {
+            localStorage.removeItem("statRote");
+            navigate("/Main/menu");
+          }}
+        >
+          {" "}
+          back
+        </Button>
+      </Drawer>
+    </>
   );
 };
 export default SideBar;

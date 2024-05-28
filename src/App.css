@@ -123,6 +123,15 @@ ul {
     margin-right: auto;
 }
 
+.handelLoader {
+    position: absolute;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+    background-color: rgba(0, 0, 0, 0.1); 
+    transform: translate(-50%, -50%); /* Correct the translate function */
+}
+
 /* Small */
 /* @media (min-width: 768px) {
     .container {

@@ -381,7 +381,5 @@ export const sendProjectEndTime=async(_id, token, setDelete, setAnchorEl)=>{
   }
 }
 export const hasPermission = (role, permissions) => {
-  console.log(role);
-  console.log(permissions);
   return Array.isArray(permissions) && permissions.includes(role);
 };

@@ -44,7 +44,7 @@ console.log("hello",data);
         </Typography>
         <div className="files-page d-flex m-20 gap-20">
           <div className="files-content d-grid gap-20">
-            {data?.length > 0 ? (
+            {data !== undefined ? (
               Array.isArray(data) &&
               data?.map((item, index) => (
                 <Box className="file bg-white p-10 rad-10" key={item?._id}>
@@ -54,7 +54,7 @@ console.log("hello",data);
                     <CloudDownload />
                   </IconButton>
                   <div className="icon txt-c">
-                    {getFileIcon(item?.UploadId.file)}
+                    {getFileIcon(item?.UploadId?.file)}
                   </div>
                   <div className="txt-c mb-10 fs-14">
                     {item?.UploadId?.BookName}
