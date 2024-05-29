@@ -2,7 +2,7 @@ import moment from "moment";
 import { BackendUrl } from "../../redux/api/axios";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { MenuItem } from "@mui/material";
 export function getFileIcon(fileName) {
   if (typeof fileName !== "string") {
     return null;
@@ -62,7 +62,6 @@ export const validateFileType = (file) => {
   }
   return "valid";
 };
-
 export const formatDate = (date) => {
   return moment(date).format("YYYY/MM/DD HH:mm"); // Return the formatted date
 };
@@ -284,7 +283,7 @@ export const formatSize = (bytes) => {
 //   const date = new Date(Data);
 //   return moment(date).format(" HH:mm YYYY/MM/DD ");
 // };
-export const Delete = async (_id, token, setDelete, setAnchorEl) => {
+export const Delete = async (_id, setDelete, setAnchorEl, token) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn btn-success ms-3",
@@ -332,7 +331,12 @@ export const Delete = async (_id, token, setDelete, setAnchorEl) => {
     console.log(error);
   }
 };
-export const sendProjectEndTime=async(_id, token, setDelete, setAnchorEl)=>{
+export const sendProjectEndTime = async (
+  _id,
+  token,
+  setDelete,
+  setAnchorEl
+) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn btn-success ms-3",
@@ -379,7 +383,13 @@ export const sendProjectEndTime=async(_id, token, setDelete, setAnchorEl)=>{
   } catch (error) {
     console.log(error);
   }
-}
+};
 export const hasPermission = (role, permissions) => {
   return Array.isArray(permissions) && permissions.includes(role);
 };
+export const renderMenuItem = (key, onClick, IconComponent, text) => (
+  <MenuItem key={key} onClick={onClick} disableRipple>
+    <IconComponent />
+    <span className="ms-2">{text}</span>
+  </MenuItem>
+);

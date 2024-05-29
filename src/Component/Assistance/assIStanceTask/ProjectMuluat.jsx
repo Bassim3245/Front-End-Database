@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box, Button, Divider, MenuItem } from "@mui/material";
+import { Box, Divider, MenuItem } from "@mui/material";
 import Header from "../../Layout/Header";
-import { BackendUrl } from "../../../redux/api/axios";
-import axios from "axios";
-import StyledDataGrid from "../../Config/StyledDataGrid";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getProjectByDepartmentDelay,
-  getProjectByDepartmentMutual,
-} from "../../../redux/ProjectSlice/ProjectAction";
+import { getProjectByDepartmentMutual } from "../../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
 import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../../Config/CustomMennu";
 import ModuleFormEditProject from "../../Project/MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Delete } from "../../Config/Function";
+import {
+  Delete,
+  hasPermission,
+  renderMenuItem,
+  sendProjectEndTime,
+} from "../../Config/Function";
 import Loader from "Component/Config/Loader";
+import GridTemplate from "../../Config/GridTemplet";
+import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
+import { useTranslation } from "react-i18next";
+import { setLanguage } from "../../../redux/LanguageState";
+
 const ProjectMutual = () => {
-  const [selectionModel, setSelectionModel] = useState([]);
   const [DeleteItem, setDelete] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dataRoleUser, setDataRoleUser] = useState({});
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   const { setProject, loading } = useSelector((state) => state?.Project);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const token = localStorage.getItem("token") || {};
@@ -31,92 +33,153 @@ const ProjectMutual = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const getPermmission = () => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  };
+  useEffect(() => {
+    getPermmission();
+  }, []);
+
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
+  const { t } = useTranslation();
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
-    { field: "id", headerName: "ID", flex: 1 },
+    { field: "id", headerName: "ID", width: 44 },
     {
       field: "Code",
-      headerName: "Code",
+      headerName: t("ProjectList.Code"),
+      minWidth: "100px",
+      maxWidth: "150px",
+      flex: 1,
     },
-    // { field: "DepartmentID", headerName: " Department Name", flex: 1 },
+    {
+      field: "DepartmentID",
+      headerName: t("ProjectList.Department"),
+      minWidth: "150px",
+      maxWidth: "175px",
+      flex: 1.5,
+      renderCell: (params) => {
+        return Array.isArray(params.value)
+          ? params.value.map((dept) => dept.departmentName).join(", ")
+          : params.value;
+      },
+    },
     {
       field: "nameProject",
-      headerName: "Project Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
+      headerName: t("ProjectList.nameProject"),
+      minWidth: "100px",
+      maxWidth: "150px",
+      flex: 1.5,
     },
     {
       field: "NumberBook",
-      headerName: "Number Book",
+      headerName: t("ProjectList.NumberBook"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "beneficiary",
-      headerName: "Beneficiary",
-      flex: 1,
+      headerName: t("ProjectList.beneficiary"),
+
+      minWidth: "150px",
+      maxWidth: "200px",
+      flex: 1.5,
     },
     {
       field: "MethodOption",
-      headerName: "Method Option",
+      headerName: t("ProjectList.MethodOption"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "WorkNatural",
-      headerName: "Work Naturel",
+      headerName: t("ProjectList.WorkNatural"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
-
     {
       field: "DateBook",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
-      headerName: "Date Request",
+      headerName: t("ProjectList.DateBook"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "DateClose",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
-      headerName: "Date Close",
+      headerName: t("ProjectList.DateClose"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "startTime",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
-      headerName: "Starting Date",
+      headerName: t("ProjectList.startTime"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "endTime",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
-      headerName: "Expiry Date",
+      headerName: t("ProjectList.endTime"),
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
     },
     {
       field: "Action",
-      headerName: "Action",
+      headerName: t("ProjectList.Action"),
       headerAlign: "center",
+      minWidth: "100px",
+      maxWidth: "150px",
       flex: 1,
       renderCell: (params) => {
         return (
           <div>
             <DropDownGrid>
-              {info.user_type === "H.O.D" || info.user_type === "management"
-                ? [
-                    <ModuleFormEditProject
-                      key="edit"
-                      ProjectData={params?.row}
-                    />,
-                    <MenuItem
-                      key="delete"
-                      onClick={() =>
-                        Delete(params?.row?._id, token, setDelete, setAnchorEl)
-                      }
-                      disableRipple
-                    >
-                      <DeleteIcon />
-                      <span className="ms-2">Delete</span>
-                    </MenuItem>,
-                  ]
-                : null}
+              {hasPermission(
+                roles?.Update_data_project?._id,
+                Permission?.permissionIds
+              ) && (
+                <ModuleFormEditProject key="edit" ProjectData={params?.row} />
+              )}
+
+              {hasPermission(
+                roles?.Delete_data_project?._id,
+                Permission?.permissionIds
+              ) &&
+                renderMenuItem(
+                  "delete",
+                  () => Delete(params?.row?._id, setDelete, setAnchorEl, token),
+                  DeleteIcon,
+                  "Delete"
+                )}
+
+              {hasPermission(
+                roles?.Delay_Projects?._id,
+                Permission?.permissionIds
+              ) &&
+                renderMenuItem(
+                  "projectDelay",
+                  () =>
+                    sendProjectEndTime(
+                      params?.row?._id,
+                      token,
+                      setDelete,
+                      setAnchorEl
+                    ),
+                  HourglassBottom,
+                  "Project Delay"
+                )}
               <Divider sx={{ my: 0.5 }} />
               <MenuItem
                 onClick={() => HandelOpen(params.row._id)}
@@ -138,20 +201,29 @@ const ProjectMutual = () => {
   useEffect(() => {
     fetchDataProject();
   }, []);
+
   const HandelOpen = (id) => {
     navigate(`/Home/OpenProject/${id}`);
   };
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
     ...item,
+    WorkNatural: item?.WorkNatural?.workNaturalData,
     DepartmentID: Array.isArray(item?.MutualProjectId?.DepartmentID)
-      ? item?.MutualProjectId?.DepartmentID.map((department) => ({
-          departmentName: department.departmentName, // Adjust this line based on actual structure
+      ? item.MutualProjectId.DepartmentID?.map((department) => ({
+          departmentName: department?.departmentName,
         }))
-      : item.DepartmentID, // Preserve original value if it's not an array
+      : item?.MutualProjectId?.DepartmentID,
   }));
+  useEffect(() => {
+    if (Array.isArray(setProject)) {
+      rows.forEach((item, index) => {
+        console.log(`Item  DepartmentID:`, item.DepartmentID);
+      });
+    }
+  }, [setProject]);
   return (
-    <Box>
+    <Box dir={rtl?.dir}>
       {loading && (
         <div className="handelLoader">
           <div>
@@ -159,27 +231,14 @@ const ProjectMutual = () => {
           </div>
         </div>
       )}
-      <Header title="Project Mutual" subTitle="List of Project mutual" />
-      <Box sx={{ height: 650, mx: "auto" }}>
-        <StyledDataGrid
-          checkboxSelection
-          //   onRowSelectionModelChange={handleSelectionModelChange}
-          gridTheme={{
-            mainColor: "rgb(55, 81, 126)",
-          }}
-          //   rowSelectionModel={selectionModel}
-          slots={{
-            toolbar: GridToolbar,
-          }}
-          columnVisibilityModel={{
-            _id: false,
-          }}
-          rows={rows}
-          columns={columns}
-          getRowId={(row) => row?._id}
-        />
-      </Box>
+      <Header
+        title={t("ProjectList.title")}
+        subTitle={t("ProjectList.subTitle")}
+        dir={rtl?.dir}
+      />
+      <GridTemplate rows={rows} columns={columns} />
     </Box>
   );
 };
+
 export default ProjectMutual;

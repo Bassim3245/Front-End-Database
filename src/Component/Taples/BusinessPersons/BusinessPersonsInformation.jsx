@@ -73,7 +73,7 @@ function BusinessPersonsMain() {
           dir={rtl.dir}
         >
           <h2 className="mt-0 mb-20"> {t("BusinessPersonsMain.title")}</h2>
-          <Button className="mb-" onClick={exportToExcel}>
+          <Button className="" onClick={exportToExcel}>
             {t("BusinessPersonsMain.ExportButton")}
           </Button>
           <div className="">

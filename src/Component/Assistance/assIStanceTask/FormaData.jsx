@@ -9,6 +9,8 @@ import {
   LevelOfAchevment,
   PerformenceLevel,
 } from "Component/Config/SelectDrobdown";
+import { useDispatch, useSelector } from "react-redux";
+import { getDataNatural } from "../../../redux/Whorkntural/WorkNutralAction";
 function FormData({
   formData,
   HandleSubmit,
@@ -21,51 +23,13 @@ function FormData({
   const [users, setUsers] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   });
-  // const [DateBook, setDateBook] = useState("");
-  // const [DateClose, setDateClose] = useState("");
+  const { getDtaInfo } = useSelector((state) => state?.natural);
   const [dataUserID, setDataUserID] = useState([]);
-  // const [startTime, setStartTime] = React.useState("");
-  // const [endTime, setEndTime] = React.useState(""),
-  //   [WorkNatural, setWorknural] = useState(""),
-  //   [MethodOption, setMethodOption] = useState(""),
-  //   [Stage, setStage] = useState(""),
-  //   [comments, setComments] = useState(""),
-  //   [LevelPerformance, setLevelPerformance] = useState(""),
-  //   [CompletionRate, setCompletionRate] = useState(""),
-  //   [nameProject, setNameProject] = useState(""),
-  //   [NumberBook, setNumberBook] = useState(""),
-  //   [beneficiary, setBeneficiary] = useState(""),
-  //   [PersonCharge, setPersonCharge] = useState("");
-  // useEffect(() => {
-  //   const DataCollection = {
-  //     DateBook,
-  //     DateClose,
-  //     startTime,
-  //     endTime,
-  //     WorkNatural,
-  //     MethodOption,
-  //     Stage,
-  //     comments,
-  //     LevelPerformance,
-  //     CompletionRate,
-  //     nameProject,
-  //     NumberBook,
-  //     beneficiary,
-  //     PersonCharge,
-  //   };
-  //   setMainData(DataCollection);
-  // }, [
-  //   DateBook,
-  //   DateClose,
-  //   dataUserID,
-  //   startTime,
-  //   endTime,
-  //   WorkNatural,
-  //   MethodOption,
-  //   comments,
-  // ]);
-
   const theme = useTheme();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDataNatural());
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -145,16 +109,6 @@ function FormData({
                 />
                 <TextField
                   fullWidth
-                  label="طبيعة العمل "
-                  id="filled-hidden-label-small"
-                  variant="filled"
-                  size="medium"
-                  name="WorkNatural"
-                  value={formData.WorkNatural}
-                  onChange={handleInputChange}
-                />
-                <TextField
-                  fullWidth
                   label=" طريقة التحصيل"
                   id="filled-hidden-label-small"
                   variant="filled"
@@ -195,8 +149,26 @@ function FormData({
               </div>
               <div className="mt-4 ">
                 <h4>select form </h4>
+
                 <div className="d-flex mobilDisplay gap-4 ">
                   <TextField
+                    fullWidth
+                    select
+                    label="طبيعة العمل "
+                    id="filled-hidden-label-small"
+                    variant="filled"
+                    size="medium"
+                    name="WorkNatural"
+                    value={formData.WorkNatural}
+                    onChange={handleInputChange}
+                  >
+                    {getDtaInfo?.map((option) => (
+                      <MenuItem key={option?._id} value={option?._id}>
+                        {option?.workNaturalData}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  {/* <TextField
                     id="filled-select-currency"
                     fullWidth
                     select
@@ -208,8 +180,8 @@ function FormData({
                     onChange={handleInputChange}
                   >
                     {dataUserID?.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}{" "}
+                      <MenuItem key={option?._id} value={option?._id}>
+                        {option?.name}{" "}
                         <span
                           className="text-secondary ms-3"
                           style={{ fontSize: "15px" }}
@@ -218,7 +190,7 @@ function FormData({
                         </span>
                       </MenuItem>
                     ))}
-                  </TextField>
+                  </TextField> */}
                   <TextField
                     id="filled-select-currency"
                     fullWidth
@@ -230,7 +202,7 @@ function FormData({
                     value={formData.CompletionRate}
                     onChange={handleInputChange}
                   >
-                    {LevelOfAchevment.map((option, index) => (
+                    {LevelOfAchevment?.map((option, index) => (
                       <MenuItem key={option?.index} value={option?.value}>
                         {option?.label}
                       </MenuItem>
@@ -241,13 +213,13 @@ function FormData({
                     fullWidth
                     select
                     label="مستوى الاداء"
-                    helperText="Please select your currency"
+                    helperText=""
                     variant="filled"
                     name="LevelPerformance"
                     value={formData.LevelPerformance}
                     onChange={handleInputChange}
                   >
-                    {PerformenceLevel.map((option, index) => (
+                    {PerformenceLevel?.map((option, index) => (
                       <MenuItem key={option?._id} value={option?.value}>
                         {option?.label}
                       </MenuItem>
@@ -269,7 +241,6 @@ function FormData({
                     value={formData.comments}
                     onChange={handleInputChange}
                   />
-
                 </div>
               </div>
             </form>

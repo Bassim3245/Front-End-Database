@@ -5,10 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import ShowData from "./ShowData/ShowDataDepartment";
 import { useTheme } from "@mui/material";
 const DepartmentInfo = (props) => {
-  const brief=props.brief
-  const departmentName=props.departmentName
-  const setBrief=props.setBrief
-  const setDepartmentName=props.setDepartmentName
+  const brief=props?.brief
+  const departmentName=props?.departmentName
+  const setBrief=props?.setBrief
+  const setDepartmentName=props?.setDepartmentName
   const handlSubmit = async (e) => {
     e.preventDefault();
     try {

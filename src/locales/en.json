@@ -20,6 +20,22 @@
       "logout": "Logout"
     }
   },
+  "ProjectList": {
+    "title": "Project Mutual",
+    "subTitle": "List of Project mutual",
+    "Code": "Code",
+    "nameProject": "Project Name",
+    "Department":"Department Names",
+    "NumberBook": "Book's Number",
+    "beneficiary": "Beneficiary",
+    "MethodOption": "Collection Method",
+    "WorkNatural": "Work Naturel",
+    "DateBook": "Request Date",
+    "DateClose": "Close Date",
+    "startTime": "Starting Date",
+    "endTime": "Expiry Date",
+    "Action": "Action"
+  },
   "ProjectTable": {
     "title": "List of projects",
     "subTitle": "Projects evaluated by department employees"
@@ -94,5 +110,9 @@
       "Custom": "Custom",
       "CustomText": " Offer price Custom mode"
     }
+  },
+  "DepartmentTable": {
+    "DepartmentName": "Department Names",
+    "Action": "Action"
   }
 }

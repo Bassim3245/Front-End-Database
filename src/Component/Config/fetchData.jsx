@@ -117,6 +117,7 @@ export const fetchDataAllDepartment = async () => {
 };
 export const getDataUserById = async (id, token) => {
   try {
+    console.log("ddd",id);
     const response = await axios({
       method: "get",
       url: `${BackendUrl}/api/getDataUserById/${id}`,

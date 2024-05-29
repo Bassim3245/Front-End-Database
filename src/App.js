@@ -36,6 +36,7 @@ import Assistance from "Component/Assistance/assIStanceTask/AssistanceSteper";
 import ProjectMutual from "Component/Assistance/assIStanceTask/ProjectMuluat";
 import DepartmentsList from "./Component/Assistance/TechnicalDepartments/DepartmentsList";
 import AllProjectsEchDepartment from "./Component/Assistance/TechnicalDepartments/AllProjectsToechDepartment";
+import ModuleEditUsers from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/EditUser";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -121,6 +122,7 @@ export default function App() {
               <Route path="OpenProject/:id" element={<OpenProject />} />
               <Route path="Received/:id" element={<Received />} />
               <Route path="Authorized" element={<Authorized />} />
+              <Route path="ModuleEditUsers/:id" element={<ModuleEditUsers />} />
             </Route>
             <Route path="/Edit/:id" element={<Edit />} />
 

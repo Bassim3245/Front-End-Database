@@ -1,17 +1,16 @@
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { Button, IconButton, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
 import { useTranslation } from "react-i18next";
 import OfferPriceMain from "../../Product/OfferPrice/OfferPrice";
+import { hasPermission } from "../../Config/Function";
 const DataProductByProjectId = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const theme = useTheme();
   const { products, loading } = useSelector((state) => state.products);
-
   const projectId = props?.ProjectID;
   const getDataProductById = () => {
     dispatch(displayProductByProjectName(projectId));
@@ -19,9 +18,6 @@ const DataProductByProjectId = (props) => {
   useEffect(() => {
     getDataProductById();
   }, [dispatch, open]);
-  const handleOpenDataProject = () => {
-    setOpen(!open);
-  };
   const { t } = useTranslation();
   return (
     <>
@@ -29,7 +25,10 @@ const DataProductByProjectId = (props) => {
         {loading && <div>loading..</div>}
         <div className="mb-3">
           <div className="mb-2">
-            <OfferPriceMain projectId={projectId} />
+            {hasPermission(
+              props?.roles.view_data_price_offer._id,
+              props?.Permission?.permissionIds
+            ) && <OfferPriceMain projectId={projectId} />}
           </div>
           <Table
             bordered

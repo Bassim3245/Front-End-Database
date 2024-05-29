@@ -82,12 +82,15 @@ function InformationUsers({ dataEmploy, theme }) {
     dispatch(getAllDataUser());
   };
   useEffect(() => {
-    console.log('sss',dataUsers);
+    console.log("sss", dataUsers);
 
     FetchDataUser();
   }, []);
   const handelAccess = (id) => {
     Navigate(`/Home/PermissionUsers/${id}`);
+  };
+  const handleClickEdit = (id) => {
+    Navigate(`/Home/ModuleEditUsers/${id}`);
   };
   const getPermmission = () => {
     const userId = info?._id;
@@ -163,10 +166,13 @@ function InformationUsers({ dataEmploy, theme }) {
                     )}
                   </td>
                 )}
-
                 <td>
                   <div className="d-flex">
-                    <ModuleEdit id={item?._id} setDataUser={setDataUser} />
+                    <Button className="btn" onClick={()=>handleClickEdit(item?._id)}>
+                      {" "}
+                      <Edit />{" "}
+                    </Button>
+                    {/* <ModuleEdit id={item?._id} setDataUser={setDataUser} /> */}
                     <Button
                       className="btn "
                       onClick={() => handleDelete(item?._id)}

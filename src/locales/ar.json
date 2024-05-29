@@ -20,6 +20,22 @@
       "logout": "تسجيل الخروج"
     }
   },
+  "ProjectList": {
+    "title": "المشاريع المشتركة",
+    "subTitle": "قائمة من المشاريع المشتركة ",
+    "Code": "شفرة",
+    "Department": "اسماء الاقسام",
+    "nameProject": "اسم المشروع",
+    "NumberBook": "رقم الكتاب",
+    "beneficiary": "الجهة المستفيدة",
+    "MethodOption": "طريقة التحصيل",
+    "WorkNatural": " طبيعة العمل",
+    "DateBook": "تاريخ الطلب ",
+    "DateClose": "تاريخ الغلق",
+    "startTime": "بداية الموعد",
+    "endTime": "تاريخ الانتهاء",
+    "Action": "اجراء"
+  },
   "ProjectTable": {
     "title": "قائمة المنتجات",
     "subTitle": " المشاريع المدرجة من خلال موظفين القسم"
@@ -94,5 +110,9 @@
       "Custom": "المخصص",
       "CustomText": "العرض السعري المخصص"
     }
+  },
+  "DepartmentTable": {
+    "DepartmentName": "اسماء الاقسام",
+    "Action": "اجراء"
   }
 }

@@ -18,13 +18,11 @@ const Permission = () => {
       cellClassName: "name-column--cell",
     },
   ];
-
   const [permissionData, setPermissionData] = useState([]);
   const [selectionModel, setSelectionModel] = useState([]);
   const [dataRoleAndPermission, setDataRoleAndPermission] = useState({});
   const [dataRoleUser, setDataRoleUser] = useState({});
   const { id } = useParams();
-
   const getRoleAndUserId = async () => {
     try {
       const response = await axios.get(

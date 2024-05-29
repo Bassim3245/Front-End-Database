@@ -81,10 +81,10 @@ export default function ShowDataUnitAndRole({
                   </tr>
                 ))}
               {label === "Role" &&
-                data?.map((data, index) => (
-                  <tr key={data?._id}>
+                data?.map((Item, index) => (
+                  <tr key={Item?._id}>
                     <td>{index + 1}</td>
-                    <td>{data?.RoleName}</td>
+                    <td>{Item?.RoleName}</td>
                     <td>
                       <ButtonSave className="ms-3">حذف</ButtonSave>
                       <ButtonClearState>تعديل</ButtonClearState>

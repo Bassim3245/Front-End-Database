@@ -1,15 +1,9 @@
 import React ,{useState,useEffect} from 'react'
 
 import IconButton from '@mui/material/IconButton';
-
 import { useSelector, useDispatch } from 'react-redux'
-
-
-
 import { styled, alpha } from '@mui/material/styles';
-
 // import Cookies from 'universal-cookie';
-
 import {useTranslation} from "react-i18next";
 import {useNavigate} from 'react-router-dom'
 import {Menu,Box, Button} from '@mui/material'
@@ -73,36 +67,21 @@ export default function DropDownGrid(props) {
     const handleClose = (dire) => {
       setAnchorEl(null);
     };
-  
-    const signOut=()=>{
-      // cookies.remove("token");
-      // window.location.href='/'
-      navigate('/')
-      
-    }
-    
-    const signIn=()=>{
-      // window.location.href='/'
-      navigate('/')
-    }
-  
     return (
         <React.Fragment>
         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
           
           {/* <Tooltip title={props?.title}> */}
-            <Button
+            <IconButton
               onClick={handleClick}
-              variant="contained"
               size="small"
               sx={{ ml: 2 }}
-              color="primary"
               aria-controls={open ? 'account-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
             >
                <SettingsIcon fontSize='medium' sx={{fontSize:'25px'}}/>
-            </Button>
+            </IconButton>
           {/* </Tooltip> */}
         </Box>
         <Menu

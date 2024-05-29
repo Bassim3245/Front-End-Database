@@ -19,6 +19,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Root() {
+  const [info, setInfo] = useState(
+    JSON.parse(localStorage.getItem("user")) || {}
+  );
+  const dispatch = useDispatch();
   const { rtl } = useSelector((state) => {
     // @ts-ignore
     return state.language;
@@ -38,10 +42,7 @@ export default function Root() {
   );
 
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-  const [info, setInfo] = useState(
-    JSON.parse(localStorage.getItem("user")) || {}
-  );
-  const dispatch = useDispatch();
+
   React.useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -57,7 +58,16 @@ export default function Root() {
           info={info}
         />
         <SideBar open={open} handleDrawerClose={handleDrawerClose} />
-        <Box component="main" sx={{ flexGrow: 1, p: 3, width:"100%",maxWidth:"100%"}}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: "100%",
+            maxWidth: "100%",
+            overflowX: rtl.dir === "rtl" ? "auto" : "hidden", // or "visible" based on your needs
+          }}
+        >
           <DrawerHeader
           // @ts-ignore
           />

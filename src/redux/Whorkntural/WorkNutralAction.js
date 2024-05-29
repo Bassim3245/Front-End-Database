@@ -21,7 +21,7 @@ export const AddWorkNutral = createAsyncThunk(
   }
 );
 export const getDataNatural = createAsyncThunk(
-  "workNutral/getData",
+  "workNutral/getDatanuattrul",
   async (_, thunkAPI) => {
     try {
       const response = await axios.get(`${BackendUrl}/api/getDataNatural`);

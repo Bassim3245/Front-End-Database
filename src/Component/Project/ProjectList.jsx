@@ -7,18 +7,23 @@ import MainForm from "./MainFor/Modul";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Box, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Loader from "../Config/Loader";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
 import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "Component/Config/CustomMennu";
-import { Delete, hasPermission, sendProjectEndTime } from "../Config/Function";
+import {
+  Delete,
+  hasPermission,
+  renderMenuItem,
+  sendProjectEndTime,
+} from "../Config/Function";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+import GridTemplate from "../Config/GridTemplet";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
@@ -41,58 +46,53 @@ const Projects = () => {
     const departmentID = info.DepartmentID;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
-  const renderMenuItem = (key, onClick, IconComponent, text) => (
-    <MenuItem key={key} onClick={onClick} disableRipple>
-      <IconComponent />
-      <span className="ms-2">{text}</span>
-    </MenuItem>
-  );
+
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
     { field: "id", headerName: "ID", width: 33 },
     {
       field: "Code",
-      headerName: "Code",
+      headerName: t("ProjectList.Code"),
     },
     { field: "DepartmentID", headerName: " Department Name", flex: 1.5 },
     {
       field: "nameProject",
-      headerName: "Project Name",
+      headerName: t("ProjectList.nameProject"),
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
       field: "NumberBook",
-      headerName: "Number Book",
+      headerName: t("ProjectList.NumberBook"),
     },
     {
       field: "beneficiary",
-      headerName: "Beneficiary",
+      headerName: t("ProjectList.beneficiary"),
       flex: 2,
     },
     {
       field: "MethodOption",
-      headerName: "Method Option",
+      headerName: t("ProjectList.MethodOption"),
     },
     {
       field: "WorkNatural",
-      headerName: "Work Naturel",
+      headerName: t("ProjectList.WorkNatural"),
     },
     {
       field: "DateBook",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       flex: 1,
-      headerName: "Date Request",
+      headerName: t("ProjectList.DateBook"),
     },
     {
       field: "DateClose",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       flex: 1,
-      headerName: "Date Close",
+      headerName: t("ProjectList.DateClose"),
     },
     {
       field: "Action",
-      headerName: "Action",
+      headerName: t("ProjectList.Action"),
       headerAlign: "center",
       renderCell: (params) => {
         return (
@@ -111,7 +111,7 @@ const Projects = () => {
               ) &&
                 renderMenuItem(
                   "delete",
-                  () => Delete(params?.row?._id, setDelete, setAnchorEl),
+                  () => Delete(params?.row?._id, setDelete, setAnchorEl, token),
                   DeleteIcon,
                   "Delete"
                 )}
@@ -161,9 +161,9 @@ const Projects = () => {
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
     ...item,
-    DepartmentID: item.DepartmentID?.departmentName,
+    DepartmentID: item?.DepartmentID?.departmentName,
+    WorkNatural: item?.WorkNatural?.workNaturalData,
   }));
-
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       {loading ? (
@@ -171,7 +171,7 @@ const Projects = () => {
           <Loader />
         </div>
       ) : (
-        <Box className="containerCustomGridTable">
+        <Box className="">
           <Header
             title={t("ProjectTable.title")}
             subTitle={t("ProjectTable.subTitle")}
@@ -179,9 +179,6 @@ const Projects = () => {
           />
           <ToastContainer />
           <Box className={"mb-2"}>
-            {/* {info?.user_type === "H.O.D" || info?.user_type === "management" ? (
-              <MainForm fetchDataProject={fetchDataProject} />
-            ) : null} */}
             {hasPermission(
               roles?.Add_data_project?._id,
               Permission?.permissionIds
@@ -189,41 +186,7 @@ const Projects = () => {
               <MainForm fetchDataProject={fetchDataProject} />
             ) : null}
           </Box>
-          <Box
-            sx={{
-              fontSize: "20px",
-              "& .MuiDataGrid-cellContent": {
-                // textOverflow: "initial !important",
-              },
-              "& .css-128fb87-MuiDataGrid-toolbarContainer": {
-                // textOverflow: "initial !important",
-                backgroundColor: "rgb(55, 81, 126)",
-              },
-              "& .css-1knaqv7-MuiButtonBase-root-MuiButton-root": {
-                color: "white",
-              },
-            }}
-          >
-            <DataGrid
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              // gridTheme={{
-              //   mainColor: "rgb(55, 81, 126)",
-              // }}
-              onStateChange={(state) => {
-                // console.log("asdadasdasdasd====>", state);
-              }}
-              theme={theme}
-              rows={rows}
-              // @ts-ignore
-              columns={columns}
-              columnVisibilityModel={{
-                _id: false,
-              }}
-              getRowId={(row) => row.id}
-            />
-          </Box>
+          <GridTemplate rows={rows} columns={columns} />
         </Box>
       )}
     </div>

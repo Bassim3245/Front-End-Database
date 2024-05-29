@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import moment from "moment";
 import { useQuery } from "react-query";
 import { getDataBySendUserProjectAndProduct } from "../Config/fetchData";
 import DataProductByProjectIsSend from "./DataProductByProjectIsSend";
@@ -12,7 +11,6 @@ import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
 import { CancelScheduleSend, Send } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -125,7 +123,7 @@ function Product() {
         <div
           className={` container projects p-20 ${
             theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
-          } rad-10 m-20 container`}
+          } rad-10 m-20 `}
           style={{ margin: "auto", width: "100%", maxWidth: "100%" }}
           dir={rtl?.dir}
         >

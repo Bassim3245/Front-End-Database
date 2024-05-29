@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {  useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { useState, useEffect } from "react";
 import {
@@ -42,6 +42,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function MainForm(props) {
+  const { getDtaInfo } = useSelector((state) => state?.natural);
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token") || {};
   });
@@ -167,9 +168,9 @@ export default function MainForm(props) {
   }, [open]);
   useEffect(() => {
     // @ts-ignore
-    console.log(endTime);
     dispatch(getDataNatural());
   }, [AddWorkNutral]);
+
   const theme = createTheme({
     direction: "rtl",
   });
@@ -218,15 +219,22 @@ export default function MainForm(props) {
               >
                 <TextField
                   id="outlined-select-currency"
-                  sx={{ width: "500px", maxWidth: "100%" }}
+                  sx={{ width: "100%", maxWidth: "100%" }}
+                  className="mb-4 me-3"
+                  select
                   label="طبيعة العمل"
-                  className="mb-4"
                   name="WorkNatural"
                   dir="rtl"
                   value={WorkNatural}
                   onChange={handleInputChange}
-                ></TextField>
-
+                  defaultValue={"0%"}
+                >
+                  {getDtaInfo.map((option) => (
+                    <MenuItem key={option?._id} value={option?._id}>
+                      {option?.workNaturalData}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 {/* end WorkNatural */}
 
                 <TextField
@@ -355,7 +363,6 @@ export default function MainForm(props) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
-                          value={DateBook}
                           label="تاريخ الاستلام"
                           onChange={(value) => setDateBook(value)}
                         />
@@ -367,7 +374,6 @@ export default function MainForm(props) {
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
                           label="تاريخ الغلق"
-                          value={DateClose}
                           onChange={(value) => setDateClose(value)}
                         />
                       </DemoContainer>

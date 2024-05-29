@@ -1,14 +1,28 @@
 import * as React from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
 import { ButtonClearState, ButtonSave } from "../../Config/Content";
 import { fetchDataAllDepartment } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
+import { useTranslation } from "react-i18next";
+import { setLanguage } from "../../../redux/LanguageState";
+
 export default function DepartmentsList() {
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
+  const [info] = React.useState(
+    () => JSON.parse(localStorage.getItem("user")) || {}
+  );
+  const token = localStorage.getItem("token") || {};
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const theme = useTheme();
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "fetchDataAllDepartment",
@@ -18,26 +32,32 @@ export default function DepartmentsList() {
   React.useEffect(() => {
     refetch();
   }, [open, message]);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  }, []);
+  React.useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
+
   const handleClickOpen = (Id) => {
     navigate(`/Home/AllProjectsEchDepartment/${Id}`);
   };
   return (
-    <React.Fragment>
       <Table
         striped
         bordered
         hover
-        // dir="rtl"
+        dir={rtl?.dir}
         variant={theme?.palette?.mode === "dark" ? "dark" : ""}
       >
         <thead>
           <tr>
             <>
               <th>#</th>
-              <th>اسماء الاقسام</th>
-              <th>رموز الاقسام</th>
-              <th>اجراء</th>
+              <th>{t("DepartmentTable.DepartmentName")}</th>
+              <th>{t("DepartmentTable.Action")}</th>
             </>
           </tr>
         </thead>
@@ -45,10 +65,7 @@ export default function DepartmentsList() {
           {data?.map((data, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <>
-                <td>{data?.departmentName}</td>
-                <td>{data?.brief}</td>
-              </>
+              <td>{data?.departmentName}</td>
               <td>
                 {/* <ButtonSave
                       className="ms-3"
@@ -63,7 +80,6 @@ export default function DepartmentsList() {
             </tr>
           ))}
         </tbody>
-      </Table>{" "}
-    </React.Fragment>
+      </Table>
   );
 }

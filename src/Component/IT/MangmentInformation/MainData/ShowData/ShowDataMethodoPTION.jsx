@@ -11,7 +11,6 @@ import { ButtonClearState, ButtonSave } from "../../../../Config/Content";
 import { BackendUrl } from "../../../../../redux/api/axios";
 import axios from "axios";
 import { toast } from "react-toastify";
-
 export default function ShowData() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -54,10 +53,10 @@ export default function ShowData() {
               </tr>
             </thead>
             <tbody>
-              {dataMethodOption.map((data, index) => (
+              {dataMethodOption?.map((data, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{data.MethodOption}</td>
+                  <td>{data?.MethodOption}</td>
                   <td>
                     <ButtonSave className="ms-3">حذف</ButtonSave>
                     <ButtonClearState>تعديل</ButtonClearState>

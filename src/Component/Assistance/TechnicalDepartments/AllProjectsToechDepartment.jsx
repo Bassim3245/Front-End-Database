@@ -6,8 +6,11 @@ import { getProjectByDepartment } from "../../../redux/ProjectSlice/ProjectActio
 import { formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { Button, IconButton, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
+import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
+import { useTranslation } from "react-i18next";
 export default function AllProjectsEchDepartment() {
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   const theme = useTheme();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -29,36 +32,49 @@ export default function AllProjectsEchDepartment() {
     const departmentID = id;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
-
+  const getPermmission = () => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  };
+  React.useEffect(() => {
+    getPermmission();
+  }, []);
   React.useEffect(() => {
     fetchDataProject();
   }, [id]); // Added dependency on `id` to refetch data when `id` changes
-
+const {t}=useTranslation();
   return (
-    <React.Fragment>
-      <div className="m-4">
+    <div
+      className={`projects p-20 ${
+        theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
+      }  rad-10 m-20 `}
+      style={{ margin: "auto" }}
+      dir={rtl.dir}
+    >
+      <div className="" style={{ overflowX: "auto" }}>
         <Table
           striped
           bordered
           hover
+          dir={rtl.dir}
           className=""
           variant={theme?.palette?.mode === "dark" ? "dark" : ""}
         >
           <thead>
             <tr>
               <th>#</th>
-              <th>Code</th>
-              <th>Department Name</th>
-              <th>Project Name</th>
-              <th>Number Book</th>
-              <th>Beneficiary</th>
-              <th>Method Option</th>
-              <th>Work Nature</th>
-              <th>Date Request</th>
-              <th>Date Close</th>
-              <th>Date Start</th>
-              <th>Date End</th>
-              <th>Action</th>
+              <th>{t("ProjectList.Code")}</th>
+              <th>{t("ProjectList.Department")}</th>
+              <th>{t("ProjectList.nameProject")}</th>
+              <th>{t("ProjectList.NumberBook")}</th>
+              <th>{t("ProjectList.beneficiary")}</th>
+              <th>{t("ProjectList.MethodOption")}</th>
+              <th>{t("ProjectList.WorkNatural")}</th>
+              <th>{t("ProjectList.DateBook")}</th>
+              <th>{t("ProjectList.DateClose")}</th>
+              <th>{t("ProjectList.startTime")}</th>
+              <th>{t("ProjectList.endTime")}</th>
+              <th>{t("ProjectList.Action")}</th>
             </tr>
           </thead>
           <tbody>
@@ -73,7 +89,7 @@ export default function AllProjectsEchDepartment() {
                     <td>{data?.NumberBook}</td>
                     <td>{data?.beneficiary}</td>
                     <td>{data?.MethodOption}</td>
-                    <td>{data?.WorkNatural}</td>
+                    <td>{data?.WorkNatural?.workNaturalData}</td>
                     <td>{formatDate(data?.DateBook)}</td>
                     <td>{formatDate(data?.DateClose)}</td>
                     <td>{formatDate(data?.DateStart)}</td>
@@ -93,7 +109,11 @@ export default function AllProjectsEchDepartment() {
                   {openProjectId === data._id && (
                     <tr>
                       <td colSpan={13}>
-                        <DataProductByProjectId ProjectID={data._id} />
+                        <DataProductByProjectId
+                          ProjectID={data._id}
+                          roles={roles}
+                          Permission={Permission}
+                        />
                       </td>
                     </tr>
                   )}
@@ -107,6 +127,6 @@ export default function AllProjectsEchDepartment() {
           </tbody>
         </Table>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
