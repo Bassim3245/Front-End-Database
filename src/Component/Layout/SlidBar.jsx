@@ -108,7 +108,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
     (state) => state?.RolesData
   );
   // @ts-ignore
-const location=useLocation()
+  const location = useLocation();
   const getPermmission = () => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
@@ -116,7 +116,7 @@ const location=useLocation()
   useEffect(() => {
     console.log(Permission?.permissionIds);
     getPermmission();
-  }, [navigate,location?.pathname]);
+  }, [navigate, location?.pathname]);
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -139,12 +139,6 @@ const location=useLocation()
     case "default":
       Route1 = [
         {
-          text: "List Projects",
-          icon: <Dataset />,
-          path: "ProjectList",
-          checkPermission: roles?.View_data_project?._id,
-        },
-        {
           text: "Management Users",
           icon: <GroupAdd />,
           path: "MangeUser",
@@ -161,12 +155,6 @@ const location=useLocation()
           icon: <Dataset />,
           path: "HR",
           checkPermission: roles?.View_data_project?._id,
-        },
-        {
-          text: "Products received",
-          icon: <ReceiptOutlinedIcon />,
-          path: "FilesReceived",
-          checkPermission: roles?.view_data_Received?._id,
         },
         {
           text: "Profile",
@@ -276,6 +264,12 @@ const location=useLocation()
           checkPermission: roles?.view_filles?._id,
         },
         {
+          text: "Delayed projects",
+          icon: <HourglassBottom />,
+          path: "ProjectDelay",
+          checkPermission: roles?.view_data_delay_Project?._id,
+        },
+        {
           text: "Products received",
           icon: <ReceiptOutlinedIcon />,
           path: "FilesReceived",
@@ -295,8 +289,14 @@ const location=useLocation()
         {
           text: "departments list",
           icon: <Analytics />,
-          path: "DepartmentsList",
+          path: "GetAllDataProjectNotDelay",
           checkPermission: roles?.Technical_Department?._id,
+        },
+        {
+          text: "Late Department Project",
+          icon: <HourglassBottom />,
+          path: "getAllDataDelaysProject",
+          checkPermission: roles?.view_data_delay_Project?._id,
         },
         {
           text: "Event",

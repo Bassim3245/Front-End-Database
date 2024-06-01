@@ -21,8 +21,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: localStorage.getItem("language") || "en", // default language
-    fallbackLng: "en",
+    lng: localStorage.getItem("language") || "ar", // default language
+    fallbackLng: "an",
     debug: false,
     // Options for language detector
     detection: {

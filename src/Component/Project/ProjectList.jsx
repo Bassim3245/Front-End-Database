@@ -46,7 +46,6 @@ const Projects = () => {
     const departmentID = info.DepartmentID;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
-
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
     { field: "id", headerName: "ID", width: 33 },
@@ -59,7 +58,6 @@ const Projects = () => {
       field: "nameProject",
       headerName: t("ProjectList.nameProject"),
       flex: 1,
-      cellClassName: "name-column--cell",
     },
     {
       field: "NumberBook",
@@ -89,6 +87,22 @@ const Projects = () => {
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
       flex: 1,
       headerName: t("ProjectList.DateClose"),
+    },
+    {
+      field: "startTime",
+      valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
+      headerName: t("ProjectList.startTime"),
+      minWidth: "100px",
+      maxWidth: "150px",
+      flex: 1,
+    },
+    {
+      field: "endTime",
+      valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
+      headerName: t("ProjectList.endTime"),
+      minWidth: "100px",
+      maxWidth: "150px",
+      flex: 1,
     },
     {
       field: "Action",
@@ -149,13 +163,9 @@ const Projects = () => {
   const HandelOpen = (id) => {
     navigate(`/Home/OpenProject/${id}`);
   };
-  const getPermmission = () => {
+  useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  };
-  useEffect(() => {
-    console.log(Permission?.permissionIds);
-    getPermmission();
   }, []);
   useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
   const rows = setProject?.map((item, index) => ({

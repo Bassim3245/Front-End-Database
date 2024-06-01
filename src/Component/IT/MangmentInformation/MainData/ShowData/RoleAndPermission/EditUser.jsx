@@ -1,206 +1,170 @@
 import * as React from "react";
-import { useState } from "react";
-import { Box, MenuItem, TextField } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, MenuItem, TextField, DialogTitle } from "@mui/material";
 import axios from "axios";
 import { BackendUrl } from "../../../../../../redux/api/axios";
 import { toast } from "react-toastify";
-import {
-  DialogTitle,
-} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getDataUserById, getRole } from "../../../../..//Config/fetchData";
-import { useQuery } from "react-query";
 import { useParams } from "react-router";
+import { getAllDataUserById } from "../../../../../../redux/userSlice/authActions";
 
 export default function ModuleEditUsers(props) {
+  const { dataUserById, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const token = localStorage.getItem("token") || {};
-  const [name, setUname] = useState("");
-  const [username, setUsername] = useState("");
-  const [Phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [user_type, setUser_type] = useState("");
-  const [DepartmentID, setDepartmentId] = useState("");
-  const [dataDepartment, setDataDepartment] = useState([]);
   const { id } = useParams();
-  const userId = id;
-  console.log("dsaslhf;", userId);
-  const { isLoadingDataUser, data, isError, error, isFetching, refetch } =
+  const token = localStorage.getItem("token") || "";
   
-    useQuery("DataUserEdit", () => getDataUserById(userId, token), {
-      refetchInterval: 5000,
-      refetchIntervalInBackground: true,
-      refetchOnWindowFocus: true,
-    });
-  // const { isLoading, dataRole, refetch } = useQuery("getRole", getRole, {});
-  React.useEffect(() => {
-    if(userId){
-      refetch();
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const [departmentID, setDepartmentId] = useState("");
+  const [dataDepartment, setDataDepartment] = useState([]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getAllDataUserById({ id, token }));
     }
-  }, [userId]);
-  React.useEffect(() => {
-    if (data) {
-      setUname(data?.name);
-      setUsername(data?.username);
-      setPassword(data?.password);
-      setPhone(data?.Phone);
-      setUser_type(data?.user_type);
-      setDepartmentId(data?.DepartmentID);
+  }, [id, dispatch, token]);
+
+  useEffect(() => {
+    if (dataUserById) {
+      setName(dataUserById.name || "");
+      setUsername(dataUserById.username || "");
+      setPhone(dataUserById.Phone || "");
+      setPassword(dataUserById.password || "");
+      setUserType(dataUserById.user_type || "");
+      setDepartmentId(dataUserById.DepartmentID || "");
     }
-  }, [open]);
-  React.useEffect(() => {
-    const fetchData = async () => {
+  }, [dataUserById]);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
       try {
-        const response = await axios.get(
-          `${BackendUrl}/api/getData/Department`
-        );
+        const response = await axios.get(`${BackendUrl}/api/getData/Department`);
         if (response) {
-          setDataDepartment(response?.data);
+          setDataDepartment(response.data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
-    fetchData();
+    fetchDepartments();
   }, []);
-  const HandleSubmit = async () => {
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("name", name || "");
-      formData.append("password", password || "");
-      formData.append("Phone", Phone || "");
-      formData.append("username", username || "");
-      formData.append("user_type", user_type || "");
-      formData.append("DepartmentID", DepartmentID || "");
+      formData.append("name", name);
+      formData.append("username", username);
+      formData.append("password", password);
+      formData.append("Phone", phone);
+      formData.append("user_type", userType);
+      formData.append("DepartmentID", departmentID);
+
       const response = await axios.put(
-        `${BackendUrl}/api/updateUserById/${userId}`,
+        `${BackendUrl}/api/updateUserById/${id}`,
         formData,
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            token: `${token}`,
+            token: token,
           },
         }
       );
+
       if (response.status === 200) {
-        toast.success(response?.data?.message);
-        localStorage.setItem("user", JSON.stringify(response?.data?.response));
-        props?.setDataUser(true);
-        setOpen(false);
+        toast.success(response.data.message);
+        localStorage.setItem("user", JSON.stringify(response.data.response));
+        props.setDataUser(true);
       } else {
         toast.error("Failed to update user.");
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("An error occurred while updating user.");
-      }
+      const errorMessage = error.response?.data?.message || "An error occurred while updating user.";
+      toast.error(errorMessage);
     }
   };
+
   return (
     <div>
-      <DialogTitle>{" User Edit"}</DialogTitle>
+      <DialogTitle>User Edit</DialogTitle>
       <Box
-        sx={{
-          width: 500,
-          maxWidth: "100%",
-          margin: "10px",
-        }}
+        sx={{ maxWidth: "100%", margin: "10px" }}
         component="form"
-        onSubmit={(e) => HandleSubmit(e)}
+        onSubmit={handleSubmit}
       >
         <TextField
           fullWidth
           label="Name"
-          id="fullWidth"
           className="mb-3"
           name="name"
           value={name}
-          onChange={(e) => setUname(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
         <TextField
           fullWidth
-          label="username"
-          id="fullWidth"
-          name="username"
+          label="Username"
           className="mb-3"
+          name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
           fullWidth
           label="Password"
-          id="fullWidth"
           className="mb-3"
           name="password"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          id="outlined-select-currency"
-          sx={{ width: "500px", maxWidth: "100%" }}
-          className="mb-4 me-3"
+          fullWidth
+          label="Phone"
+          className="mb-3"
+          name="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <TextField
+          fullWidth
           select
           label="Role"
+          className="mb-4 me-3"
           name="user_type"
-          value={user_type}
-          onChange={(e) => setUser_type(e.target.value)}
+          value={userType}
+          onChange={(e) => setUserType(e.target.value)}
         >
-          <MenuItem value="HR">HR </MenuItem>
-          <MenuItem value="H.O.D">Head of Department </MenuItem>
-          <MenuItem value="Employ">Employ </MenuItem>
-          <MenuItem value="Management">Management </MenuItem>
-          <MenuItem value="IT">IT </MenuItem>
+          <MenuItem value="HR">HR</MenuItem>
+          <MenuItem value="H.O.D">Head of Department</MenuItem>
+          <MenuItem value="Employ">Employee</MenuItem>
+          <MenuItem value="Management">Management</MenuItem>
+          <MenuItem value="IT">IT</MenuItem>
         </TextField>
         <TextField
           fullWidth
-          label="Phone"
-          id="priceField"
-          className="mb-3"
-          name="Phone"
-          value={Phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-
-        <TextField
-          id="outlined-select-currency"
-          sx={{ width: "500px", maxWidth: "100%" }}
-          className="mb-4 me-3"
           select
-          label="Departments "
+          label="Departments"
+          className="mb-4 me-3"
           name="DepartmentID"
-          value={DepartmentID}
-          onChange={(e) => setDepartmentId(e.value.target)}
+          value={departmentID}
+          onChange={(e) => setDepartmentId(e.target.value)}
         >
-          {dataDepartment?.map((option) => (
-            <MenuItem key={option?._id} value={option?._id}>
-              {option?.departmentName}
+          {dataDepartment.map((option) => (
+            <MenuItem key={option._id} value={option._id}>
+              {option.departmentName}
             </MenuItem>
           ))}
         </TextField>
-        {/* <TextField
-            id="outlined-select-currency"
-            sx={{ width: "500px", maxWidth: "100%" }}
-            className="mb-4 me-3"
-            select
-            label="Role "
-            name="Role"
-            value={DepartmentID}
-            onChange={(e) => setDepartmentId(e.value.target)}
-          >
-            {dataRole?.map((option) => (
-              <MenuItem key={option?._id} value={option?._id}>
-                {option?.RoleName}
-              </MenuItem>
-            ))}
-          </TextField> */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button type="submit" className="btn btn-primary">
+            Update
+          </button>
+        </Box>
       </Box>
     </div>
   );

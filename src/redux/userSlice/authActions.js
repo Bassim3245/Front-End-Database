@@ -76,14 +76,14 @@ const getAllDataUser = createAsyncThunk(
   }
 );
 const getAllDataUserById = createAsyncThunk(
-  "auth/getAllUserById",
+  "auth/getAllUserByIdToShow",
   async ({ id, token }, { rejectWithValue }) => {
     try {
+      console.log("sassasfsd",id);
       const response = await axios({
         method: "get",
         url: `${BackendUrl}/api/getDataUserById/${id}`,
         headers: {
-          Accept: "application/json",
           token: token,
         },
       });

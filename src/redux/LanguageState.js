@@ -7,9 +7,9 @@ const getrtlSettings = () => {
     return JSON.parse(storedRTL);
   } else {
     return {
-      anchor: "left", // Default anchor for non-rtl languages
-      flexDirection: "row", // Default direction for non-rtl languages
-      dir: "ltr",
+      anchor: "right", // Default anchor for non-rtl languages
+      flexDirection: "row-reverse", // Default direction for non-rtl languages
+      dir: "rtl",
     };
   }
 };

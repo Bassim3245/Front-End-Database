@@ -114,5 +114,32 @@
   "DepartmentTable": {
     "DepartmentName": "اسماء الاقسام",
     "Action": "اجراء"
+  },
+  "Assistance": {
+    "AssistanceStepper": {
+      "steps": {
+        "MainForm": "نموذج ادخال بيانتات المشروع",
+        "formMutual": "نموذج لمعالجة البيانات المشتركة للمشروع"
+      },
+      "title": "تم إكمال جميع الخطوات - انتهيت",
+      "Reset": "إعادة تعيين",
+      "Back": "رجوع",
+      "Finish": "انهاء",
+      "SaveData": "حفظ البيانات",
+      "Optional": "اختياري"
+    }
+  },
+  "tableDelayProject": {
+    "title": "المشاريع المتأخرة",
+    "subTitle": "قائمة من المشاريع ألمتاخرة"
+  },
+  "mainMune": {
+    "ProjectsManager": "ادارة المشاروع",
+    "Dashboards": "لوحة التحكم",
+    "QuantityTables": "جداول الكمية",
+    "InformationTechnology": "تقنية المعلومات",
+    "Assistance": "المعاون الفني",
+    "TechnicalDepartments": "الاقسام الفنية ",
+    "HumanResource": "الموارد البشرية"
   }
 }

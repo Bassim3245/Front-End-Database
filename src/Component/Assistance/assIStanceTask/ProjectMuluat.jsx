@@ -40,7 +40,6 @@ const ProjectMutual = () => {
   useEffect(() => {
     getPermmission();
   }, []);
-
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -152,7 +151,6 @@ const ProjectMutual = () => {
               ) && (
                 <ModuleFormEditProject key="edit" ProjectData={params?.row} />
               )}
-
               {hasPermission(
                 roles?.Delete_data_project?._id,
                 Permission?.permissionIds

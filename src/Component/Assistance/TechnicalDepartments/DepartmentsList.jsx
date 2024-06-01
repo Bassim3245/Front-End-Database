@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
-
-export default function DepartmentsList() {
+import Header from "../../Layout/Header";
+export default function DepartmentsList({ Path }) {
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -42,9 +42,14 @@ export default function DepartmentsList() {
   }, [dispatch]);
 
   const handleClickOpen = (Id) => {
-    navigate(`/Home/AllProjectsEchDepartment/${Id}`);
+    navigate(`${Path}/${Id}`);
   };
   return (
+    <>
+      <Header
+        title={t("tableDelayProject.title")}
+        subTitle={t("tableDelayProject.subTitle")}
+      />
       <Table
         striped
         bordered
@@ -81,5 +86,6 @@ export default function DepartmentsList() {
           ))}
         </tbody>
       </Table>
+    </>
   );
 }

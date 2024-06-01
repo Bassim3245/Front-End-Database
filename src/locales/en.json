@@ -25,7 +25,7 @@
     "subTitle": "List of Project mutual",
     "Code": "Code",
     "nameProject": "Project Name",
-    "Department":"Department Names",
+    "Department": "Department Names",
     "NumberBook": "Book's Number",
     "beneficiary": "Beneficiary",
     "MethodOption": "Collection Method",
@@ -114,5 +114,33 @@
   "DepartmentTable": {
     "DepartmentName": "Department Names",
     "Action": "Action"
+  },
+  "Assistance": {
+    "AssistanceStepper": {
+      "steps": {
+        "MainForm": "Form to insert project data",
+        "formMutual": "Form to handle mutual project data"
+      },
+      "title": "All steps completed - you're finished",
+      "Reset": "Reset",
+      "Back": "Back",
+      "Finish": "Finish",
+      "SaveData": "Save Data",
+      "Optional": "Optional"
+    }
+  },
+  "tableDelayProject": {
+    "title": "Project Delays",
+    "subTitle": "List of Project Delays"
+  },
+  "mainMune":{
+    "ProjectsManager":"Projects Manager",
+    "Dashboards":"Dashboards",
+    "QuantityTables":"Quantity tables",
+    "InformationTechnology":"Information Technology",
+    "Assistance":"Assistance",
+    "TechnicalDepartments":"Technical Departments",
+    "HumanResource":"Human Resource"
+
   }
 }

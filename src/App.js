@@ -37,6 +37,10 @@ import ProjectMutual from "Component/Assistance/assIStanceTask/ProjectMuluat";
 import DepartmentsList from "./Component/Assistance/TechnicalDepartments/DepartmentsList";
 import AllProjectsEchDepartment from "./Component/Assistance/TechnicalDepartments/AllProjectsToechDepartment";
 import ModuleEditUsers from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/EditUser";
+import GetAllDataDelaysProject from "./Component/Assistance/TechnicalDepartments/getAllDataDelaysProject";
+import GetAllDataProjectNotDelay from "./Component/Assistance/TechnicalDepartments/GetAllDataProjectNotDelay";
+import ProjectsListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectsList";
+import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectDelayListAssistacnce";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -114,15 +118,26 @@ export default function App() {
               <Route path="FilesReceived" element={<FilesReceived />} />
               <Route path="Assistance" element={<Assistance />} />
               <Route path="ProjectMutual" element={<ProjectMutual />} />
-              <Route path="DepartmentsList" element={<DepartmentsList />} />
               <Route
-                path="AllProjectsEchDepartment/:id"
-                element={<AllProjectsEchDepartment />}
+                path="GetAllDataProjectNotDelay"
+                element={<GetAllDataProjectNotDelay />}
+              />
+              <Route
+                path="ProjectsListAssistance/:id"
+                element={<ProjectsListAssistance />}
+              />
+              <Route
+                path="ProjectDelayListAssistance/:id"
+                element={<ProjectDelayListAssistance />}
               />
               <Route path="OpenProject/:id" element={<OpenProject />} />
               <Route path="Received/:id" element={<Received />} />
               <Route path="Authorized" element={<Authorized />} />
               <Route path="ModuleEditUsers/:id" element={<ModuleEditUsers />} />
+              <Route
+                path="getAllDataDelaysProject"
+                element={<GetAllDataDelaysProject />}
+              />
             </Route>
             <Route path="/Edit/:id" element={<Edit />} />
 

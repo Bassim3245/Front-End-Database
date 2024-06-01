@@ -11,6 +11,8 @@ import {
 } from "Component/Config/SelectDrobdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataNatural } from "../../../redux/Whorkntural/WorkNutralAction";
+import { setLanguage } from "../../../redux/LanguageState";
+
 function FormData({
   formData,
   HandleSubmit,
@@ -19,6 +21,7 @@ function FormData({
   setDateClose,
   setDateBook,
   setEndTime,
+  rtl
 }) {
   const [users, setUsers] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
@@ -46,89 +49,86 @@ function FormData({
       }
     };
     fetchData();
-  }, []);
+  }, [users.DepartmentID]);
   return (
     <div className="Project">
-      {/* <div
-        className={`container  seletMode   p-5 gap-3  `}
-        style={{
-          backgroundColor:
-            theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "",
-        }}
-      > */}
       <div
         className={`${
           theme.palette.mode === "dark" ? "bg-dark" : ""
         } SelectModePrice m-4 `}
       >
         <Box className=" m-4 ">
-          <div className="form-outline mb-3 me-2 w-100  ">
+          <div className="form-outline mb-3 me-2 w-100  " dir={rtl?.dir}>
             <form action="" onSubmit={(e) => HandleSubmit(e)}>
-              <h4> Data form</h4>
+              <h4>{rtl?.dir === 'rtl' ? 'نموذج البيانات' : 'Data Form'}</h4>
               <div className="d-flex  gap-4 mobilDisplay ">
                 <TextField
                   fullWidth
-                  label="اسم المشروع "
+                  label={rtl?.dir === 'rtl' ? 'اسم المشروع' : 'Project Name'}
                   id="filled-hidden-label-small"
                   variant="filled"
                   name="nameProject"
                   size="medium"
+                  dir={rtl?.dir}
                   value={formData.nameProject}
                   onChange={handleInputChange}
                 />
                 <TextField
                   fullWidth
-                  label="رقم الكتاب"
+                  label={rtl?.dir === 'rtl' ? 'رقم الكتاب' : 'Book Number'}
                   id="filled-hidden-label-small"
                   variant="filled"
                   size="medium"
+                  dir={rtl?.dir}
                   name="NumberBook"
                   value={formData.NumberBook}
                   onChange={handleInputChange}
                 />
-
                 <TextField
                   fullWidth
-                  label=" الجهة المستفيدة  "
+                  label={rtl?.dir === 'rtl' ? 'الجهة المستفيدة' : 'Beneficiary'}
                   id="filled-hidden-label-small"
                   variant="filled"
                   size="medium"
+                  dir={rtl?.dir}
                   name="beneficiary"
                   value={formData.beneficiary}
                   onChange={handleInputChange}
                 />
                 <TextField
                   fullWidth
-                  label="المرحلة"
+                  label={rtl?.dir === 'rtl' ? 'المرحلة' : 'Stage'}
                   id="filled-hidden-label-small"
                   variant="filled"
                   size="medium"
+                  dir={rtl?.dir}
                   name="Stage"
                   value={formData.Stage}
                   onChange={handleInputChange}
                 />
                 <TextField
                   fullWidth
-                  label=" طريقة التحصيل"
+                  label={rtl?.dir === 'rtl' ? 'طريقة التحصيل' : 'Method of Collection'}
                   id="filled-hidden-label-small"
                   variant="filled"
                   size="medium"
+                  dir={rtl?.dir}
                   name="MethodOption"
                   value={formData.MethodOption}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="mt-4">
-                <h4>date form </h4>
+                <h4>{rtl?.dir === 'rtl' ? 'نموذج التاريخ' : 'Date Form'}</h4>
                 <div className="d-flex mobilDisplay  gap-4 ">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
-                        label="Received Date "
+                        label={rtl?.dir === 'rtl' ? 'تاريخ الاستلام' : 'Received Date'}
                         onChange={(value) => setDateBook(value)}
                       />
                       <DatePicker
-                        label="Close Date"
+                        label={rtl?.dir === 'rtl' ? 'تاريخ الإغلاق' : 'Close Date'}
                         onChange={(value) => setDateClose(value)}
                       />
                     </DemoContainer>
@@ -136,11 +136,11 @@ function FormData({
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
-                        label="start"
+                        label={rtl?.dir === 'rtl' ? 'تاريخ البدء' : 'Start Date'}
                         onChange={(value) => setStartTime(value)}
                       />
                       <DatePicker
-                        label="end"
+                        label={rtl?.dir === 'rtl' ? 'تاريخ الانتهاء' : 'End Date'}
                         onChange={(value) => setEndTime(value)}
                       />
                     </DemoContainer>
@@ -148,16 +148,16 @@ function FormData({
                 </div>
               </div>
               <div className="mt-4 ">
-                <h4>select form </h4>
-
+                <h4>{rtl?.dir === 'rtl' ? 'نموذج التحديد' : 'Select Form'}</h4>
                 <div className="d-flex mobilDisplay gap-4 ">
                   <TextField
                     fullWidth
                     select
-                    label="طبيعة العمل "
+                    label={rtl?.dir === 'rtl' ? 'طبيعة العمل' : 'Nature of Work'}
                     id="filled-hidden-label-small"
                     variant="filled"
                     size="medium"
+                    dir={rtl?.dir}
                     name="WorkNatural"
                     value={formData.WorkNatural}
                     onChange={handleInputChange}
@@ -168,34 +168,11 @@ function FormData({
                       </MenuItem>
                     ))}
                   </TextField>
-                  {/* <TextField
-                    id="filled-select-currency"
-                    fullWidth
-                    select
-                    label="القائم بالعمل"
-                    helperText=""
-                    name="PersonCharge"
-                    variant="filled"
-                    value={formData.PersonCharge}
-                    onChange={handleInputChange}
-                  >
-                    {dataUserID?.map((option) => (
-                      <MenuItem key={option?._id} value={option?._id}>
-                        {option?.name}{" "}
-                        <span
-                          className="text-secondary ms-3"
-                          style={{ fontSize: "15px" }}
-                        >
-                          {option.user_type}
-                        </span>
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
                   <TextField
                     id="filled-select-currency"
                     fullWidth
                     select
-                    label="نيبة الانجاز"
+                    label={rtl?.dir === 'rtl' ? 'نسبة الانجاز' : 'Completion Rate'}
                     helperText=""
                     variant="filled"
                     name="CompletionRate"
@@ -212,7 +189,7 @@ function FormData({
                     id="filled-select-currency"
                     fullWidth
                     select
-                    label="مستوى الاداء"
+                    label={rtl?.dir === 'rtl' ? 'مستوى الاداء' : 'Performance Level'}
                     helperText=""
                     variant="filled"
                     name="LevelPerformance"
@@ -228,12 +205,12 @@ function FormData({
                 </div>
               </div>
               <div className="mt-4">
-                <h4>text form </h4>
+                <h4>{rtl?.dir === 'rtl' ? 'نموذج النص' : 'Text Form'}</h4>
                 <div className="d-flex mobilDisplay  gap-4 ">
                   <TextField
                     fullWidth
                     id="filled-multiline-static"
-                    label="ملاحظات"
+                    label={rtl?.dir === 'rtl' ? 'ملاحظات' : 'Comments'}
                     multiline
                     rows={4}
                     name="comments"
@@ -247,8 +224,8 @@ function FormData({
           </div>
         </Box>
       </div>
-      {/* </div> */}
     </div>
   );
 }
+
 export default FormData;

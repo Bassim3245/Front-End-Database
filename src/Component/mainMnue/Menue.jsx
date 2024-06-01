@@ -7,13 +7,14 @@ import AppBarComponent from "../Layout/AppBar";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+import { useTranslation } from "react-i18next";
 function Product() {
   const Navigate = useNavigate();
+  const {t}=useTranslation()
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
   const token = localStorage.getItem("token") || {};
-  const { Rol } = useSelector((state) => state.user);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   useEffect(() => {
     AOS.init();
@@ -135,7 +136,7 @@ function Product() {
   const dataRout = [
     {
       image: "/image/task-management.png",
-      name: "Projects Manager",
+      name:t("mainMune.ProjectsManager"),
       url:
         info?.user_type === "H.O.D" ||
         info.user_type === "Employ" ||
@@ -146,13 +147,13 @@ function Product() {
     },
     {
       image: "/image/business-report.png",
-      name: "Dashboards",
+      name: t("mainMune.Dashboards"),
       url: info?.user_type === "H.O.D" ? "/Home" : "/Authorized",
       statRote: "Dashboard",
     },
     {
       image: "/image/folder.png",
-      name: "Quantity tables",
+      name:t("mainMune.QuantityTables"),
       url:
         info?.user_type === "management" || info?.user_type === "H.O.D"
           ? "/Home"
@@ -161,25 +162,25 @@ function Product() {
     },
     {
       image: "/image/information-technology.png",
-      name: "Information Technology",
+      name:t("mainMune.InformationTechnology"),
       url: "/Home",
       statRote: "default",
     },
     {
       image: "/image/icons8-assistance-64.png",
-      name: "Assistance",
+      name: t("mainMune.Assistance"),
       url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
       statRote: "AssistanceSection",
     },
     {
       image: "/image/company-department.png",
-      name: "Technical Departments",
+      name: t("mainMune.TechnicalDepartments"),
       url: info?.user_type === "Assistance" ? "/Home" : "/Authorized",
       statRote: "TechnicalDepartments",
     },
     {
       image: "/image/management.png",
-      name: "Human Resource",
+      name: t("mainMune.HumanResource"),
       url: info?.user_type === "HR" ? "/Home" : "/Authorized",
       statRote: "default",
     },

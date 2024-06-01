@@ -1,19 +1,21 @@
 import * as React from "react";
 import Table from "react-bootstrap/Table";
-import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectByDepartment } from "../../../redux/ProjectSlice/ProjectAction";
+import {
+  getProjectByDepartment,
+  getProjectByDepartmentDelay,
+} from "../../../redux/ProjectSlice/ProjectAction";
 import { formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Button, useTheme } from "@mui/material";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
-export default function AllProjectsEchDepartment() {
+import Header from "../../Layout/Header";
+export default function AllProjectsEchDepartment({ id, Label }) {
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { id } = useParams();
   const { setProject, loading } = useSelector((state) => state?.Project);
   const [info] = React.useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
@@ -30,7 +32,11 @@ export default function AllProjectsEchDepartment() {
 
   const fetchDataProject = () => {
     const departmentID = id;
-    dispatch(getProjectByDepartment({ departmentID, info, token }));
+    if (Label === "Delay") {
+      dispatch(getProjectByDepartmentDelay({ departmentID, info, token }));
+    } else {
+      dispatch(getProjectByDepartment({ departmentID, info, token }));
+    }
   };
   const getPermmission = () => {
     const userId = info?._id;
@@ -42,7 +48,7 @@ export default function AllProjectsEchDepartment() {
   React.useEffect(() => {
     fetchDataProject();
   }, [id]); // Added dependency on `id` to refetch data when `id` changes
-const {t}=useTranslation();
+  const { t } = useTranslation();
   return (
     <div
       className={`projects p-20 ${
@@ -51,6 +57,7 @@ const {t}=useTranslation();
       style={{ margin: "auto" }}
       dir={rtl.dir}
     >
+   
       <div className="" style={{ overflowX: "auto" }}>
         <Table
           striped

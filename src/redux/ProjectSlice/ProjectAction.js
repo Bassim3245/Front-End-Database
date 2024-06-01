@@ -32,7 +32,9 @@ export const getProjectByDepartment = createAsyncThunk(
       const response = await axios({
         method: "get",
         url:
-          info?.user_type === "H.O.D" || info?.user_type === "management"|| info?.user_type === "Assistance"
+          info?.user_type === "H.O.D" ||
+          info?.user_type === "management" ||
+          info?.user_type === "Assistance"
             ? `${BackendUrl}/api/getProjects/${departmentID}`
             : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
         headers: {
@@ -54,14 +56,14 @@ export const getProjectByDepartment = createAsyncThunk(
 
 export const getProjectByDepartmentDelay = createAsyncThunk(
   "GetALL/getProjectByDepartmentDelay",
-  async ({ info, token }, thunkAPI) => {
+  async ({ departmentID,info, token }, thunkAPI) => {
     try {
       const response = await axios({
         method: "get",
         url:
-          info?.user_type === "H.O.D"
-            ? `${BackendUrl}/api/getallDataByDepartmentAndUserIDWhendelayCheckIsTure`
-            : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
+          // info?.user_type === "H.O.D"
+            `${BackendUrl}/api/getallDataByDepartmentAndUserIDWhendelayCheckIsTure/${departmentID}`,
+            // : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",

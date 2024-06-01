@@ -43,7 +43,7 @@ export default function OfferPrice(props) {
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      // refetchInterval: 5000,
+      refetchInterval: 5000,
     }
   );
   const open = Boolean(anchorEl);
@@ -54,7 +54,7 @@ export default function OfferPrice(props) {
     setAnchorEl(null);
   }; 
   React.useEffect(() => {
-    refetch();
+  console.log(data);
   }, [loading,open]);
 
   const collectData = (Products) => {

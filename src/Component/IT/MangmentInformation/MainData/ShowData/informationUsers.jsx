@@ -14,7 +14,6 @@ import {
   ColorLink,
 } from "../../../../Config/Content";
 import { useNavigate } from "react-router";
-import ModuleEdit from "./RoleAndPermission/EditUser";
 import Swal from "sweetalert2";
 import Loader from "../../../../Config/Loader";
 import { getRoleAndUserId } from "../../../../../redux/RoleSlice/rolAction";
