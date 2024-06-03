@@ -190,9 +190,25 @@ const initialState = {
       value: false,
       _id: "6649e020fc1a4f7c44fe0503",
     },
-    view_filles: {
+    Technical_Departmernt: {
       value: false,
-      _id: "665379eecf020c0b9cc88207",
+      _id: "66543f71349d96377f2a341b",
+    },
+    Information_Technology: {
+      value: false,
+      _id: "665d8b0b9c85da7ef30be4ad",
+    },
+    Quantity_Tables: {
+      value: false,
+      _id: "665d8b289c85da7ef30be4af",
+    },
+    M_Dashboards: {
+      value: false,
+      _id: "665d8b519c85da7ef30be4b1",
+    },
+    Human_Resource: {
+      value: false,
+      _id: "665d8afd9c85da7ef30be4a9",
     },
   },
 };
