@@ -44,7 +44,7 @@ function UploadFile(props) {
   return (
     <div className="files-stats p-20 bg-white rad-10">
       <ToastContainer />
-      <h2 className="mt-0 mb-15 txt-c-mobile">Files </h2>
+      {/* <h2 className="mt-0 mb-15 txt-c-mobile">Files </h2> */}
       <div className="d-flex align-center border-eee p-10 rad-6 mb-15 fs-13">
         <img
           src="/image/pdf_136522.png"

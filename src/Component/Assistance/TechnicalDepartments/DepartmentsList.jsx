@@ -40,7 +40,6 @@ export default function DepartmentsList({ Path }) {
   React.useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-
   const handleClickOpen = (Id) => {
     navigate(`${Path}/${Id}`);
   };

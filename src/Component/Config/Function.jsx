@@ -125,7 +125,7 @@ export function SumTotalPriceAfterAddPercentage(Products) {
     return formattedTotalSum;
   }
 }
-export function SumTotalPriceAfterAddPercentageAnddConvertToUSD(
+export function SumTotalPriceAfterAddPercentageAndConvertToUSD(
   Products,
   PriceConvertToIQD
 ) {
@@ -197,7 +197,7 @@ export function calculatePriceAfterPercentageWithoutQuantity(item) {
   }
 }
 
-export function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
+export function calculatePriceAfterPercentageWithoutQuantityAndConvertToUSD(
   item,
   PriceConvertToIQD
 ) {
@@ -220,7 +220,7 @@ export function calculatePriceAfterPercentageWithoutQuantityAndConvertToUsd(
   }
 }
 
-export function calculatePriceAfterPercentageWithQuantityAndConvertToUsd(
+export function calculatePriceAfterPercentageWithQuantityAndConvertToUSD(
   item,
   PriceConvertToIQD
 ) {

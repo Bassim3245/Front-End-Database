@@ -10,9 +10,14 @@ import {
 import SelectModePriceOffer from "./SelectModePriceOfer";
 import CustomPriceOffer from "./CostumPriceOffer";
 import OfferPriceTable from "./OfferPriceTaples";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCustomDataPrice } from "../../../redux/OfferPriceCustomStat/OfferPriceCustomSlice";
+import { setLanguage } from "../../../redux/LanguageState";
+import { useTranslation } from "react-i18next";
 export default function CustomizedSteppers(props) {
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
   const [activeStep, setActiveStep] = React.useState(0);
   const [selectModeNormal, setSelectModeNormal] = React.useState(false);
   const [customSelectMode, setCustomSelectMode] = React.useState(false);
@@ -24,14 +29,18 @@ export default function CustomizedSteppers(props) {
     supplyPermeability: "",
     Notes: "",
   });
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
   const handleNextAndSaveData = () => {
     console.log(formData.ExpirePeriod);
-    dispatch(setCustomDataPrice(formData))
+    dispatch(setCustomDataPrice(formData));
 
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -61,7 +70,10 @@ export default function CustomizedSteppers(props) {
           setCustomSelectMode={setCustomSelectMode}
           customSelectMode={customSelectMode}
         />,
-        <OfferPriceTable projectId={props?.projectId} targetRef={props?.targetRef} />,
+        <OfferPriceTable
+          projectId={props?.projectId}
+          targetRef={props?.targetRef}
+        />,
       ]
     : [
         // @ts-ignore
@@ -76,7 +88,10 @@ export default function CustomizedSteppers(props) {
           handleInputChange={handleInputChange}
           handleNextAndSaveData={handleNextAndSaveData}
         />,
-        <OfferPriceTable projectId={props?.projectId} targetRef={props?.targetRef}/>,
+        <OfferPriceTable
+          projectId={props?.projectId}
+          targetRef={props?.targetRef}
+        />,
       ];
   const isStepOptional = (step) => {
     return step === 1;
@@ -108,9 +123,10 @@ export default function CustomizedSteppers(props) {
   const handleReset = () => {
     setActiveStep(0);
   };
+  const { t } = useTranslation();
   return (
-    <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep} sx={{ overflowX: "auto" }}>
+    <Box sx={{ width: "100%" }} dir={rtl?.dir} >
+      <Stepper activeStep={activeStep} sx={{  }}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -133,11 +149,14 @@ export default function CustomizedSteppers(props) {
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            {t("Assistance.AssistanceStepper.title")}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleReset}>
+              {" "}
+              {t("Assistance.AssistanceStepper.Reset")}
+            </Button>
           </Box>
         </React.Fragment>
       ) : (
@@ -150,7 +169,7 @@ export default function CustomizedSteppers(props) {
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
-              Back
+              {t("Assistance.AssistanceStepper.Back")}
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             {formData.PriceConvertToIQD &&
@@ -158,13 +177,26 @@ export default function CustomizedSteppers(props) {
             formData.ProcessingTime &&
             formData.supplyPermeability ? (
               <Button onClick={handleNextAndSaveData}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                {activeStep === steps.length - 1
+                  ? rtl?.dir === "rtl"
+                    ? "انهاء"
+                    : "Finish"
+                  : rtl?.dir === "rtl"
+                  ? "التالي"
+                  : "Next"}
               </Button>
             ) : null}
+
             {(customSelectMode || selectModeNormal) &&
             formData.PriceConvertToIQD === "" ? (
               <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                {activeStep === steps.length - 1
+                  ? rtl?.dir === "rtl"
+                    ? "انهاء"
+                    : "Finish"
+                  : rtl?.dir === "rtl"
+                  ? "التالي"
+                  : "Next"}
               </Button>
             ) : null}
           </Box>

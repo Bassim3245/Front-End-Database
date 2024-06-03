@@ -12,11 +12,10 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Close } from "@mui/icons-material";
-import { usePDF } from "react-to-pdf";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
 import { ButtonSave } from "../../Config/Content.jsx";
 import CustomizedSteppers from "./Stepper.jsx";
-import "jspdf-autotable";
+import { setLanguage } from "../../../redux/LanguageState.js";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,12 +29,17 @@ function OfferPriceMain(props) {
   const id = props?.projectId;
   // @ts-ignore
   const { products, loading } = useSelector((state) => state.products);
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
   const dispatch = useDispatch();
   const [dataFile, setDataFiles] = useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
   const handleClose = () => {
     localStorage.removeItem("CustomDataForPriceOffer");
     setOpen(false);
@@ -48,10 +52,10 @@ function OfferPriceMain(props) {
     detDataProductById();
   }, [open]);
   // @ts-ignore
-  const { toPDF, targetRef } = usePDF(options);
+  // const { toPDF, targetRef } = usePDF(options);
 
   const generatePDF = async () => {
-    toPDF(targetRef);
+    // toPDF(targetRef);
   };
 
   const theme = useTheme();
@@ -94,7 +98,7 @@ function OfferPriceMain(props) {
           >
             <CustomizedSteppers
               projectId={props?.projectId}
-              targetRef={targetRef}
+              // targetRef={targetRef}
             />
           </div>
         </div>
