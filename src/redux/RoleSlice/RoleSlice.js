@@ -210,6 +210,10 @@ const initialState = {
       value: false,
       _id: "665d8afd9c85da7ef30be4a9",
     },
+    Project_Manger: {
+      value: false,
+      _id: "665da1cdd663f86ca0c868f8",
+    },
   },
 };
 

@@ -45,7 +45,7 @@ function Manue() {
       name: t("mainMune.ProjectsManager"),
       url: "/Home",
       statRote: "ProjectRote",
-      checkPermission: roles?.M_Dashboards?._id,
+      checkPermission: roles?.Project_Manger?._id,
     },
     {
       image: "/image/business-report.png",
@@ -87,7 +87,7 @@ function Manue() {
       name: t("mainMune.HumanResource"),
       url: "/Home",
       statRote: "default",
-      checkPermission: roles?.M_Dashboards?._id,
+      checkPermission: roles?.Human_Resource?._id,
     },
   ];
 
