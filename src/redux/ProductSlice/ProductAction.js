@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BackendUrl, info, token } from "../api/axios";
 import axios from "axios";
-import { useState } from "react";
 export const displayProductByProjectName = createAsyncThunk(
   "Products/display/",
   async (id, thunkAPI) => {

@@ -12,6 +12,8 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
+import { setLanguage } from "../../../redux/LanguageState";
+import { useDispatch, useSelector } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -85,12 +87,18 @@ export default function ModuleEdit(props) {
       setSelectPriceType(false);
     }
   }, [formData.PriceType]);
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
   return (
     <div>
       <Button onClick={handleClickOpen}> edit</Button>
       <Dialog
         open={open}
-        // @ts-ignore
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
@@ -113,7 +121,7 @@ export default function ModuleEdit(props) {
             id="fullWidth"
             className="mb-3"
             name="nameProduct"
-            dir="rtl"
+            dir={rtl?.dir}
             value={formData?.nameProduct}
             onChange={handleInputChange}
           />
@@ -122,7 +130,7 @@ export default function ModuleEdit(props) {
             label="العدد"
             id="fullWidth"
             name="Quantity"
-            dir="rtl"
+            dir={rtl?.dir}
             className="mb-3"
             value={formData?.Quantity}
             onChange={handleInputChange}
@@ -134,6 +142,7 @@ export default function ModuleEdit(props) {
               id="fullWidth"
               className="mb-3"
               name="license"
+              dir={rtl?.dir}
               value={formData?.license}
               onChange={handleInputChange}
             />
@@ -143,6 +152,7 @@ export default function ModuleEdit(props) {
             sx={{ width: "500px", maxWidth: "100%" }}
             className="mb-4 me-3"
             select
+            dir={rtl?.dir}
             label=" تحديد نوع السعر "
             name="PriceType"
             value={formData?.PriceType}
@@ -158,6 +168,7 @@ export default function ModuleEdit(props) {
               id="priceField"
               className="mb-3"
               name="PriceConvert"
+              dir={rtl?.dir}
               defaultValue={"1600"}
               value={formData?.PriceConvert}
               onChange={handleInputChange}
@@ -168,6 +179,7 @@ export default function ModuleEdit(props) {
             label="  السعر المنتج "
             id="fullWidth"
             className="mb-3"
+            dir={rtl?.dir}
             name="Price"
             value={formData?.Price}
             onChange={handleInputChange}
@@ -176,6 +188,7 @@ export default function ModuleEdit(props) {
             fullWidth
             label="انسبة"
             id="fullWidth"
+            dir={rtl?.dir}
             className="mb-3"
             name="percent"
             value={formData?.percent}
@@ -188,6 +201,7 @@ export default function ModuleEdit(props) {
             select
             label="الوحدة "
             name="UnitId"
+            dir={rtl?.dir}
             value={formData?.UnitId}
             onChange={handleInputChange}
           >
@@ -201,14 +215,14 @@ export default function ModuleEdit(props) {
             controlId="floatingTextarea2"
             label="المواصفات المطلوبة"
             className="mb-3"
-            dir="rtl"
+            dir={rtl?.dir}
             style={{ height: "100px", width: "500px", maxWidth: "100%" }}
           >
             <Form.Control
               as="textarea"
               placeholder="Leave a comment here"
               name="description"
-              dir="rtl"
+              dir={rtl?.dir}
               value={formData?.description}
               onChange={handleInputChange}
               style={{ height: "100px", width: "500px", maxWidth: "100%" }}
@@ -219,7 +233,7 @@ export default function ModuleEdit(props) {
               as="textarea"
               placeholder="Leave a comment here"
               name="comments"
-              dir="rtl"
+              dir={rtl?.dir}
               value={formData?.comments}
               onChange={handleInputChange}
               className="mb-3"

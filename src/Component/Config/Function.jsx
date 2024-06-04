@@ -283,7 +283,7 @@ export const formatSize = (bytes) => {
 //   const date = new Date(Data);
 //   return moment(date).format(" HH:mm YYYY/MM/DD ");
 // };
-export const Delete = async (_id, setDelete, setAnchorEl, token) => {
+export const Delete = async (_id, setDelete, setAnchorEl, token, url) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn btn-success ms-3",
@@ -291,7 +291,6 @@ export const Delete = async (_id, setDelete, setAnchorEl, token) => {
     },
     buttonsStyling: false,
   });
-
   try {
     const result = await swalWithBootstrapButtons.fire({
       title: "Are you sure?",
@@ -307,14 +306,18 @@ export const Delete = async (_id, setDelete, setAnchorEl, token) => {
       // @ts-ignore
       const response = await axios({
         method: "DELETE",
-        url: `${BackendUrl}/api/deleteProject/${_id}`,
+        url: `${BackendUrl}/api/${url}/${_id}`,
         headers: {
           token: token,
         },
       });
+      if (response) {
+        setDelete(true);
+        setAnchorEl(null);
+        // window.location.reload();
 
-      setDelete(response?.data?.message);
-      setAnchorEl(null);
+      }
+
       swalWithBootstrapButtons.fire({
         title: "Deleted!",
         text: "Your file has been deleted.",

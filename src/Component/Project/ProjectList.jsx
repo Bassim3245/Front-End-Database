@@ -125,7 +125,7 @@ const Projects = () => {
               ) &&
                 renderMenuItem(
                   "delete",
-                  () => Delete(params?.row?._id, setDelete, setAnchorEl, token),
+                  () => Delete(params?.row?._id, setDelete, setAnchorEl, token,"deleteProject"),
                   DeleteIcon,
                   "Delete"
                 )}
@@ -141,7 +141,8 @@ const Projects = () => {
                       params?.row?._id,
                       token,
                       setDelete,
-                      setAnchorEl
+                      setAnchorEl,
+                      
                     ),
                   HourglassBottom,
                   "Project Delay"
@@ -177,7 +178,7 @@ const Projects = () => {
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       {loading ? (
-        <div className="position-absolute" style={{ top: "50%", left: "50%" }}>
+        <div className="position-absolute"  dir="ltr"style={{ top: "50%", left: "50%" }}>
           <Loader />
         </div>
       ) : (

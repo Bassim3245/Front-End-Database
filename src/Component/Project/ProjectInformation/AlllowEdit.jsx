@@ -23,22 +23,31 @@ export default function AllowEdit(props) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const handleSend = async () => {
     try {
-      console.log(token);
-      const response = await axios.put(
-        `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`,
-        {},
-        { headers: { token: token } }
-      );
-      toast.success(response.data.message);
+      const url =
+        props?.label === "AllowDelete"
+          ? `${BackendUrl}/api/productRequestDeletePage/${props?.Id}`
+          : `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`;
+
+      // Sending the request based on the label
+      const response = await axios?.put(url, {}, { headers: { token } });
+
+      // Show success toast notification
+      toast?.success(response.data.message);
       setOpen(false);
     } catch (error) {
-      toast.error(error.response.data.message);
+      // Show error toast notification
+      toast?.error(error.response.data.message);
     }
   };
   return (
     <div>
       <ToastContainer />
-      <ButtonSave onClick={handleOpen}>طلب تعديل</ButtonSave>
+      {props?.label === "AllowEdit" ? (
+        <ButtonSave onClick={handleOpen}>طلب تعديل</ButtonSave>
+      ) : props?.label === "AllowDelete" ? (
+        <ButtonClearState onClick={handleOpen}>طلب حذف</ButtonClearState>
+      ) : null}
+
       <Modal
         keepMounted
         open={open}
@@ -47,7 +56,7 @@ export default function AllowEdit(props) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          <h3 className="text-center m-4">ارسال طلب </h3>
+          <h3 className="text-center m-4"> ارسال طلب {props?.title}</h3>
           <div className="d-flex justify-content-between align-items-center">
             <ButtonClearState className="" onClick={handleSend}>
               ارسال

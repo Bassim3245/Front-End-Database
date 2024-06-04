@@ -90,17 +90,23 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
       console.log("departmentId:", eventData?.departmentId);
       if (eventData?.departmentId === info?.DepartmentID) {
         setDepartmentId(eventData?.departmentId);
-        setVotes((prevVotes) => {
-          return prevVotes ? prevVotes + 1 : 0;
-        });
+        setVotes((prevVotes) => prevVotes + 1);
+        // if (eventData.userId && eventData.DepartmentID) {
+        //   console.log("jjfjjjf", eventData.userId);
+        //   toast(eventData?.message || null, { position: "bottom-right" });
+        // }
       }
-      toast(eventData?.message || null, { position: "bottom-right" });
+      if (
+        (eventData?.departmentId && eventData.userId === null) ||
+        eventData.userId === undefined
+      ) {
+        toast(eventData?.message || null, { position: "bottom-right" });
+      }
     });
     return () => {
       pusher.unsubscribe("poll");
     };
   }, []);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

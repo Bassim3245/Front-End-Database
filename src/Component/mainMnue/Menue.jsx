@@ -132,7 +132,7 @@ function Manue() {
                   className="ImageLogoButton"
                 />
                 <Button variant="contained" color="secondary" className="mt-3">
-                  Unauthorized
+                  {t("Authorized")}
                 </Button>
               </div>
             );

@@ -170,7 +170,7 @@ export default function Module(props) {
           )}
           <TextField
             fullWidth
-            label="  السعر المنتج "
+            label="  لسعر المنتج "
             id="fullWidth"
             className="mb-3"
             name="Price"

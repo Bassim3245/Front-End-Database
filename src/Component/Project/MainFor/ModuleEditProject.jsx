@@ -39,6 +39,7 @@ import {
   getDataNatural,
 } from "../../../redux/Whorkntural/WorkNutralAction.js";
 import { Close } from "@mui/icons-material";
+import { setLanguage } from "../../../redux/LanguageState";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -56,6 +57,9 @@ export default function ModuleFormEditProject(props) {
   });
   const [users, setUsers] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
+  });
+  const { rtl } = useSelector((state) => {
+    return state?.language;
   });
   const [open, setOpen] = useState(false);
   const [DateBook, setDateBook] = useState("");
@@ -206,9 +210,11 @@ export default function ModuleFormEditProject(props) {
   useEffect(() => {
     dispatch(getDataNatural());
   }, [AddWorkNutral]);
-  const theme = createTheme({
-    direction: "rtl",
-  });
+
+  
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
   return (
     <React.Fragment>
       <MenuItem onClick={handleClickOpen}>
@@ -260,7 +266,7 @@ export default function ModuleFormEditProject(props) {
                   label="طبيعة العمل"
                   className="mb-4"
                   name="WorkNatural"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={WorkNatural}
                   onChange={handleInputChange}
                 >
@@ -277,7 +283,7 @@ export default function ModuleFormEditProject(props) {
                   select
                   label="طريقة التحصيل"
                   name="MethodOption"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={MethodOption}
                   onChange={handleInputChange}
                 >
@@ -294,7 +300,7 @@ export default function ModuleFormEditProject(props) {
                   select
                   label="المرحلة "
                   name="Stage"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={Stage}
                   onChange={handleInputChange}
                 >
@@ -312,7 +318,7 @@ export default function ModuleFormEditProject(props) {
                     select
                     label="مستوى الاداء"
                     name="LevelPerformance"
-                    dir="rtl"
+                    dir={rtl?.dir}
                     value={LevelPerformance}
                     onChange={handleInputChange}
                     defaultValue={"0%"}
@@ -329,7 +335,7 @@ export default function ModuleFormEditProject(props) {
                     className="mb-4 me-3"
                     select
                     label="نسبة الانجاز"
-                    dir="rtl"
+                    dir={rtl?.dir}
                     name="CompletionRate"
                     value={CompletionRate}
                     onChange={handleInputChange}
@@ -359,7 +365,7 @@ export default function ModuleFormEditProject(props) {
                   id="fullWidth"
                   className="mb-4"
                   name="nameProject"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={nameProject}
                   onChange={handleInputChange}
                 />
@@ -370,7 +376,7 @@ export default function ModuleFormEditProject(props) {
                   id="fullWidth"
                   className="mb-4"
                   name="NumberBook"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={NumberBook}
                   onChange={handleInputChange}
                 />
@@ -411,7 +417,7 @@ export default function ModuleFormEditProject(props) {
                       label=" الجهة المستفيدة"
                       className="mb-4"
                       name="beneficiary"
-                      dir="rtl"
+                      dir={rtl?.dir}
                       value={beneficiary}
                       onChange={handleInputChange}
                     >
@@ -441,7 +447,7 @@ export default function ModuleFormEditProject(props) {
                         label=" اكتب الاختيار"
                         id="fullWidth"
                         className=""
-                        dir="rtl"
+                        dir={rtl?.dir}
                         name="beneficiary"
                         value={beneficiary}
                         onChange={handleInputChange}
@@ -466,7 +472,7 @@ export default function ModuleFormEditProject(props) {
                   label=" القائم بالعمل"
                   className="mb-4"
                   name="PersonCharge"
-                  dir="rtl"
+                  dir={rtl?.dir}
                   value={PersonCharge || ""} // Provide a default value if PersonCharge is undefined
                   onChange={handleInputChange}
                 >

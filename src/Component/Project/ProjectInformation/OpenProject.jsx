@@ -16,6 +16,8 @@ import ModulToploadFilePricedTechnical from "../MainFor/ModulToploadFilePricedTe
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 import Loader from "Component/Config/Loader";
+import { Delete, hasPermission } from "../../Config/Function";
+import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 export default function OpenProject() {
   const { id } = useParams();
   console.log(id);
@@ -24,16 +26,33 @@ export default function OpenProject() {
   const [dataProject, setDataProject] = useState([]);
   const [loadingProject, setLoading] = useState(false);
   const { products, loading } = useSelector((state) => state?.products);
+  const [DeleteItem, setDelete] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
+  const { rtl } = useSelector((state) => {
+    return state?.language;
+  });
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
     detDataProductById();
   }, [message, dispatch]);
+  useEffect(() => {
+    const userId = info?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  }, []);
 
+  useEffect(() => {
+    dispatch(setLanguage());
+  }, [dispatch]);
+  const detDataProductById = () => {
+    dispatch(displayProductByProjectName(id));
+  };
+  useEffect(() => detDataProductById(), [DeleteItem]);
   const fetchDataByProjectId = async () => {
     try {
       setLoading(true); // Set loading to true when starting to fetch data
@@ -50,11 +69,6 @@ export default function OpenProject() {
     }
   };
 
-  const detDataProductById = () => {
-    // @ts-ignore
-    dispatch(displayProductByProjectName(id));
-  };
-  useEffect(() => detDataProductById(), []);
   const handleSend = async () => {
     try {
       const response = await axios.put(
@@ -77,37 +91,9 @@ export default function OpenProject() {
   const handleBack = () => {
     window.history.back(-1);
   };
-  const { rtl } = useSelector((state) => {
-    return state?.language;
-  });
-
-  const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(
-        `${BackendUrl}/api/DeleteProduct/${id}`,
-        {
-          headers: {
-            token: token,
-          },
-        }
-      );
-      if (response) {
-        toast(response?.data?.message);
-        // setMessage(response?.data?.message);
-        window.location.reload();
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    }
-  };
-
-  useEffect(() => {
-    dispatch(setLanguage());
-  }, [dispatch]);
-
   useEffect(() => {
     fetchDataByProjectId();
-  }, [message, token]);
+  }, [DeleteItem, anchorEl]);
 
   return (
     <div className={`w-100 `}>
@@ -138,13 +124,27 @@ export default function OpenProject() {
                   <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
                     {products ? (
                       <>
-                        <Button
-                          onClick={() => handleSend(products?._id)}
-                          className="me-2 "
-                          variant="outlined"
-                        >
-                          {t("ProductList.SendButton")}
-                        </Button>
+                        {hasPermission(
+                          roles?.send_project_from_Employ_to_HOD?._id,
+                          Permission?.permissionIds
+                        ) ? (
+                          <Button
+                            onClick={() => handleSend(products?._id)}
+                            className="me-2"
+                            variant="outlined"
+                          >
+                            {t("ProductList.SendButton")}
+                          </Button>
+                        ) : (
+                          <Button
+                            className="me-2"
+                            variant="contained"
+                            color="secondary"
+                          >
+                            {t("Authorized")}
+                          </Button>
+                        )}
+
                         <ModulToploadFilePricedTechnical
                           t={t}
                           DepartmentID={dataProject?.DepartmentID}
@@ -225,8 +225,34 @@ export default function OpenProject() {
                                         dataProject?.WorkNatural
                                       }
                                     />
+                                  </div>
+                                ) : (
+                                  <>
+                                    {/* <Button>Delete</Button> */}
+                                    <div className="d-flex gap-2">
+                                      <AllowEdit
+                                        Id={item?._id}
+                                        label={"AllowEdit"}
+                                        title={"تعديل"}
+                                      />
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                              <div>
+                                {item?.allowRequestDelete ||
+                                info?.user_type === "H.O.D" ? (
+                                  <div className="d-flex">
                                     <Button
-                                      onClick={() => handleDelete(item?._id)}
+                                      onClick={() =>
+                                        Delete(
+                                          item?._id,
+                                          setDelete,
+                                          setAnchorEl,
+                                          token,
+                                          "DeleteProduct"
+                                        )
+                                      }
                                     >
                                       Delete
                                     </Button>
@@ -234,7 +260,13 @@ export default function OpenProject() {
                                 ) : (
                                   <>
                                     {/* <Button>Delete</Button> */}
-                                    <AllowEdit Id={item?._id} />
+                                    <div className="d-flex gap-2">
+                                      <AllowEdit
+                                        Id={item?._id}
+                                        label={"AllowDelete"}
+                                        title={"حذف"}
+                                      />
+                                    </div>
                                   </>
                                 )}
                               </div>

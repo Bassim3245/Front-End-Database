@@ -134,12 +134,13 @@
     "subTitle": "قائمة من المشاريع ألمتاخرة"
   },
   "mainMune": {
-    "ProjectsManager": "ادارة المشاروع",
+    "ProjectsManager": "ادارة المشاريع",
     "Dashboards": "لوحة التحكم",
     "QuantityTables": "جداول الكمية",
     "InformationTechnology": "تقنية المعلومات",
     "Assistance": "المعاون الفني",
     "TechnicalDepartments": "الاقسام الفنية ",
     "HumanResource": "الموارد البشرية"
-  }
+  },
+  "Authorized":"غير مصرح"
 }

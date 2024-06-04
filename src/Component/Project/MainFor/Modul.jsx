@@ -380,6 +380,7 @@ export default function MainForm(props) {
                     </LocalizationProvider>
                   </div>
                 </div>
+                <div className="mb-4">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
@@ -392,6 +393,8 @@ export default function MainForm(props) {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
+                </div>
+             
                 {/* end Date for the project  */}
                 {/* start select */}
                 {/* start beneficiary*/}
@@ -422,17 +425,19 @@ export default function MainForm(props) {
                   value={PersonCharge}
                   onChange={handleInputChange}
                 >
-                  {dataUserID.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.name}{" "}
-                      <span
-                        className="text-secondary ms-3"
-                        style={{ fontSize: "15px" }}
-                      >
-                        {option.user_type}
-                      </span>
-                    </MenuItem>
-                  ))}
+                  {dataUserID
+                    .filter((option) => option.user_type !== users?.user_type && option.user_type !== "IT")
+                    .map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}{" "}
+                        <span
+                          className="text-secondary ms-3"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {option.user_type}
+                        </span>
+                      </MenuItem>
+                    ))}
                 </TextField>
               </Box>
             </div>
