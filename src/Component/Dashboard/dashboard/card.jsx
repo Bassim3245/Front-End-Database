@@ -21,7 +21,7 @@ const {t}=useTranslation()
           {title}
         </Typography>
         <Typography variant="body2" sx={{ fontSize: "13px" }}>
-          {t('dashboard.titleInfoBox',{subTitle})}
+          {subTitle}
         </Typography>
       </Stack>
 

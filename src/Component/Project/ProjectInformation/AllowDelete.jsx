@@ -20,7 +20,7 @@ const style = {
 };
 
 // AllowEdit component
-export default function AllowEdit(props) {
+export default function AllowDelate(props) {
   // State for modal open/close
   const [open, setOpen] = useState(false);
 
@@ -42,7 +42,7 @@ export default function AllowEdit(props) {
 
     try {
       // Determine the URL based on the label
-      const url = `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`;
+      const url = `${BackendUrl}/api/productRequestDeletePage/${props?.Id}`;
 
       // Send the request
       const response = await axios.put(url, {}, { headers: { token } });
@@ -55,11 +55,10 @@ export default function AllowEdit(props) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
   };
-
   return (
     <div>
       <ToastContainer />
-      <ButtonSave onClick={handleOpen}>طلب تعديل</ButtonSave>
+      <ButtonClearState onClick={handleOpen}>طلب حذف</ButtonClearState>
       <Modal
         keepMounted
         open={open}

@@ -78,7 +78,7 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     localStorage.setItem("language", "en");
   };
   const [votes, setVotes] = useState(0);
-  const [departmentId, setDepartmentId] = useState(null);
+  const [userId, setUserId] = useState(null);
   useEffect(() => {
     const pusher = new Pusher("981e65db6d4dc90983b4", {
       cluster: "us3",
@@ -87,20 +87,16 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     });
     const channel = pusher.subscribe("poll");
     channel.bind("vote", (eventData) => {
-      console.log("departmentId:", eventData?.departmentId);
-      if (eventData?.departmentId === info?.DepartmentID) {
-        setDepartmentId(eventData?.departmentId);
+      console.log("departmentId:", eventData?.userId);
+      if (eventData?.userId === info?._id) {
+        setUserId(eventData?.userId);
         setVotes((prevVotes) => prevVotes + 1);
-        // if (eventData.userId && eventData.DepartmentID) {
-        //   console.log("jjfjjjf", eventData.userId);
-        //   toast(eventData?.message || null, { position: "bottom-right" });
-        // }
-      }
-      if (
-        (eventData?.departmentId && eventData.userId === null) ||
-        eventData.userId === undefined
-      ) {
-        toast(eventData?.message || null, { position: "bottom-right" });
+        toast(eventData?.message || null, {
+          style: {
+            backgroundColor: "black",
+            color: "white", // Optional: Change text color to white for better visibility
+          },
+        });
       }
     });
     return () => {
@@ -125,7 +121,6 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
   return (
     <AppBar
       position="fixed"
-      // @ts-ignore
       open={open}
       rtl={rtl}
       sx={{

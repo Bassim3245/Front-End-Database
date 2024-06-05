@@ -27,7 +27,6 @@ import { BackendUrl } from "../../../redux/api/axios";
 import { getData } from "../../../redux/MinistriesState/MinistresAction.js";
 import {
   ButtonClearState,
-  ButtonSave,
   ColorButtonEdit,
   Textarea,
 } from "../../Config/Content.jsx";
@@ -55,7 +54,6 @@ export default function MainForm(props) {
   const [dataUserID, setDataUserID] = useState([]);
   const [startTime, setStartTime] = React.useState("");
   const [endTime, setEndTime] = React.useState("");
-
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
     nameProject: "",
@@ -153,7 +151,7 @@ export default function MainForm(props) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${BackendUrl}/api/getallDataUser/${users.DepartmentID}`
+          `${BackendUrl}/api/getallDataUser/${users?.DepartmentID}`
         );
         setDataUserID(response.data);
       } catch (error) {
@@ -170,7 +168,6 @@ export default function MainForm(props) {
     // @ts-ignore
     dispatch(getDataNatural());
   }, [AddWorkNutral]);
-
   const theme = createTheme({
     direction: "rtl",
   });

@@ -18,6 +18,7 @@ import { setLanguage } from "../../../redux/LanguageState";
 import Loader from "Component/Config/Loader";
 import { Delete, hasPermission } from "../../Config/Function";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
+import AllowDelate from "./AllowDelete";
 export default function OpenProject() {
   const { id } = useParams();
   console.log(id);
@@ -141,7 +142,7 @@ export default function OpenProject() {
                             variant="contained"
                             color="secondary"
                           >
-                            {t("Authorized")}
+                            {t("Authorized to send")}
                           </Button>
                         )}
 
@@ -232,8 +233,8 @@ export default function OpenProject() {
                                     <div className="d-flex gap-2">
                                       <AllowEdit
                                         Id={item?._id}
-                                        label={"AllowEdit"}
-                                        title={"تعديل"}
+                                        label="AllowEdit"
+                                        title="تعديل"
                                       />
                                     </div>
                                   </>
@@ -261,10 +262,10 @@ export default function OpenProject() {
                                   <>
                                     {/* <Button>Delete</Button> */}
                                     <div className="d-flex gap-2">
-                                      <AllowEdit
+                                      <AllowDelate
                                         Id={item?._id}
-                                        label={"AllowDelete"}
-                                        title={"حذف"}
+                                        label="AllowDelete"
+                                        title="حذف"
                                       />
                                     </div>
                                   </>
