@@ -18,24 +18,20 @@ function Manue() {
   const token = localStorage.getItem("token") || {};
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const dispatch = useDispatch();
-
   useEffect(() => {
     AOS.init();
     return () => {
       AOS.refresh();
     };
   }, []);
-
   const getPermission = () => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
   };
-
   useEffect(() => {
     console.log(Permission?.permissionIds);
     getPermission();
   }, []);
-
   const hasPermission = (role, permissions) => {
     return Array.isArray(permissions) && permissions.includes(role);
   };
@@ -90,12 +86,10 @@ function Manue() {
       checkPermission: roles?.Human_Resource?._id,
     },
   ];
-
   const handleRole = (url, state) => {
     localStorage.setItem("statRote", state);
     window.location.href = url;
   };
-
   return (
     <>
       <div className="">
