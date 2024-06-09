@@ -58,7 +58,7 @@ const StyledDataGrid = styled(DataGrid)(
         whiteSpace: "break-spaces !important",
         overflow: "auto",
         padding: "10px",
-        // textOverflow: "ellipsis",
+        textOverflow: "ellipsis",
         // @ts-ignore
         whiteSpace: "wrap",
         lineBreak: "anywhere !important",
@@ -76,7 +76,7 @@ const StyledDataGrid = styled(DataGrid)(
         wordWrap: "break-word !important",
         spaceWord: "break-word !important",
         whiteSpace: "break-spaces !important",
-        // overflow: "hidden",
+        overflow: "hidden",
         textOverflow: 'ellipsis',
         // lineBreak: 'anywhere !important',
         display: "flex !important",
@@ -141,7 +141,7 @@ const StyledDataGrid = styled(DataGrid)(
         direction == "rtl" ? "flex-start !important" : "flex-end !important",
       alignItems: "start",
       alignSelf: direction == "rtl" ? "flex-end !important" : "start",
-      fontSize: "13px !important",
+      fontSize: "12px !important",
     },
 
     "& .MuiDataGrid-virtualScrollerContent": {

@@ -2,7 +2,6 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { BackendUrl } from "../../../redux/api/axios";
 import { CloudDownload } from "@mui/icons-material";
 import { formatDate, getFileIcon } from "Component/Config/Function";
-import SendToUsers from "./SendToUsers";
 import { getDatFileUploadByIdDepartmentToSendEmploy } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";

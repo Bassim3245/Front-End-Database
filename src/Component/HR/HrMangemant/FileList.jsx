@@ -33,7 +33,7 @@ function FileList(props) {
           token: `${token}`,
         },
       });
-      console.log(response.data); // Log the response data for debugging
+      console.log(response?.data); // Log the response data for debugging
       setData(response?.data);
     } catch (error) {
       console.error(error); // Log any errors for debugging
@@ -95,7 +95,7 @@ function FileList(props) {
   return (
     <div className="files-content d-grid gap-20">
       {data?.map((file, index) => (
-        <div key={index} className="file bg-white p-10 rad-10">
+        <div key={file?._id} className="file bg-white p-10 rad-10">
           <IconButton onClick={() => handleDownload(file?.file)}>
             <CloudDownload />
           </IconButton>

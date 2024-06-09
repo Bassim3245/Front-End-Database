@@ -42,6 +42,7 @@ import { getRoleRedux, setRolesRedux } from "../../redux/RoleSlice/RoleSlice";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import Loader from "Component/Config/Loader";
 import { hasPermission } from "Component/Config/Function";
+import { useTranslation } from "react-i18next";
 const drawerWidth = 340;
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -134,30 +135,30 @@ const SideBar = ({ open, handleDrawerClose }) => {
     };
     dispatch(setRolesRedux(updatedRoles));
   }, []);
-
+  const { t } = useTranslation();
   switch (stateRote) {
     case "default":
       Route1 = [
         {
-          text: "Management Users",
+          text: t("layout.MangeUser"),
           icon: <GroupAdd />,
           path: "MangeUser",
           checkPermission: roles?.ADD_Data_Users?._id,
         },
         {
-          text: "General Data",
+          text: t("layout.GeneralData"),
           icon: <PermDataSetting />,
           path: "GeneralDataInformation",
           checkPermission: roles?.Add_General_Data?._id,
         },
         {
-          text: "Files",
+          text: t("layout.Files"),
           icon: <Dataset />,
           path: "HR",
           checkPermission: roles?.View_data_project?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -167,13 +168,13 @@ const SideBar = ({ open, handleDrawerClose }) => {
     case "Dashboard":
       Route1 = [
         {
-          text: "Dashboard",
+          text: t("layout.Dashboard"),
           icon: <Home />,
           path: "/Home",
           checkPermission: roles?.view_data_dashboard?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -183,32 +184,38 @@ const SideBar = ({ open, handleDrawerClose }) => {
     case "ProjectRote":
       Route1 = [
         {
-          text: " List Projects",
+          text: t("layout.ProjectList"),
           icon: <Dataset />,
           path: "ProjectList",
           checkPermission: roles?.View_data_project?._id,
         },
         {
-          text: "Projects delivered ",
+          text: t("layout.ProductList"),
           icon: <ReceiptOutlinedIcon />,
           path: "ProductList",
           checkPermission: roles?.view_data_send?._id,
         },
         {
-          text: "Delayed projects",
+          text: t("layout.DelayedProjects"),
           icon: <HourglassBottom />,
           path: "ProjectDelay",
           checkPermission: roles?.view_data_delay_Project?._id,
         },
+        {
+          text: t("layout.ProjectMutual"),
+          icon: <Dataset />,
+          path: "MutualProjectClint",
+          checkPermission: roles?.view_data_mutual_projects?._id,
+        },
 
         {
-          text: "Event",
+          text: t("layout.Event"),
           icon: <Event />,
           path: "Event",
           checkPermission: roles?.view_notifction?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -218,25 +225,25 @@ const SideBar = ({ open, handleDrawerClose }) => {
     case "QuantityTables":
       Route1 = [
         {
-          text: "Business requirements analysis",
+          text: t("layout.AnalyticsData"),
           icon: <Analytics />,
           path: "AnalyticsData",
           checkPermission: roles?.view_data_Business_requirements_analysis?._id,
         },
         {
-          text: "Business representatives",
+          text: t("layout.BusinessPersonsMain"),
           icon: <WaterfallChart />,
           path: "BusinessPersonsMain",
           checkPermission: roles?.view_data_Business_representatives?._id,
         },
         {
-          text: "Performance analytics",
+          text: t("layout.PerformsnceAnalytcsMain"),
           icon: <StackedLineChart />,
           path: "PerformsnceAnalytcsMain",
           checkPermission: roles?.view_data_Performance_analytics?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -246,38 +253,38 @@ const SideBar = ({ open, handleDrawerClose }) => {
     case "AssistanceSection":
       Route1 = [
         {
-          text: "Assistance",
+          text: t("layout.Assistance"),
           icon: <Dataset />,
           path: "Assistance",
           checkPermission: roles?.form_Mutual_projects?._id,
         },
         {
-          text: "Project Mutual",
+          text: t("layout.ProjectMutual"),
           icon: <Dataset />,
           path: "ProjectMutual",
           checkPermission: roles?.view_data_mutual_projects?._id,
         },
         {
-          text: "Files",
+          text: t("layout.Files"),
           icon: <CloudUpload />,
           path: "HR",
           checkPermission: roles?.view_filles?._id,
         },
         {
-          text: "Delayed projects",
+          text: t("layout.DelayedProjects"),
           icon: <HourglassBottom />,
           path: "ProjectDelay",
           checkPermission: roles?.view_data_delay_Project?._id,
         },
         {
-          text: "Products received",
+          text: t("layout.FilesReceived"),
           icon: <ReceiptOutlinedIcon />,
           path: "FilesReceived",
           checkPermission:
             roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -287,25 +294,25 @@ const SideBar = ({ open, handleDrawerClose }) => {
     case "TechnicalDepartments":
       Route1 = [
         {
-          text: "departments list",
+          text: t("layout.getAllDataDelaysProject"),
           icon: <Analytics />,
           path: "GetAllDataProjectNotDelay",
           checkPermission: roles?.Technical_Department?._id,
         },
         {
-          text: "Late Department Project",
+          text: t("layout.getAllDataDelaysProject"),
           icon: <HourglassBottom />,
           path: "getAllDataDelaysProject",
           checkPermission: roles?.view_data_delay_Project?._id,
         },
         {
-          text: "Event",
+          text: t("layout.Event"),
           icon: <Event />,
           path: "Event",
           checkPermission: roles?.Event_Assistance?._id,
         },
         {
-          text: "Profile",
+          text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",
           checkPermission: roles?.show_Profile?._id,
@@ -498,7 +505,10 @@ const SideBar = ({ open, handleDrawerClose }) => {
                 >
                   <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={t("appBar.dropdown.logout")}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </ListItemButton>
             </Tooltip>
           </ListItem>
@@ -508,6 +518,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
             position: "absolute",
             bottom: "0px",
             mb: "10px",
+            marginLeft: "10px",
             backgroundColor: "#e91e63",
             color: "white",
           }}
@@ -517,7 +528,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
           }}
         >
           {" "}
-          back
+          {t("layout.Back")}
         </Button>
       </Drawer>
     </>

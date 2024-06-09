@@ -7,10 +7,9 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
-import { ButtonClearState, ButtonSave } from "../../../../Config/Content";
+import { ButtonClearState, ButtonSave, ColorButtonEdit, ColorLink } from "../../../../Config/Content";
 import { useQuery } from "react-query";
 import { getRole } from "../../../../Config/fetchData";
-
 export default function ShowDataUnitAndRole({
   themeMode,
   dataSystemUnit,
@@ -87,7 +86,8 @@ export default function ShowDataUnitAndRole({
                     <td>{Item?.RoleName}</td>
                     <td>
                       <ButtonSave className="ms-3">حذف</ButtonSave>
-                      <ButtonClearState>تعديل</ButtonClearState>
+                      <ButtonClearState className="ms-3">تعديل</ButtonClearState>
+                      <ColorLink>اضافة صلاحيات </ColorLink>
                     </td>
                   </tr>
                 ))}

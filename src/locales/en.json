@@ -20,6 +20,26 @@
       "logout": "Logout"
     }
   },
+  "layout": {
+    "MangeUser": "Management Users",
+    "GeneralData": "General Data",
+    "Files": "Files",
+    "Profile": "Profile",
+    "Dashboard": "Dashboard",
+    "ProjectList": "List Projects",
+    "ProductList": "Projects delivered",
+    "Event": "Event",
+    "AnalyticsData": "Business requirements analysis",
+    "BusinessPersonsMain": "Business representatives",
+    "PerformsnceAnalytcsMain": "Performance analytics",
+    "Assistance": "Assistance",
+    "ProjectMutual": "ProjectMutual",
+    "Delayed projects": "Delayed projects",
+    "FilesReceived": "Files Received",
+    "GetAllDataProjectNotDelay": "departments list",
+    "getAllDataDelaysProject": "Late Department Project",
+    "Back":"Back"
+  },
   "ProjectList": {
     "title": "Project Mutual",
     "subTitle": "List of Project mutual",
@@ -133,15 +153,14 @@
     "title": "Project Delays",
     "subTitle": "List of Project Delays"
   },
-  "mainMune":{
-    "ProjectsManager":"Projects Manager",
-    "Dashboards":"Dashboards",
-    "QuantityTables":"Quantity tables",
-    "InformationTechnology":"Information Technology",
-    "Assistance":"Assistance",
-    "TechnicalDepartments":"Technical Departments",
-    "HumanResource":"Human Resource"
-
+  "mainMune": {
+    "ProjectsManager": "Projects Manager",
+    "Dashboards": "Dashboards",
+    "QuantityTables": "Quantity tables",
+    "InformationTechnology": "Information Technology",
+    "Assistance": "Assistance",
+    "TechnicalDepartments": "Technical Departments",
+    "HumanResource": "Human Resource"
   },
-  "Authorized":"Unauthorized"
+  "Authorized": "Unauthorized"
 }

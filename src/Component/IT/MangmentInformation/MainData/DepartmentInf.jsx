@@ -31,7 +31,7 @@ const DepartmentInfo = (props) => {
   return (
     <>
       <div className="">
-        <ToastContainer /> 
+        {/* <ToastContainer />  */}
         <h2 className="mt-0 mb-10" style={{ direction: "rtl" }}>
           معلومات القسم
         </h2>

@@ -3,7 +3,10 @@ import { Box, Divider, MenuItem } from "@mui/material";
 import Header from "../../Layout/Header";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectByDepartmentMutual } from "../../../redux/ProjectSlice/ProjectAction";
+import {
+  getProjectByDepartmentMutual,
+  getProjectByDepartmentMutualById,
+} from "../../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
 import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../../Config/CustomMennu";
@@ -21,7 +24,7 @@ import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 
-const ProjectMutual = () => {
+const ProjectMutual = (props) => {
   const [DeleteItem, setDelete] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
@@ -194,12 +197,16 @@ const ProjectMutual = () => {
   ];
   const fetchDataProject = () => {
     // @ts-ignore
-    dispatch(getProjectByDepartmentMutual({ info, token }));
+    const DepartmentId = info?.DepartmentID;
+    if (props.label === "getDataMutualToEchDepartment") {
+      dispatch(getProjectByDepartmentMutualById({ DepartmentId, token }));
+    } else {
+      dispatch(getProjectByDepartmentMutual({ DepartmentId, token }));
+    }
   };
   useEffect(() => {
     fetchDataProject();
   }, []);
-
   const HandelOpen = (id) => {
     navigate(`/Home/OpenProject/${id}`);
   };
@@ -238,5 +245,4 @@ const ProjectMutual = () => {
     </Box>
   );
 };
-
 export default ProjectMutual;

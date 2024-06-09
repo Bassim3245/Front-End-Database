@@ -101,7 +101,7 @@ function InformationUsers({ dataEmploy, theme }) {
   return (
     <>
       {loading && <Loader />}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <Table
         striped
         style={{}}

@@ -107,7 +107,7 @@ export default function PersonalProfile(props) {
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
       }`}
     >
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div>
         <div className="main-body p-4 ">
           <div className="row">

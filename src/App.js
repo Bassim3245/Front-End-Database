@@ -35,12 +35,13 @@ import ProjectDelay from "./Component/ProjectDelay/ProjectDelay";
 import Assistance from "Component/Assistance/assIStanceTask/AssistanceSteper";
 import ProjectMutual from "Component/Assistance/assIStanceTask/ProjectMuluat";
 import DepartmentsList from "./Component/Assistance/TechnicalDepartments/DepartmentsList";
-import AllProjectsEchDepartment from "./Component/Assistance/TechnicalDepartments/AllProjectsToechDepartment";
 import ModuleEditUsers from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/EditUser";
 import GetAllDataDelaysProject from "./Component/Assistance/TechnicalDepartments/getAllDataDelaysProject";
 import GetAllDataProjectNotDelay from "./Component/Assistance/TechnicalDepartments/GetAllDataProjectNotDelay";
 import ProjectsListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectsList";
 import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectDelayListAssistacnce";
+import MutualProjectClint from "Component/MutualProject/MutualProjectClaint";
+import { ToastContainer } from "react-toastify";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -86,6 +87,7 @@ export default function App() {
   };
   return (
     <QueryClientProvider client={queryClient}>
+  
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />
@@ -137,6 +139,10 @@ export default function App() {
               <Route
                 path="getAllDataDelaysProject"
                 element={<GetAllDataDelaysProject />}
+              />
+              <Route
+                path="MutualProjectClint"
+                element={<MutualProjectClint />}
               />
             </Route>
             <Route path="/Edit/:id" element={<Edit />} />

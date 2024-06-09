@@ -56,17 +56,16 @@ export const getProjectByDepartment = createAsyncThunk(
 
 export const getProjectByDepartmentDelay = createAsyncThunk(
   "GetALL/getProjectByDepartmentDelay",
-  async ({ departmentID,info, token }, thunkAPI) => {
+  async ({ departmentID, info, token }, thunkAPI) => {
     try {
       const response = await axios({
         method: "get",
         url:
           // info?.user_type === "H.O.D"
-            `${BackendUrl}/api/getallDataByDepartmentAndUserIDWhendelayCheckIsTure/${departmentID}`,
-            // : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
+          `${BackendUrl}/api/getallDataByDepartmentAndUserIDWhendelayCheckIsTure/${departmentID}`,
+        // : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
         headers: {
           Accept: "application/json",
-          "Content-Type": "multipart/form-data",
           token: token,
         },
       });
@@ -82,14 +81,35 @@ export const getProjectByDepartmentDelay = createAsyncThunk(
 );
 export const getProjectByDepartmentMutual = createAsyncThunk(
   "GetALL/getProjectByDepartmentMutual",
-  async ({ info, token }, thunkAPI) => {
+  async ({ DepartmentId, token }, thunkAPI) => {
     try {
       const response = await axios({
         method: "get",
-        url: `${BackendUrl}/api/getDataAllByIdProjectMutual`,
+        url: `${BackendUrl}/api/getDataAllByIdProjectMutual/${DepartmentId}`,
         headers: {
           Accept: "application/json",
-          "Content-Type": "multipart/form-data",
+          token: token,
+        },
+      });
+      if (response || response?.data) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error || error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
+export const getProjectByDepartmentMutualById = createAsyncThunk(
+  "GetALL/getProjectByDepartmentMutualById",
+  async ({ DepartmentId, token }, thunkAPI) => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BackendUrl}/api/getDataByDepartmentId/${DepartmentId}`,
+        headers: {
+          Accept: "application/json",
           token: token,
         },
       });

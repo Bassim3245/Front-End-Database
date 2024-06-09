@@ -3,7 +3,8 @@ import {
   AddProject,
   getProjectByDepartment,
   getProjectByDepartmentDelay,
-  getProjectByDepartmentMutual
+  getProjectByDepartmentMutual,
+  getProjectByDepartmentMutualById
 } from "./ProjectAction";
 const initialState = {
   setProject: [],
@@ -87,6 +88,24 @@ const ProjectSLice = createSlice({
         }
       })
       .addCase(getProjectByDepartmentMutual.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.loading = false;
+        state.isSuccess = false;
+        state.message = payload;
+      });
+      builder
+      .addCase(getProjectByDepartmentMutualById.pending, (state) => {
+        state = { ...state, loading: true };
+      })
+      .addCase(getProjectByDepartmentMutualById.fulfilled, (state, action) => {
+        if (action?.payload) {
+          state.isError = false;
+          state.isSuccess = true;
+          state.loading = false;
+          state.setProject = action.payload;
+        }
+      })
+      .addCase(getProjectByDepartmentMutualById.rejected, (state, { payload }) => {
         state.isError = true;
         state.loading = false;
         state.isSuccess = false;

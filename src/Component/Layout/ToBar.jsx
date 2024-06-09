@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice/userSlice";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Pusher from "pusher-js";
 import { useNavigate } from "react-router";
 import ReceiveData from "./HRlayout/ReciveData";
@@ -70,7 +70,6 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     localStorage.setItem("language", "ar");
     dispatch(setLanguage(language));
   };
-
   const handleDirectionEnglish = () => {
     const language = "en";
     i18n.changeLanguage("en");
@@ -78,31 +77,41 @@ const TopBar = ({ open, handleDrawerOpen, setMode, info }) => {
     localStorage.setItem("language", "en");
   };
   const [votes, setVotes] = useState(0);
-  const [userId, setUserId] = useState(null);
   useEffect(() => {
+    if (!info?._id || !info?.DepartmentID) {
+      console.error("Missing user information.");
+      return;
+    }
     const pusher = new Pusher("981e65db6d4dc90983b4", {
       cluster: "us3",
-      // @ts-ignore
       encrypted: true,
     });
     const channel = pusher.subscribe("poll");
-    channel.bind("vote", (eventData) => {
-      console.log("departmentId:", eventData?.userId);
-      if (eventData?.userId === info?._id) {
-        setUserId(eventData?.userId);
+    const voteHandler = (eventData) => {
+      console.log("departmentId:", eventData?.DepartmentID);
+      if (
+        eventData?.userId === info?._id ||
+        (Array.isArray(eventData?.DepartmentID) &&
+          eventData?.DepartmentID.includes(info?.DepartmentID))
+      ) {
         setVotes((prevVotes) => prevVotes + 1);
-        toast(eventData?.message || null, {
-          style: {
-            backgroundColor: "black",
-            color: "white", // Optional: Change text color to white for better visibility
-          },
-        });
+        if (eventData?.message) {
+          toast.success(eventData.message || "Vote received", {
+            position: "top-right",
+            style: {
+              backgroundColor: "black",
+              color: "white",
+            },
+          });
+        }
       }
-    });
+    };
+    channel.bind("vote", voteHandler);
     return () => {
+      channel.unbind("vote", voteHandler);
       pusher.unsubscribe("poll");
     };
-  }, []);
+  }, [info]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

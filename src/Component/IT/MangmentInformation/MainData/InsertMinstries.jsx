@@ -42,7 +42,7 @@ function Minstries(props) {
   const theme=useTheme()
   return (
     <div className="">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <h2 className="mt-0 mb-10" style={{ direction: "rtl" }}>
         الجهات المستفيدة
       </h2>

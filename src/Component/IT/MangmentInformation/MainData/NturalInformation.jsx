@@ -7,15 +7,18 @@ import {
   getDataNatural,
 } from "../../../../redux/Whorkntural/WorkNutralAction";
 import { useTheme } from "@mui/material";
+import { toast } from "react-toastify";
 function NturalInformation() {
   // @ts-ignore
-  const { getDtaInfo } = useSelector((state) => state?.natural);
+  const { getDtaInfo,message } = useSelector((state) => state?.natural);
   const dispatch = useDispatch();
   const [workNaturalData, setworkNaturalData] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     // @ts-ignore
     dispatch(AddWorkNutral({ workNaturalData }));
+    toast(message)
+    setworkNaturalData("");
   };
   useEffect(() => {
     // @ts-ignore

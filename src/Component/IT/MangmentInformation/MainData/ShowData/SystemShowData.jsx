@@ -13,7 +13,6 @@ import { getDataSystemPrice } from "../../../../Config/fetchData";
 export default function PriceSystemShowData() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const [dataSystemPrice, setDataSystemPrice] = React.useState([]);
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const handleClickOpen = () => {
     setOpen(true);

@@ -9,6 +9,8 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -17,7 +19,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
-
 export default function Root() {
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
@@ -34,19 +35,15 @@ export default function Root() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
   const [mode, setMode] = React.useState(
     Boolean(localStorage.getItem("currentMode"))
       ? localStorage.getItem("currentMode")
       : "light"
   );
-
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
   React.useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex", flexDirection: rtl?.flexDirection }}>
@@ -57,6 +54,7 @@ export default function Root() {
           setMode={setMode}
           info={info}
         />
+
         <SideBar open={open} handleDrawerClose={handleDrawerClose} />
         <Box
           component="main"
@@ -70,6 +68,19 @@ export default function Root() {
         >
           <DrawerHeader
           // @ts-ignore
+          />
+          <ToastContainer
+            // containerId="container_toast_id"
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            transition={Slide}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
           />
           <Outlet />
         </Box>

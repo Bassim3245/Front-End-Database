@@ -57,7 +57,7 @@ function Login() {
         </div>
       ) : (
         <section className="vh-100  gradient-custom">
-          <ToastContainer />
+          {/* <ToastContainer /> */}
           <div className="container h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <>

@@ -66,7 +66,7 @@ function Register(props) {
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
       } rad-10`}
     >
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-lg-12 col-xl-11">
           <div className="card-body p-md-3">
@@ -76,7 +76,7 @@ function Register(props) {
                   className="h1 fw-bold mb-3 mx-1 mx-md-4 mt-3"
                   style={{ direction: "rtl" }}
                 >
-                  بيانات الموظفين
+                  بيانات العاملين
                 </p>
                 <form className="mx-1 mx-md-4" onSubmit={handleSubmit}>
                   <div className="d-flex flex-row align-items-center mb-1">

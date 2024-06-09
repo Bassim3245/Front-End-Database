@@ -243,7 +243,6 @@ export default function ModuleFormEditProject(props) {
             </Button>
           </Toolbar>
         </AppBar>
-        <ToastContainer />
         <div className="container">
           <div>
             <h2 className="mt-2 " style={{ textAlign: "center" }}>

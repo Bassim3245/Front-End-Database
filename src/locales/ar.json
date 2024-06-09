@@ -20,6 +20,27 @@
       "logout": "تسجيل الخروج"
     }
   },
+  "layout": {
+    "MangeUser": "أدارة المستخدمين ",
+    "GeneralData": "البانات  الاساسية",
+    "Files": "الملفات",
+    "Profile": "الملف الشخصي",
+    "Dashboard": "لوحة التحكم",
+    "ProjectList": "قائمة المنتجات",
+    "ProductList": "المنتجات المستلم",
+    "Event": "الاحداث",
+    "AnalyticsData": "تحليل متطلبات الاعمال",
+    "BusinessPersonsMain": "المكلفين بالاعمال",
+    "PerformsnceAnalytcsMain": "تحليل الاداء",
+    "Assistance": "المعون الفني",
+    "ProjectMutual": "المشاريع المشتركة ",
+    "DelayedProjects": "الشاريع المتأخرة",
+    "FilesReceived": "الملفات المستلمة",
+    "GetAllDataProjectNotDelay": "قائمةالاقسام",
+    "getAllDataDelaysProject": "قائمة المشاريع المشتركة",
+    "Back":"رجوع"
+
+  },
   "ProjectList": {
     "title": "المشاريع المشتركة",
     "subTitle": "قائمة من المشاريع المشتركة ",
@@ -142,5 +163,5 @@
     "TechnicalDepartments": "الاقسام الفنية ",
     "HumanResource": "الموارد البشرية"
   },
-  "Authorized":"غير مصرح"
+  "Authorized": "غير مصرح"
 }

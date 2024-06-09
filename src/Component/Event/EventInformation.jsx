@@ -34,7 +34,6 @@ const Event = () => {
       pusher.unsubscribe("poll");
     };
   }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,7 +111,7 @@ const Event = () => {
         </div>
       )}
       <ThemeProvider theme={theme}>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <section
           className={`section ${
             themeMode.palette.mode === "dark" ? "bg-dark" : ""

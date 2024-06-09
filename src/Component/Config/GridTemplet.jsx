@@ -20,10 +20,7 @@ const GridTemplate = ({ columns, rows }) => {
           "& .css-1knaqv7-MuiButtonBase-root-MuiButton-root": {
             // color: "white",
           },
-          height: 650,
-          mx: "auto",
-          width: "calc(100% - 10px)",
-          maxWidth: "100%",
+        
         }}
       >
         <StyledDataGrid

@@ -33,32 +33,23 @@ export default function AllowEdit(props) {
   // Function to close the modal
   const handleClose = () => setOpen(false);
 
-  // Function to send the request
   const handleSend = async () => {
     if (!token) {
       toast.error("Token is missing");
       return;
     }
-
     try {
-      // Determine the URL based on the label
       const url = `${BackendUrl}/api/ProductRequestEdit/${props?.Id}`;
-
-      // Send the request
       const response = await axios.put(url, {}, { headers: { token } });
-
-      // Show success toast notification
-      toast.success(response.data.message);
+      toast?.success(response?.data?.message);
       setOpen(false);
     } catch (error) {
       // Show error toast notification
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error?.response?.data?.message || "An error occurred");
     }
   };
-
   return (
     <div>
-      <ToastContainer />
       <ButtonSave onClick={handleOpen}>طلب تعديل</ButtonSave>
       <Modal
         keepMounted
@@ -68,7 +59,7 @@ export default function AllowEdit(props) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          <h3 className="text-center m-4">ارسال طلب {props?.title}</h3>
+          <h3 className="text-center m-4">ارسال طلب التعديل </h3>
           <div className="d-flex justify-content-between align-items-center">
             <ButtonClearState onClick={handleSend}>ارسال</ButtonClearState>
             <ButtonSave onClick={handleClose}>غلق</ButtonSave>

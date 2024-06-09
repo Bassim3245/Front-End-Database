@@ -1,71 +1,70 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, useTheme } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import {
   getProjectByDepartment,
   getProjectByDepartmentDelay,
 } from "../../../redux/ProjectSlice/ProjectAction";
 import { formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { Button, useTheme } from "@mui/material";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
-import { useTranslation } from "react-i18next";
-import Header from "../../Layout/Header";
-export default function AllProjectsEchDepartment({ id, Label }) {
+
+const AllProjectsEchDepartment = ({ id, Label }) => {
   const { Permission, roles } = useSelector((state) => state?.RolesData);
+  const { setProject, loading } = useSelector((state) => state?.Project);
+  const { rtl } = useSelector((state) => state?.language);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { setProject, loading } = useSelector((state) => state?.Project);
-  const [info] = React.useState(
-    () => JSON.parse(localStorage.getItem("user")) || {}
-  );
-  const [token] = React.useState(() => localStorage.getItem("token"));
-  const { rtl } = useSelector((state) => {
-    return state?.language;
-  });
-  const [openProjectId, setOpenProjectId] = React.useState(null);
+  const { t } = useTranslation();
 
-  const handelOpen = (projectId) => {
+  const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const [token] = useState(() => localStorage.getItem("token"));
+  const [openProjectId, setOpenProjectId] = useState(null);
+
+  const handleOpen = (projectId) => {
     setOpenProjectId(openProjectId === projectId ? null : projectId);
   };
 
-  const fetchDataProject = () => {
+  const fetchDataProject = useCallback(() => {
     const departmentID = id;
-    if (Label === "Delay") {
-      dispatch(getProjectByDepartmentDelay({ departmentID, info, token }));
-    } else {
-      dispatch(getProjectByDepartment({ departmentID, info, token }));
-    }
-  };
-  const getPermmission = () => {
+    const action =
+      Label === "Delay" ? getProjectByDepartmentDelay : getProjectByDepartment;
+    dispatch(action({ departmentID, info, token }));
+  }, [dispatch, id, Label, info, token]);
+
+  const getPermission = useCallback(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  };
-  React.useEffect(() => {
-    getPermmission();
-  }, []);
-  React.useEffect(() => {
+  }, [dispatch, info, token]);
+
+  useEffect(() => {
+    getPermission();
+  }, [getPermission]);
+
+  useEffect(() => {
     fetchDataProject();
-  }, [id]); // Added dependency on `id` to refetch data when `id` changes
-  const { t } = useTranslation();
+  }, [fetchDataProject, id]);
+
   return (
     <div
       className={`projects p-20 ${
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
-      }  rad-10 m-20 `}
+      } rad-10 m-20`}
       style={{ margin: "auto" }}
       dir={rtl.dir}
     >
-   
-      <div className="" style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto" }}>
         <Table
           striped
           bordered
           hover
           dir={rtl.dir}
           className=""
-          variant={theme?.palette?.mode === "dark" ? "dark" : ""}
+          variant={theme.palette.mode === "dark" ? "dark" : ""}
         >
           <thead>
             <tr>
@@ -85,8 +84,14 @@ export default function AllProjectsEchDepartment({ id, Label }) {
             </tr>
           </thead>
           <tbody>
-            {setProject ? (
-              setProject.map((data, index) => (
+            {loading ? (
+              <tr>
+                <td colSpan={13} style={{ textAlign: "center" }}>
+                  Loading...
+                </td>
+              </tr>
+            ) : setProject && setProject?.length > 0 ? (
+              setProject?.map((data, index) => (
                 <React.Fragment key={data._id}>
                   <tr>
                     <td>{index + 1}</td>
@@ -102,22 +107,20 @@ export default function AllProjectsEchDepartment({ id, Label }) {
                     <td>{formatDate(data?.DateStart)}</td>
                     <td>{formatDate(data?.DateEnd)}</td>
                     <td>
-                      {openProjectId ? (
-                        <Button onClick={() => handelOpen(data._id)}>
-                          <KeyboardArrowDown />
-                        </Button>
-                      ) : (
-                        <Button onClick={() => handelOpen(data._id)}>
+                      <Button onClick={() => handleOpen(data?._id)}>
+                        {openProjectId === data?._id ? (
                           <KeyboardArrowUp />
-                        </Button>
-                      )}
+                        ) : (
+                          <KeyboardArrowDown />
+                        )}
+                      </Button>
                     </td>
                   </tr>
-                  {openProjectId === data._id && (
+                  {openProjectId === data?._id && (
                     <tr>
                       <td colSpan={13}>
                         <DataProductByProjectId
-                          ProjectID={data._id}
+                          ProjectID={data?._id}
                           roles={roles}
                           Permission={Permission}
                         />
@@ -127,13 +130,22 @@ export default function AllProjectsEchDepartment({ id, Label }) {
                 </React.Fragment>
               ))
             ) : (
-              <div>
-                <h4>no data found</h4>
-              </div>
+              <tr>
+                <td colSpan={13} style={{ textAlign: "center" }}>
+                  {t("ProjectList.NoDataFound")}
+                </td>
+              </tr>
             )}
           </tbody>
         </Table>
       </div>
     </div>
   );
-}
+};
+
+AllProjectsEchDepartment.propTypes = {
+  id: PropTypes?.string?.isRequired,
+  Label: PropTypes?.string?.isRequired,
+};
+
+export default React.memo(AllProjectsEchDepartment);

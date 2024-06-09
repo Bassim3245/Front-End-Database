@@ -15,9 +15,9 @@ function SettingInformation() {
   const theme = useTheme();
   return (
     <>
-      <div className=" w-100">
+      <div className=" w-100 ">
         <div className="d-flex justify-content-center">
-          <h1 className="">ادارة المعلومات</h1>
+          <h1 className="">ادارة المعلومات الاساسية</h1>
         </div>
         <div className="  settings-page  gap-20  mt-5 ">
           <div

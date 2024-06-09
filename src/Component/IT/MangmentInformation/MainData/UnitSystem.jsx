@@ -30,22 +30,20 @@ function UnitSystem() {
     try {
       const response = await axios.get(`${BackendUrl}/api/UnitSystemShowData`);
       setDataSystemUnit(response?.data?.response);
-      console.log(response?.data?.response);
-      console.log(dataSystemUnit);
     } catch (error) {
       toast.error(error?.response?.data?.message);
 
     }
   };
   // @ts-ignore
-  useEffect(() => getDataSystemUnit, [Unit]);
+  useEffect(() => getDataSystemUnit, [Unit,open]);
   const handleEdit = () => {
     setOpen(!open);
   };
   const theme=useTheme()
   return (
     <div className="">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <h2 className="mt-0 mb-10" style={{ direction: "rtl" }}>
         نظام الوحدات
       </h2>

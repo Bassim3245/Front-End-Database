@@ -9,7 +9,6 @@ import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
 import { Box, Divider, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "./MainFor/ModuleEditProject";
-import { ToastContainer } from "react-toastify";
 import Loader from "../Config/Loader";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
@@ -38,10 +37,8 @@ const Projects = () => {
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-  const theme = useTheme();
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const fetchDataProject = () => {
     const departmentID = info.DepartmentID;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
@@ -52,6 +49,7 @@ const Projects = () => {
     {
       field: "Code",
       headerName: t("ProjectList.Code"),
+     flex:1.5
     },
     { field: "DepartmentID", headerName: " Department Name", flex: 1.5 },
     {
@@ -62,6 +60,7 @@ const Projects = () => {
     {
       field: "NumberBook",
       headerName: t("ProjectList.NumberBook"),
+   
     },
     {
       field: "beneficiary",
@@ -108,6 +107,7 @@ const Projects = () => {
       field: "Action",
       headerName: t("ProjectList.Action"),
       headerAlign: "center",
+      width:"20",
       renderCell: (params) => {
         return (
           <div>
@@ -188,7 +188,6 @@ const Projects = () => {
             subTitle={t("ProjectTable.subTitle")}
             dir={rtl?.dir}
           />
-          <ToastContainer />
           <Box className={"mb-2"}>
             {hasPermission(
               roles?.Add_data_project?._id,

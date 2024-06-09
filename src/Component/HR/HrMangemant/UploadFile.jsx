@@ -1,5 +1,4 @@
 import { Button, TextField } from "@mui/material";
-import { VisuallyHiddenInput } from "Component/Config/Content";
 import React, { useEffect, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ToastContainer, toast } from "react-toastify";
@@ -26,8 +25,8 @@ function UploadFile(props) {
           },
         }
       );
-      if (response && response.data && response.data.message) {
-        toast.success(response.data.message); // Assuming you're using toast for notifications
+      if (response && response?.data && response?.data?.message) {
+        toast.success(response?.data?.message); // Assuming you're using toast for notifications
         props?.setAction(true);
       } else {
         toast.error("An error occurred while uploading the file.");
@@ -37,13 +36,13 @@ function UploadFile(props) {
       toast.error("An error occurred while uploading the file."); // Notify the user about the error
     }
   };
-  const fileTypeValidation = validateFileType(file);
-  useEffect(() => {
-    toast.error(fileTypeValidation);
-  }, [file]);
+  // const fileTypeValidation = validateFileType(file);
+  // useEffect(() => {
+  //   toast?.error(fileTypeValidation);
+  // }, [file]);
   return (
     <div className="files-stats p-20 bg-white rad-10">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {/* <h2 className="mt-0 mb-15 txt-c-mobile">Files </h2> */}
       <div className="d-flex align-center border-eee p-10 rad-6 mb-15 fs-13">
         <img

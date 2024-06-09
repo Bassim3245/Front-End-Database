@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { ColorLink } from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../MainFor/ModuleInsertProduct";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import AllowEdit from "./AlllowEdit";
-import { ToastContainer, toast } from "react-toastify";
+import { Slide, ToastContainer, toast } from "react-toastify";
 import { fetchDataProduct } from "../../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
@@ -19,6 +19,7 @@ import Loader from "Component/Config/Loader";
 import { Delete, hasPermission } from "../../Config/Function";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
+import 'react-toastify/dist/ReactToastify.css';
 export default function OpenProject() {
   const { id } = useParams();
   console.log(id);
@@ -98,7 +99,18 @@ export default function OpenProject() {
 
   return (
     <div className={`w-100 `}>
-      <ToastContainer />
+         <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        transition={Slide}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {loadingProject ? (
         <div className="eventLoaderCenter">
           <Loader />
@@ -115,7 +127,6 @@ export default function OpenProject() {
               theme?.palette?.mode === "dark" ? "bg-dark" : "bg-eee"
             }`}
           >
-            <ToastContainer />
             <div className=" mb-3">
               {!dataProject?.SendProject ? (
                 <>
