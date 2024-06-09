@@ -9,6 +9,7 @@ import UnitSystem from "./MangmentInformation/MainData/UnitSystem";
 import "./style.css";
 import { useTheme } from "@mui/material";
 import RoleSystem from "./MangmentInformation/MainData/Role";
+import { ToastContainer } from "react-toastify";
 function SettingInformation() {
   const [departmentName, setDepartmentName] = useState("");
   const [brief, setBrief] = useState("");
@@ -16,8 +17,10 @@ function SettingInformation() {
   return (
     <>
       <div className=" w-100 ">
+      <ToastContainer/>
         <div className="d-flex justify-content-center">
           <h1 className="">ادارة المعلومات الاساسية</h1>
+
         </div>
         <div className="  settings-page  gap-20  mt-5 ">
           <div
@@ -40,13 +43,13 @@ function SettingInformation() {
               setBrief={setBrief}
             />
           </div>
-          <div
+          {/* <div
             className={`p-20 ${
               theme.palette.mode === "dark" ? "dark" : ""
             } rad-10`}
           >
             <MethodOption theme={theme} />
-          </div>
+          </div> */}
           <div
             className={`p-20 ${
               theme.palette.mode === "dark" ? "dark" : ""

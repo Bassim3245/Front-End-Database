@@ -7,9 +7,15 @@ import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
-import { ButtonClearState, ButtonSave, ColorButtonEdit, ColorLink } from "../../../../Config/Content";
+import {
+  ButtonClearState,
+  ButtonSave,
+  ColorButtonEdit,
+  ColorLink,
+} from "../../../../Config/Content";
 import { useQuery } from "react-query";
 import { getRole } from "../../../../Config/fetchData";
+import { useNavigate } from "react-router";
 export default function ShowDataUnitAndRole({
   themeMode,
   dataSystemUnit,
@@ -17,9 +23,10 @@ export default function ShowDataUnitAndRole({
   label,
 }) {
   const [open, setOpen] = useState(false);
+  const Navigate = useNavigate();
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -32,6 +39,9 @@ export default function ShowDataUnitAndRole({
     refetch();
     console.log(data);
   }, [open]);
+  const handelSetPermission = (id) => {
+    Navigate(`/Home/SetPermissionToGroup/${id}`);
+  };
   return (
     <Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -86,8 +96,12 @@ export default function ShowDataUnitAndRole({
                     <td>{Item?.RoleName}</td>
                     <td>
                       <ButtonSave className="ms-3">حذف</ButtonSave>
-                      <ButtonClearState className="ms-3">تعديل</ButtonClearState>
-                      <ColorLink>اضافة صلاحيات </ColorLink>
+                      <ButtonClearState className="ms-3">
+                        تعديل
+                      </ButtonClearState>
+                      <ColorLink onClick={() => handelSetPermission(Item?._id)}>
+                        اضافة صلاحيات{" "}
+                      </ColorLink>
                     </td>
                   </tr>
                 ))}

@@ -1,7 +1,7 @@
 import {  ButtonSave } from "../../../Config/Content";
 import { BackendUrl } from "../../../../redux/api/axios";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ShowData from "./ShowData/ShowDataDepartment";
 import { useTheme } from "@mui/material";
 const DepartmentInfo = (props) => {
@@ -31,7 +31,6 @@ const DepartmentInfo = (props) => {
   return (
     <>
       <div className="">
-        {/* <ToastContainer />  */}
         <h2 className="mt-0 mb-10" style={{ direction: "rtl" }}>
           معلومات القسم
         </h2>

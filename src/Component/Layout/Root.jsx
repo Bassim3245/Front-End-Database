@@ -63,6 +63,7 @@ export default function Root() {
             p: 3,
             width: "100%",
             maxWidth: "100%",
+            height: "100vh",
             overflowX: rtl.dir === "rtl" ? "auto" : "hidden", // or "visible" based on your needs
           }}
         >

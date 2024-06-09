@@ -42,6 +42,7 @@ import ProjectsListAssistance from "./Component/Assistance/TechnicalDepartments/
 import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectDelayListAssistacnce";
 import MutualProjectClint from "Component/MutualProject/MutualProjectClaint";
 import { ToastContainer } from "react-toastify";
+import SetPermissionToGroup from "Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/SetPermisition";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -143,6 +144,10 @@ export default function App() {
               <Route
                 path="MutualProjectClint"
                 element={<MutualProjectClint />}
+              />
+               <Route
+                path="SetPermissionToGroup/:id"
+                element={<SetPermissionToGroup />}
               />
             </Route>
             <Route path="/Edit/:id" element={<Edit />} />

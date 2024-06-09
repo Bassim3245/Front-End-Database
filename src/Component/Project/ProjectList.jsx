@@ -23,6 +23,7 @@ import {
 } from "../Config/Function";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import GridTemplate from "../Config/GridTemplet";
+import { ToastContainer } from "react-toastify";
 const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
@@ -177,6 +178,7 @@ const Projects = () => {
   }));
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
+      <ToastContainer/>
       {loading ? (
         <div className="position-absolute"  dir="ltr"style={{ top: "50%", left: "50%" }}>
           <Loader />
