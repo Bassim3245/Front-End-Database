@@ -218,7 +218,6 @@ export default function OfferPrice(props) {
         </div>
       )}
       <div>
-        <ToastContainer />
         <div className="w-100 mb-3 mt-3">
           <div style={{ direction: "rtl", fontFamily: "Arial, sans-serif" }}>
             <p style={{ textAlign: "center", color: textDark }}>

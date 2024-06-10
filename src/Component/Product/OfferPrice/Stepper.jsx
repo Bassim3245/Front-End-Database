@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCustomDataPrice } from "../../../redux/OfferPriceCustomStat/OfferPriceCustomSlice";
 import { setLanguage } from "../../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
+import { ToastContainer } from "react-toastify";
 export default function CustomizedSteppers(props) {
   const { rtl } = useSelector((state) => {
     return state?.language;

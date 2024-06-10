@@ -110,6 +110,7 @@ export default function PersonalProfile(props) {
       {/* <ToastContainer /> */}
       <div>
         <div className="main-body p-4 ">
+          <ToastContainer/>
           <div className="row">
             <ProfileImage
               info={info}
