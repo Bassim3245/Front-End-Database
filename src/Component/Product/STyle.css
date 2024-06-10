@@ -151,4 +151,22 @@
     background-position: left bottom;
     color: white;
   }
+  @page {
+    size: A4; /* Setting the page size to A4 */
+    margin: 0; /* Optional: Set margins to zero */
+  }
+  
+  .a4-page {
+    width: 210mm;
+    height: 297mm;
+    margin: auto;
+    padding: 10mm; /* Optional: Add padding if needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visualization */
+    background: white; /* Optional: Set background to white */
+  }
+  
+  .contentPage {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+  }
   

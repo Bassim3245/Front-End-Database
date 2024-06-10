@@ -22,6 +22,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "Component/Config/Loader";
+import PrintPdf from "./HandelFile/PrintPdf";
 
 export default function OfferPrice(props) {
   const [info, setInfo] = useState(
@@ -273,6 +274,7 @@ export default function OfferPrice(props) {
               <ArchiveIcon />
               Download as Word
             </MenuItem>
+            <PrintPdf />
           </StyledMenu>
         </div>
         {loading ? "Downloading..." : "Download PDF"}

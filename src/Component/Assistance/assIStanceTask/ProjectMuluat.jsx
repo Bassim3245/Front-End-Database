@@ -141,9 +141,7 @@ const ProjectMutual = (props) => {
       field: "Action",
       headerName: t("ProjectList.Action"),
       headerAlign: "center",
-      minWidth: "100px",
-      maxWidth: "150px",
-      flex: 1,
+      width:44,
       renderCell: (params) => {
         return (
           <div>

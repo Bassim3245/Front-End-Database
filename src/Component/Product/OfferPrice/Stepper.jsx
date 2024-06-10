@@ -126,7 +126,7 @@ export default function CustomizedSteppers(props) {
   };
   const { t } = useTranslation();
   return (
-    <Box sx={{ width: "100%" }} dir={rtl?.dir} >
+    <Box sx={{ width: "100%" }} >
       <Stepper activeStep={activeStep} sx={{  }}>
         {steps.map((label, index) => {
           const stepProps = {};
