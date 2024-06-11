@@ -13,10 +13,13 @@ import { FloatingLabel, Form } from "react-bootstrap";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import { toast } from "react-toastify";
+import { getDataSystemPrice } from "Component/Config/fetchData";
+import { useQuery } from "react-query";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 export default function Module(props) {
   const [open, setOpen] = useState(false);
   const token = localStorage.getItem("token") || "";
@@ -38,15 +41,22 @@ export default function Module(props) {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const { data, refetch } = useQuery("DataSystemPrice", getDataSystemPrice, {
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+  });
+
   useEffect(() => {
-    if (formData.PriceType === "USD") {
-      setSelectPriceType(true);
-    } else {
-      setSelectPriceType(false);
+    if (open) {
+      refetch();
     }
+  }, [open, refetch]);
+
+  useEffect(() => {
+    setSelectPriceType(formData.PriceType !== "IQD");
   }, [formData.PriceType]);
 
   const handleSubmit = async (e) => {
@@ -58,43 +68,46 @@ export default function Module(props) {
         {
           headers: {
             Accept: "application/json",
-            token: token,
+            token,
           },
         }
       );
       if (response?.data) {
-        toast.success(response?.data?.message);
+        toast.success(response.data.message);
         window.location.reload();
-        props?.getDataProduct();
+        props.getDataProduct();
         setOpen(false);
       }
     } catch (error) {
       if (error.response) {
-        toast.error(error?.response?.data?.message);
+        toast.error(error.response.data.message);
       }
     }
   };
-
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const getDataUnit = async () => {
     try {
       const response = await axios.get(`${BackendUrl}/api/UnitSystemShowData`);
       setDataUnit(response?.data?.response);
     } catch (error) {
-      toast.error(error?.response?.data?.message);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      }
     }
   };
+
   useEffect(() => {
     if (open) {
       getDataUnit();
     }
   }, [open]);
+
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        {props?.t("ProductList.InsertButton")}
+        {props.t("ProductList.InsertButton")}
       </Button>
       <Dialog
         open={open}
@@ -119,7 +132,6 @@ export default function Module(props) {
           <TextField
             fullWidth
             label="اسم المنتج او المنظومة"
-            id="fullWidth"
             className="mb-3"
             name="nameProduct"
             value={formData.nameProduct}
@@ -128,50 +140,47 @@ export default function Module(props) {
           <TextField
             fullWidth
             label="العدد"
-            id="fullWidth"
-            name="Quantity"
             className="mb-3"
+            name="Quantity"
             value={formData.Quantity}
             onChange={handleInputChange}
           />
           <TextField
             fullWidth
-            label="  الرخصة او الضمان "
-            id="fullWidth"
+            label="الرخصة او الضمان"
             className="mb-3"
             name="license"
             value={formData.license}
             onChange={handleInputChange}
           />
           <TextField
-            id="outlined-select-currency"
-            sx={{ width: "500px", maxWidth: "100%" }}
-            className="mb-4 me-3"
             select
+            fullWidth
             label="تحديد نوع السعر"
+            className="mb-4"
             name="PriceType"
             value={formData.PriceType}
             onChange={handleInputChange}
           >
-            <MenuItem value="IQD">IQD</MenuItem>
-            <MenuItem value="USD">USD</MenuItem>
+            {data?.map((option) => (
+              <MenuItem key={option?._id} value={option?.typePrice}>
+                {option?.typePrice}
+              </MenuItem>
+            ))}
           </TextField>
           {selectPriceType && (
             <TextField
               fullWidth
               label="سعر الصرف"
-              id="priceField"
               className="mb-3"
               name="PriceConvert"
-              defaultValue={"1600"}
-              value={formData?.PriceConvert}
+              value={formData.PriceConvert}
               onChange={handleInputChange}
             />
           )}
           <TextField
             fullWidth
-            label="  لسعر المنتج "
-            id="fullWidth"
+            label="سعر المنتج"
             className="mb-3"
             name="Price"
             value={formData.Price}
@@ -179,49 +188,44 @@ export default function Module(props) {
           />
           <TextField
             fullWidth
-            label=" النسبة بالمية"
-            id="fullWidth"
+            label="النسبة بالمية"
             className="mb-3"
             name="percent"
             value={formData.percent}
             onChange={handleInputChange}
           />
           <TextField
-            id="outlined-select-currency"
-            sx={{ width: "500px", maxWidth: "100%" }}
-            className="mb-4 me-3"
             select
-            label="الوحدة "
+            fullWidth
+            label="الوحدة"
+            className="mb-4"
             name="UnitId"
             value={formData.UnitId}
             onChange={handleInputChange}
           >
-            {dataUnit.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {option.Unit}
+            {dataUnit?.map((option) => (
+              <MenuItem key={option?._id} value={option?._id}>
+                {option?.Unit}
               </MenuItem>
             ))}
           </TextField>
           <TextField
-            id="outlined-select-currency"
-            sx={{ width: "500px", maxWidth: "100%" }}
-            className="mb-4 me-3"
             select
-            label="نوع المنتج اذاكان محلي او خارجي "
+            fullWidth
+            label="نوع المنتج اذاكان محلي او خارجي"
+            className="mb-4"
             name="typeProject"
             value={formData.typeProject}
             onChange={handleInputChange}
           >
-            <MenuItem value={"محلي"}> محلي </MenuItem>
-            <MenuItem value={"خارجي"}> خارجي </MenuItem>
+            <MenuItem value="محلي">محلي</MenuItem>
+            <MenuItem value="خارجي">خارجي</MenuItem>
           </TextField>
-
           <FloatingLabel
             controlId="floatingTextarea2"
             label="المواصفات المطلوبة"
             className="mb-3"
-            // data-bs-theme="dark"
-            style={{ height: "100px", width: "500px", maxWidth: "100%" }}
+            style={{ height: "100px", width: "100%" }}
           >
             <Form.Control
               as="textarea"
@@ -229,25 +233,24 @@ export default function Module(props) {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              style={{ height: "75px", width: "500px", maxWidth: "100%" }}
+              style={{ height: "75px", width: "100%" }}
             />
           </FloatingLabel>
-          <FloatingLabel controlId="floatingTextarea2" label=" الملاحضات">
+          <FloatingLabel controlId="floatingTextarea2" label="الملاحظات">
             <Form.Control
-              // data-bs-theme="dark"
               as="textarea"
               placeholder="Leave a comment here"
               name="comments"
               value={formData.comments}
               onChange={handleInputChange}
               className="mb-3"
-              style={{ height: "75px", width: "500px", maxWidth: "100%" }}
+              style={{ height: "75px", width: "100%" }}
             />
           </FloatingLabel>
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button type="submit" onClick={(e)=>handleSubmit(e)}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>

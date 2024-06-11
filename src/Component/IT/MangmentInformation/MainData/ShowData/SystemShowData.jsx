@@ -58,9 +58,8 @@ export default function PriceSystemShowData() {
               <tr>
                 <>
                   <th>#</th>
-                  <th>Price</th>
+
                   <th>Label Price</th>
-                  <th>percent </th>
 
                   <th>Action</th>
                 </>
@@ -70,9 +69,8 @@ export default function PriceSystemShowData() {
               {data?.map((data, index) => (
                 <tr key={data?._id}>
                   <td>{index + 1}</td>
-                  <td>{data?.Price}</td>
-                  <td>{data?.PriceLabel}</td>
-                  <td>{data?.percent}</td>
+
+                  <td>{data?.typePrice}</td>
 
                   <td>
                     <ButtonSave className="ms-3">حذف</ButtonSave>

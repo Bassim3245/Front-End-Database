@@ -132,7 +132,7 @@ export function SumTotalPriceAfterAddPercentageAndConvertToUSD(
 ) {
   const selectPriceType = "Normal";
   if (selectPriceType === "Normal") {
-    const totalSum = Products.reduce((accumulator, currentItem) => {
+    const totalSum = Products?.reduce((accumulator, currentItem) => {
       let PriceInUSD = 0; // Initialize to 0
       let PriceInIQD = 0; // Initialize to 0
       if (currentItem.PriceType === "IQD") {
@@ -148,8 +148,8 @@ export function SumTotalPriceAfterAddPercentageAndConvertToUSD(
       const PriceInIQR = priceAfterPercent;
 
       return (
-        accumulator +
-        (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
+        Math.ceil(accumulator +
+        (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600))
       );
     }, 0);
     const formattedTotalSum = new Intl.NumberFormat().format(
@@ -253,12 +253,10 @@ export function calculatePrice(item) {
   const priceConvert = Number(item.PriceConvert);
 
   if (isNaN(price) || isNaN(priceConvert)) return 0; // Check if conversion is successful
-
   return item.PriceType === "USD"
     ? new Intl.NumberFormat().format(price * priceConvert)
     : new Intl.NumberFormat().format(price);
 }
-
 export const calculateTotalPrice = (item) => {
   if (!item) return 0;
   // Convert to number in case they are strings
@@ -316,7 +314,6 @@ export const Delete = async (_id, setDelete, setAnchorEl, token, url) => {
         setDelete(true);
         setAnchorEl(null);
         // window.location.reload();
-
       }
 
       swalWithBootstrapButtons.fire({

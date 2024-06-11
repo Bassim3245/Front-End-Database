@@ -23,14 +23,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "Component/Config/Loader";
 import PrintPdf from "./HandelFile/PrintPdf";
-
 export default function OfferPrice(props) {
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("CustomDataForPriceOffer")) || {}
   );
   const PriceConvertToIQD = info?.PriceConvertToIQD;
   const token = localStorage.getItem("token") || {};
-
   const [dataSet, setDataSet] = useState({});
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -274,7 +272,12 @@ export default function OfferPrice(props) {
               <ArchiveIcon />
               Download as Word
             </MenuItem>
-            <PrintPdf />
+
+            <PrintPdf
+              dataSet={dataSet}
+              label={props?.label}
+              dataProjectTest={dataProjectTest}
+            />
           </StyledMenu>
         </div>
         {loading ? "Downloading..." : "Download PDF"}
