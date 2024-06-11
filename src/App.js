@@ -10,7 +10,7 @@ import OpenProject from "./Component/Project/ProjectInformation/OpenProject.jsx"
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Menu from "./Component/mainMnue/Menue.jsx";
-import MainForm from "./Component/Project/MainFor/Modul.jsx";
+import MainForm from "./Component/MainFor/Modul.jsx";
 import Event from "./Component/Event/EventInformation.jsx";
 import AnalyticsData from "./Component/Taples/AnaLitcsData/AnalyitcsInformation.jsx";
 import BusinessPersonsMain from "./Component/Taples/BusinessPersons/BusinessPersonsInformation.jsx";
@@ -41,15 +41,14 @@ import GetAllDataProjectNotDelay from "./Component/Assistance/TechnicalDepartmen
 import ProjectsListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectsList";
 import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectDelayListAssistacnce";
 import MutualProjectClint from "Component/MutualProject/MutualProjectClaint";
-import { ToastContainer } from "react-toastify";
 import SetPermissionToGroup from "Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/SetPermisition";
+import HandelDataMutualProject from "Component/MutualProject/HandelDataMutualProject";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
   const [stateRote, setStatRote] = useState(localStorage.getItem("statRote"));
-
   const queryClient = new QueryClient();
   const renderDefaultRoute = () => {
     switch (info?.user_type || Rol) {
@@ -88,7 +87,6 @@ export default function App() {
   };
   return (
     <QueryClientProvider client={queryClient}>
-  
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Login />} />
@@ -148,6 +146,10 @@ export default function App() {
                <Route
                 path="SetPermissionToGroup/:id"
                 element={<SetPermissionToGroup />}
+              />
+                  <Route
+                path="HandelDataMutualProject/:id"
+                element={<HandelDataMutualProject />}
               />
             </Route>
             <Route path="/Edit/:id" element={<Edit />} />

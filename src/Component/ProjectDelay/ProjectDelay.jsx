@@ -7,7 +7,7 @@ import { getProjectByDepartmentDelay } from "../../redux/ProjectSlice/ProjectAct
 import moment from "moment";
 import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../Config/CustomMennu";
-import ModuleFormEditProject from "../Project/MainFor/ModuleEditProject";
+import ModuleFormEditProject from "../MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Delete,

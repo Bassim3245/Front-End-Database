@@ -15,11 +15,13 @@ span,
 div,
 button,
 label,
-input,textarea {
-  font-family: "Cairo",Avenir, Helvetica, Arial, sans-serif !important;
+input,
+textarea {
+  font-family: "Cairo", Avenir, Helvetica, Arial, sans-serif !important;
   font-style: normal;
   font-optical-sizing: auto
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -36,6 +38,31 @@ code {
 }
 
 
+::-webkit-scrollbar {
+  width: 8px;
+  /* Adjust the width as needed */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* Scrollbar color */
+  border-radius: 10px;
+  /* Round corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* Color on hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  /* Options: auto, thin */
+  scrollbar-color: #9e4673 #3d4a59 #9e4673;
+  /* thumb color and track color */
+  background: linear-gradient(270deg, #3d4a59);
+}
 
 ::-webkit-scrollbar {
   width: 13px;
@@ -59,7 +86,7 @@ code {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  /* background: linear-gradient(270deg, #9e4673, #3d4a59, #9e4673); */
+  background: linear-gradient(270deg, #9e4673, #3d4a59, #9e4673);
 
   background-color: #555;
 

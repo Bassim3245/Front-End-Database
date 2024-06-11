@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../../redux/userSlice/authActions";
 import { clearState } from "../../../../redux/userSlice/userSlice";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import { ColorButton, VisuallyHiddenInput } from "../../../Config/Content";
 import { Button, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { getRole } from "../../../Config/fetchData";
 import { useQuery } from "react-query";
 function Register(props) {
-  // @ts-ignore
   const { isSuccess, isError, message } = useSelector((state) => state?.user);
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
@@ -21,7 +20,6 @@ function Register(props) {
   const [RoleId, setRoleId] = useState("");
   const dispatch = useDispatch();
   const { isLoading, data, error, refetch } = useQuery("getRole", getRole, {});
-
   useEffect(() => {
     refetch();
     console.log(data);
@@ -66,7 +64,6 @@ function Register(props) {
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
       } rad-10`}
     >
-      {/* <ToastContainer /> */}
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-lg-12 col-xl-11">
           <div className="card-body p-md-3">
@@ -204,7 +201,6 @@ function Register(props) {
                       </select>
                     </div>
                   </div>
-
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="DepartmentID">

@@ -10,7 +10,7 @@ import {
 import moment from "moment";
 import { HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../../Config/CustomMennu";
-import ModuleFormEditProject from "../../Project/MainFor/ModuleEditProject";
+import ModuleFormEditProject from "../../MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Delete,
@@ -206,7 +206,7 @@ const ProjectMutual = (props) => {
     fetchDataProject();
   }, []);
   const HandelOpen = (id) => {
-    navigate(`/Home/OpenProject/${id}`);
+    navigate(`/Home/HandelDataMutualProject/${id}`);
   };
   const rows = setProject?.map((item, index) => ({
     id: index + 1,

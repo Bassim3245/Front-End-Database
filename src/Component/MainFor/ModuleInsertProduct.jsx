@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { FloatingLabel, Form } from "react-bootstrap";
 import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios";
+import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
 import { getDataSystemPrice } from "Component/Config/fetchData";
 import { useQuery } from "react-query";

@@ -36,7 +36,7 @@ function UsersMange() {
             theme={theme}
           />
         </div>
-        <div className="mt-5  bg-eee" style={{ marginBottom: "10px" }}>
+        <div className="mt-5 bg-eee" style={{ marginBottom: "10px" }}>
           <InformationUsers dataEmploy={dataEmploy} theme={theme} />
         </div>
       </div>

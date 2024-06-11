@@ -7,24 +7,10 @@ function ImageInsert() {
   const [open, setOpen] = useState(true);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   const response = await axios.post(`${BackendUrl}/api/setImageInsert`, {
-    //     data: ImageInsert,
-    //   });
-    //   toast(response.data.message);
-    //   setImageInsert("");
-    // } catch (error) {
-    //   toast.error(error.response.data.message);
-    // }
+
   };
   const getDataMethodOtion = async () => {
-    // try {
-    //   const response = await axios.get(`${BackendUrl}/api/getDataImageInsert`);
-    //   setDataImageInsert(response.data.response);
-    //   console.log(dataImageInsert);
-    // } catch (error) {
-    //   toast.error(error.response.data.message);
-    // }
+
   };
   // @ts-ignore
   useEffect(() => getDataMethodOtion, [ImageInsert]);

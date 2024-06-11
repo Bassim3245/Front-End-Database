@@ -5,7 +5,6 @@ import { getAllDataUser } from "../../../../../redux/userSlice/authActions";
 import { Delete, Edit } from "@mui/icons-material";
 import axios from "axios";
 import { BackendUrl } from "../../../../../redux/api/axios";
-import { ToastContainer, toast } from "react-toastify";
 import { Button } from "@mui/material";
 import {
   BottomRoot,
@@ -101,7 +100,6 @@ function InformationUsers({ dataEmploy, theme }) {
   return (
     <>
       {loading && <Loader />}
-      {/* <ToastContainer /> */}
       <Table
         striped
         style={{}}

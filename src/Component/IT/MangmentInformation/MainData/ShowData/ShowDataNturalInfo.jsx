@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
 import { ButtonClearState, ButtonSave } from "../../../../Config/Content";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { BackendUrl } from "../../../../../redux/api/axios";
 import axios from "axios";
 export default function ShowData(props) {
@@ -36,7 +36,6 @@ export default function ShowData(props) {
   };
   return (
     <React.Fragment>
-      {/* <ToastContainer /> */}
       <Button variant="outlined" onClick={handleClickOpen}>
         البيانات المدرجة
       </Button>

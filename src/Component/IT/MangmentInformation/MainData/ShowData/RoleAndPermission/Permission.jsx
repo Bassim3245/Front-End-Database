@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GridToolbar } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import Header from "../../../../../Layout/Header";
@@ -8,6 +8,9 @@ import StyledDataGrid from "../../../../../Config/StyledDataGrid";
 import { useParams } from "react-router";
 import { ColorLink } from "Component/Config/Content";
 import { ButtonClearState } from "../../../../../Config/Content";
+import { useQuery } from "react-query";
+import { getRole } from "Component/Config/fetchData";
+import { toast } from "react-toastify";
 const Permission = (props) => {
   const columns = [
     { field: "_id", headerName: "ID" },
@@ -25,7 +28,7 @@ const Permission = (props) => {
 
   const [dataRoleUser, setDataRoleUser] = useState({});
   const { id } = useParams();
-  const GroupId=props?.GroupId||""
+  const GroupId = props?.GroupId || "";
   const getRoleAndUserId = async () => {
     try {
       const response = await axios.get(
@@ -118,15 +121,34 @@ const Permission = (props) => {
         { selectionModel, GroupId, roleIdPermissionGroup }
       );
       if (response) {
-        console.log(response);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error(error?.response?.data?.message);
     }
   };
+  const { isLoading, data, error, refetch } = useQuery("getRole", getRole, {});
+
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+  const filteredData = data ? data.find((item) => item._id === GroupId) : null;
+  useEffect(() => {
+    console.log(filteredData);
+  });
+  if (isLoading) return <div>Loading...</div>;
+  if (error) toast.error(error.message);
+
   return (
     <Box>
-      <Header title="Permission" subTitle="List of Permission Data" />
+      <Header
+        title="Permission"
+        subTitle={
+          props?.label === "setPermissionToGroup"
+            ? `set Permission to ${filteredData?.RoleName}`
+            : "List of Permission Data"
+        }
+      />
       {props?.label === "setPermissionToGroup" ? (
         <ButtonClearState onClick={handelSetPermissionGroup}>
           data Group
@@ -138,7 +160,6 @@ const Permission = (props) => {
       <Box sx={{}}>
         <StyledDataGrid
           // autoHeight
-
           autoPageSize
           checkboxSelection
           onRowSelectionModelChange={handleSelectionModelChange}

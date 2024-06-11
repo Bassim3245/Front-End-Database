@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BackendUrl } from "../../../../redux/api/axios";
 import { ButtonSave } from "../../../Config/Content";
 import { useTheme } from "@mui/material";
 import ShowDataUnitAndRole from "./ShowData/ShowDataUnitAndRole";
-import { useQuery } from "react-query";
-import { getRole } from "../../../Config/fetchData";
 function RoleSystem() {
   const [RoleName, setRoleName] = useState("");
   const [open, setOpen] = useState(true);
-  const [RoleData, setRoleData] = useState([]);
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -35,7 +32,6 @@ function RoleSystem() {
   const theme = useTheme();
   return (
     <div className="">
-      {/* <ToastContainer /> */}
       <h2 className="mt-0 mb-10" style={{ direction: "rtl" }}>
         نظام الصلاحيات
       </h2>

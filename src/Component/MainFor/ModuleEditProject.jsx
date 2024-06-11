@@ -24,22 +24,22 @@ import {
   PerformenceLevel,
   currencies,
   optionMethod,
-} from "../../Config/SelectDrobdown";
+} from "../Config/SelectDrobdown";
 import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios.js";
-import { getData } from "../../../redux/MinistriesState/MinistresAction.js";
+import { BackendUrl } from "../../redux/api/axios.js";
+import { getData } from "../../redux/MinistriesState/MinistresAction.js";
 import {
   ButtonClearState,
   ButtonSave,
   ColorButtonEdit,
-} from "../../Config/Content.jsx";
+} from "../Config/Content.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import {
   AddWorkNutral,
   getDataNatural,
-} from "../../../redux/Whorkntural/WorkNutralAction.js";
+} from "../../redux/Whorkntural/WorkNutralAction.js";
 import { Close } from "@mui/icons-material";
-import { setLanguage } from "../../../redux/LanguageState";
+import { setLanguage } from "../../redux/LanguageState";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore

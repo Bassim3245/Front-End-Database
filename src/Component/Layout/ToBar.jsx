@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice/userSlice";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import Pusher from "pusher-js";
 import { useNavigate } from "react-router";
 import ReceiveData from "./HRlayout/ReciveData";

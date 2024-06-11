@@ -10,7 +10,6 @@ import Table from "react-bootstrap/Table";
 import {
   ButtonClearState,
   ButtonSave,
-  ColorButtonEdit,
   ColorLink,
 } from "../../../../Config/Content";
 import { useQuery } from "react-query";
@@ -19,7 +18,6 @@ import { useNavigate } from "react-router";
 export default function ShowDataUnitAndRole({
   themeMode,
   dataSystemUnit,
-  RoleData,
   label,
 }) {
   const [open, setOpen] = useState(false);

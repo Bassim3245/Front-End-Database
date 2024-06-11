@@ -21,20 +21,20 @@ import { useState, useEffect } from "react";
 import {
   LevelOfAchevment,
   PerformenceLevel,
-} from "../../Config/SelectDrobdown";
+} from "../Config/SelectDrobdown";
 import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios";
-import { getData } from "../../../redux/MinistriesState/MinistresAction.js";
+import { BackendUrl } from "../../redux/api/axios";
+import { getData } from "../../redux/MinistriesState/MinistresAction.js";
 import {
   ButtonClearState,
   ColorButtonEdit,
   Textarea,
-} from "../../Config/Content.jsx";
+} from "../Config/Content.jsx";
 import {  toast } from "react-toastify";
 import {
   AddWorkNutral,
   getDataNatural,
-} from "../../../redux/Whorkntural/WorkNutralAction.js";
+} from "../../redux/Whorkntural/WorkNutralAction.js";
 import { Add, Close } from "@mui/icons-material";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore

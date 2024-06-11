@@ -1,6 +1,6 @@
 import { useState ,useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import ShowData from "./ShowData/ShowDataMinstries";
 import { AddMinstries, getData } from "../../../../redux/MinistriesState/MinistresAction";
 import { ButtonSave } from "../../../Config/Content";

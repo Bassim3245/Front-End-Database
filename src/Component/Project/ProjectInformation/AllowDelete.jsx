@@ -3,7 +3,7 @@ import Modal from "@mui/material/Modal";
 import { ButtonClearState, ButtonSave } from "../../Config/Content";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 
 // Style for the modal box

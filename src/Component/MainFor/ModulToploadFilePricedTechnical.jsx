@@ -8,10 +8,10 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
-import { VisuallyHiddenInput } from "../../Config/Content";
+import { VisuallyHiddenInput } from "../Config/Content";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios";
+import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore

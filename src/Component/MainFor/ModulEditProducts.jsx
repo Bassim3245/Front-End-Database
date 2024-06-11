@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Box, MenuItem, TextField } from "@mui/material";
 import { FloatingLabel, Form } from "react-bootstrap";
 import axios from "axios";
-import { BackendUrl } from "../../../redux/api/axios";
+import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -12,7 +12,7 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
-import { setLanguage } from "../../../redux/LanguageState";
+import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
