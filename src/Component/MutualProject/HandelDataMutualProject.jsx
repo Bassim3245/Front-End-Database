@@ -196,7 +196,6 @@ export default function HandelDataMutualProject() {
           </div>
         </div>
       </div>
-      <ToastContainer transition={Slide} />
     </div>
   );
 }

@@ -26,9 +26,6 @@ function InformationUsers({ dataEmploy, theme }) {
   const token = localStorage.getItem("token") || {};
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [message, setMessage] = useState("");
-  // @ts-ignore
-  const [UpdateDataUser, setDataUser] = useState(false);
-  // @ts-ignore
   const dispatch = useDispatch();
   const Navigate = useNavigate();
 

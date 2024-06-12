@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import MutualProject from "./MutualProject";
 import "../style.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import { setLanguage } from "../../../redux/LanguageState";

@@ -14,7 +14,6 @@ import { useQuery } from "react-query";
 import { getDatFileUploadByIdDepartment } from "../../Config/fetchData";
 import DatarecivedByHod from "./DatarecivedByHod";
 import DataFileEmploy from "./DataFileEmploy";
-import { ToastContainer } from "react-toastify";
 const drawerWidth = 370;
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -45,7 +44,6 @@ export default function ReceiveData(props) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <ToastContainer/>
       <IconButton
         size="large"
         aria-label="show 17 new notifications"
