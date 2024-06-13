@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
+import { BottomSend } from "Component/Config/Content";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -96,7 +97,7 @@ export default function ModuleEdit(props) {
   }, [dispatch]);
   return (
     <div>
-      <Button onClick={handleClickOpen}> edit</Button>
+      <BottomSend onClick={handleClickOpen}> edit</BottomSend>
       <Dialog
         open={open}
         TransitionComponent={Transition}

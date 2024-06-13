@@ -46,6 +46,14 @@ export const BottomRoot = styled(Button)(({ theme }) => ({
     backgroundColor: grey[900],
   },
 }));
+export const BottomSend = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(indigo[500]),
+  backgroundColor: indigo[500],
+  "&:hover": {
+    color:indigo[500],
+    backgroundColor:"white",
+  },
+}));
 export const BoxCostom = styled(Box)(({ theme }) => ({
   color: theme.palette.getContrastText(grey[500]),
   backgroundColor: "white",

@@ -1,48 +1,51 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table } from "react-bootstrap";
-import Module from "../MainFor/ModuleInsertProduct";
+import { FormControlLabel, Checkbox, useTheme, Button } from "@mui/material";
 import axios from "axios";
-import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
-import { fetchDataProduct } from "../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
-import { displayProductByProjectName } from "../../redux/ProductSlice/ProductAction";
-import { Button, FormControlLabel, useTheme } from "@mui/material";
-import ModulToploadFilePricedTechnical from "../MainFor/ModulToploadFilePricedTechnical";
 import { useTranslation } from "react-i18next";
-import { setLanguage } from "../../redux/LanguageState";
-import Loader from "Component/Config/Loader";
-import { hasPermission } from "../Config/Function";
+import ModuleInsertProduct from "../MainFor/ModuleInsertProduct";
+import ModulToploadFilePricedTechnical from "../MainFor/ModulToploadFilePricedTechnical";
+import { BackendUrl } from "../../redux/api/axios";
+import { displayProductByProjectName } from "../../redux/ProductSlice/ProductAction";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+import { setLanguage } from "../../redux/LanguageState";
+import Loader from "../Config/Loader";
+import { Delete, hasPermission } from "../Config/Function";
+import { ColorLink, ButtonClearState, BottomSend } from "../Config/Content";
 import "react-toastify/dist/ReactToastify.css";
-import { ColorLink } from "Component/Config/Content";
-import Checkbox from "@mui/material/Checkbox";
-import { ButtonClearState } from "../Config/Content";
-import { idID } from "@mui/material/locale";
+import { fetchDataProduct } from "Component/Config/fetchData";
+import AllowDelate from "Component/Project/ProjectInformation/AllowDelete";
+import AllowEdit from "Component/Project/ProjectInformation/AlllowEdit";
+import ModuleEdit from "Component/MainFor/ModulEditProducts";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
-export default function HandelDataMutualProject() {
+export default function HandleDataMutualProject() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const theme = useTheme();
+  const { t } = useTranslation();
+
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [message, setMessage] = useState("");
   const [dataProject, setDataProject] = useState([]);
-  const [loadingProject, setLoading] = useState(false);
-  const { products, loading } = useSelector((state) => state?.products);
-  const [DeleteItem, setDelete] = useState(false);
+  const [loadingProject, setLoadingProject] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [checkData, setCheckData] = useState([]);
   const [isActive, setIsActive] = useState({});
-  const [IsSend, setIsSende] = useState(false);
+  const [isSend, setIsSend] = useState(false);
+  const [DeleteItem, setDelete] = useState(false);
+
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
+
+  const { products, loading } = useSelector((state) => state?.products);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const { rtl } = useSelector((state) => state?.language);
-  const theme = useTheme();
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
+
   useEffect(() => {
     const userId = info?._id;
     if (userId && token) {
@@ -56,11 +59,11 @@ export default function HandelDataMutualProject() {
 
   useEffect(() => {
     dispatch(displayProductByProjectName(id));
-  }, [DeleteItem, dispatch, id]);
+  }, [deleteItem, dispatch, id]);
 
   const fetchDataByProjectId = async () => {
     try {
-      setLoading(true);
+      setLoadingProject(true);
       const response = await axios.get(
         `${BackendUrl}/api/getProjectById/${id}`
       );
@@ -70,13 +73,13 @@ export default function HandelDataMutualProject() {
     } catch (error) {
       console.error("Error fetching project data:", error);
     } finally {
-      setLoading(false);
+      setLoadingProject(false);
     }
   };
 
   useEffect(() => {
     fetchDataByProjectId();
-  }, [DeleteItem, anchorEl, id]);
+  }, [deleteItem, anchorEl, id]);
 
   const handleSend = async () => {
     try {
@@ -107,7 +110,7 @@ export default function HandelDataMutualProject() {
       );
       setCheckData(response?.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -138,7 +141,7 @@ export default function HandelDataMutualProject() {
     }));
   };
 
-  const handelSendProjectFromHodToProjectManger = async () => {
+  const handleSendProjectFromHodToProjectManager = async () => {
     try {
       const DepartmentID = info?.DepartmentID;
       const check = checkData ? checkData?._id : null;
@@ -162,28 +165,21 @@ export default function HandelDataMutualProject() {
   };
 
   useEffect(() => {
+    const departmentIds = Array.isArray(
+      dataProject?.MutualProjectId?.DepartmentID
+    )
+      ? dataProject?.MutualProjectId?.DepartmentID?.map(
+          (mutualProject) => mutualProject._id
+        )
+      : [];
     if (
-      Array.isArray(dataProject?.MutualProjectId) &&
-      dataProject.MutualProjectId.length > 0
+      Array.isArray(checkData?.DepartmentID) &&
+      departmentIds.length === checkData?.DepartmentID?.length
     ) {
-      const departmentIds = dataProject.MutualProjectId.map(
-        (department) => department?.DepartmentID?._id
-      );
-
-      if (
-        Array.isArray(checkData?.DepartmentID?._id) &&
-        departmentIds.length === checkData.DepartmentID._id.length
-      ) {
-        setIsSende(true);
-      }
-
-      console.log("Department IDs length:", departmentIds.length);
-      console.log(
-        "CheckData DepartmentID length:",
-        checkData?.DepartmentID?.length
-      );
+      setIsSend(true);
     }
-  }, [checkData,dataProject]);
+  }, [checkData, dataProject, handleSendProjectFromHodToProjectManager]);
+
   return (
     <div className="w-100">
       <div className="p-5 d-block">
@@ -198,7 +194,7 @@ export default function HandelDataMutualProject() {
       >
         <div className="mb-3">
           <div className="d-flex justify-content-between" dir={rtl?.dir}>
-            <p>{dataProject?.nameProject}</p>
+            <h4 className="">{dataProject?.nameProject}</h4>
             <h4>
               Project Manager (
               {dataProject?.MutualProjectId?.ProjectManger?.name})
@@ -211,23 +207,37 @@ export default function HandelDataMutualProject() {
                   key={item?._id}
                   control={
                     <Checkbox
-                      {...label}
                       checked={isActive[item?._id] || false}
                       onChange={handleCheckboxChange(item?._id)}
-                      // disabled={
-                      //   info?.DepartmentID !== item?._id || isActive[item?._id]
-                      // }
+                      disabled={
+                        dataProject?.MutualProjectId?.ProjectManger?._id !==
+                          info?._id &&
+                        (info?.DepartmentID !== item?._id ||
+                          isActive[item?._id])
+                      }
                       defaultChecked
                       sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                     />
                   }
-                  label={item?.departmentName}
+                  label={
+                    <div>
+                      {item?.departmentName}
+                      {isActive[item?._id] && (
+                        <>
+                          <br />
+                          <span className="text-secondary">
+                            تم تسليم البيانات الخاصة بالمنتجات القسم المعني
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  }
                 />
               ))}
             </div>
             <div>
               <ButtonClearState
-                onClick={handelSendProjectFromHodToProjectManger}
+                onClick={handleSendProjectFromHodToProjectManager}
               >
                 Send to Project Manager
               </ButtonClearState>
@@ -239,30 +249,38 @@ export default function HandelDataMutualProject() {
             <h2>{t("ProductList.title")}</h2>
           </div>
           <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
-            {IsSend &&
-              (hasPermission(
-                roles?.send_project_from_Employ_to_HOD?._id,
-                Permission?.permissionIds
-              ) ? (
-                <Button
-                  onClick={handleSend}
-                  className="me-2"
-                  variant="outlined"
-                >
-                  {t("ProductList.SendButton")}
-                </Button>
-              ) : (
-                <Button className="me-2" variant="contained" color="secondary">
-                  {t("Authorized to send")}
-                </Button>
-              ))}
+            {isSend &&
+              dataProject?.MutualProjectId?.ProjectManger?._id ==
+                info?._id&&(
+                  hasPermission(
+                    roles?.send_project_from_Employ_to_HOD?._id,
+                    Permission?.permissionIds
+                  ) ? (
+                    <BottomSend
+                      onClick={handleSend}
+                      className="me-2"
+                      variant="contained"
+                      color="secondary"
+                    >
+                      {t("ProductList.SendButton")}
+                    </BottomSend>
+                  ) : (
+                    <Button
+                      className="me-2"
+                      variant="contained"
+                      color="secondary"
+                    >
+                      {t("Authorized to send")}
+                    </Button>
+                  )
+                )}
 
             <ModulToploadFilePricedTechnical
               t={t}
               DepartmentID={dataProject?.DepartmentID}
               ProjectId={dataProject?._id}
             />
-            <Module
+            <ModuleInsertProduct
               t={t}
               getDataProduct={fetchDataProduct}
               DepartmentID={dataProject?.DepartmentID}
@@ -296,9 +314,89 @@ export default function HandelDataMutualProject() {
                 <th>{t("ProductList.table.Action")}</th>
               </tr>
             </thead>
-            <tbody>{/* Add logic to render product rows here */}</tbody>
+            <tbody>
+              {products ? (
+                Array.isArray(products) &&
+                products?.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item?.nameProduct}</td>
+                    <td>{item?.Price}</td>
+                    <td>{item?.PriceType}</td>
+                    <td>{item?.Quantity}</td>
+                    <td>{item?.percent}</td>
+                    <td>{item?.PriceConvert}</td>
+
+                    <td>{item?.comments}</td>
+                    <td>{item?.description}</td>
+                    <td>{item?.UnitId?.Unit}</td>
+
+                    <td className=" d-flex gap-2 f-wrap">
+                      <div>
+                        {item?.allowRequest || info?.user_type === "H.O.D" ? (
+                          <div className="d-flex">
+                            <ModuleEdit
+                              item={item}
+                              getDataProduct={fetchDataProduct}
+                              // @ts-ignore
+                              ProjectWorkNatural={dataProject?.WorkNatural}
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            {/* <Button>Delete</Button> */}
+                            <div className="d-flex gap-2">
+                              <AllowEdit
+                                Id={item?._id}
+                                label="AllowEdit"
+                                title="تعديل"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div>
+                        {item?.allowRequestDelete ||
+                        info?.user_type === "H.O.D" ? (
+                          <div className="d-flex">
+                            <BottomSend
+                              onClick={() =>
+                                Delete(
+                                  item?._id,
+                                  setDelete,
+                                  setAnchorEl,
+                                  token,
+                                  "DeleteProduct"
+                                )
+                              }
+                            >
+                              Delete
+                            </BottomSend>
+                          </div>
+                        ) : (
+                          <>
+                            {/* <Button>Delete</Button> */}
+                            <div className="d-flex gap-2">
+                              <AllowDelate
+                                Id={item?._id}
+                                label="AllowDelete"
+                                title="حذف"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <div>
+                  <p>No Data Found</p>
+                </div>
+              )}
+            </tbody>
           </Table>
-          <div className="d-flex justify-content-center align-item-center">
+          <div className="d-flex justify-content-center align-items-center">
             {loading ? <Loader /> : "Data not found"}
           </div>
         </div>

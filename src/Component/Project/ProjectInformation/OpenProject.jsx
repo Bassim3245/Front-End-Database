@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ColorLink } from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../../MainFor/ModuleInsertProduct";
@@ -19,7 +19,7 @@ import Loader from "Component/Config/Loader";
 import { Delete, hasPermission } from "../../Config/Function";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 export default function OpenProject() {
   const { id } = useParams();
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -95,10 +95,9 @@ export default function OpenProject() {
   useEffect(() => {
     fetchDataByProjectId();
   }, [DeleteItem, anchorEl]);
-
   return (
     <div className={`w-100 `}>
-         <ToastContainer
+      <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={true}
@@ -202,6 +201,7 @@ export default function OpenProject() {
                         <th>{t("ProductList.table.priceConvert")}</th>
                         <th>{t("ProductList.table.Notes")}</th>
                         <th>{t("ProductList.table.Specifications")}</th>
+                        <th>المجموع</th>
                         <th>{t("ProductList.table.Unit")}</th>
                         <th>{t("ProductList.table.Action")}</th>
                       </tr>
@@ -221,6 +221,7 @@ export default function OpenProject() {
 
                             <td>{item?.comments}</td>
                             <td>{item?.description}</td>
+                            <td>{item?.Quantity * item?.Price}</td>
                             <td>{item?.UnitId?.Unit}</td>
 
                             <td className=" d-flex gap-2 f-wrap">

@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { ButtonClearState, ButtonSave } from "../../Config/Content";
+import { BottomSend, ButtonClearState, ButtonSave } from "../../Config/Content";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -50,7 +50,7 @@ export default function AllowEdit(props) {
   };
   return (
     <div>
-      <ButtonSave onClick={handleOpen}>طلب تعديل</ButtonSave>
+      <BottomSend onClick={handleOpen}>طلب تعديل</BottomSend>
       <Modal
         keepMounted
         open={open}

@@ -15,6 +15,7 @@ import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
 import { getDataSystemPrice } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
+import { BottomSend } from "Component/Config/Content";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,7 +36,7 @@ export default function Module(props) {
     UnitId: "",
     typeProject: "",
     license: "",
-    PriceConvert: "",
+    PriceConvert: "1500",
     percent: "",
   });
 
@@ -106,9 +107,9 @@ export default function Module(props) {
   const handleClose = () => setOpen(false);
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <BottomSend variant="outlined" onClick={handleClickOpen}>
         {props.t("ProductList.InsertButton")}
-      </Button>
+      </BottomSend>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -174,6 +175,7 @@ export default function Module(props) {
               label="سعر الصرف"
               className="mb-3"
               name="PriceConvert"
+         
               value={formData.PriceConvert}
               onChange={handleInputChange}
             />

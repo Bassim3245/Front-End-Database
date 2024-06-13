@@ -8,7 +8,7 @@ import {
   DialogTitle,
   Slide,
 } from "@mui/material";
-import { VisuallyHiddenInput } from "../Config/Content";
+import { BottomSend, VisuallyHiddenInput } from "../Config/Content";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
@@ -58,9 +58,9 @@ export default function ModulToploadFilePricedTechnical({
   };
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <BottomSend variant="outlined" onClick={handleClickOpen}>
         {t("ProductList.ButtonUpload")}
-      </Button>
+      </BottomSend>
       <Dialog
         open={open}
         TransitionComponent={Transition}
