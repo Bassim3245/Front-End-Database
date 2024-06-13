@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction.js";
 import { Archive } from "@mui/icons-material";
+import Loader from "Component/Config/Loader.jsx";
 
 function OfferPriceTable(props) {
   const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ function OfferPriceTable(props) {
   const theme = useTheme();
   return (
     <div className={`${theme.palette.mode === "dark" ? "bg-dark" : " bg-eee"}`}>
-      {loading && <div>loading..</div>}
+      {loading && <div><Loader/></div>}
       <div className={` m-5  p-3 rad-10`}>
       <Button variant="outlined" startIcon={<Archive/>}> Archive</Button>
         <div className="container w-100" ref={props?.targetRef}>

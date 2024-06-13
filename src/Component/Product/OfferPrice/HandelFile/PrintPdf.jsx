@@ -14,6 +14,10 @@ import {
 } from "@mui/material";
 import { Close, LocalPrintshop } from "@mui/icons-material";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
+import html2pdf from "html2pdf.js";
+import axios from "axios";
+import { BackendUrl } from "../../../../redux/api/axios";
+import { usePDF } from "react-to-pdf";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -27,6 +31,48 @@ export default function PrintPdf(props) {
     content: () => componentRef.current,
     documentTitle: `${props?.dataProjectTest?.nameProject}_${props?.label}`,
   });
+
+  // const handlePrint = () => {
+  //   // Ensure componentRef has the latest content
+  //   const content = componentRef.current;
+
+  //   // Use html2pdf to generate PDF
+  //   html2pdf()
+  //     .from(content)
+  //     .toPdf()
+  //     .then(function (data) {
+  //       // Convert the PDF to base64 format
+  //       const pdfBase64 = data.replace(/^data:image\/pdf;base64,/, "");
+  //       // Send the base64 data to your backend to save to the database
+  //       saveToDatabase(pdfBase64);
+  //     });
+  // };
+
+  // const saveToDatabase = (pdfBase64) => {
+  //   // Make a POST request to your backend API to save the PDF
+  //   axios
+  //     .post(`${BackendUrl}/api/setPdfDataOverPrice`, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //       body: JSON.stringify({
+  //         pdf: pdfBase64,
+  //         filename: `${props?.dataProjectTest?.nameProject}_${props?.label}.pdf`,
+  //       }),
+  //     })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("PDF saved successfully:", data);
+  //       // Handle success (e.g., show a success message)
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error saving PDF:", error);
+  //       // Handle error (e.g., show an error message)
+  //     });
+  // };
+
   const handleClickOpen = () => {
     setOpen(true);
   };

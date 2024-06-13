@@ -38,7 +38,7 @@
     "FilesReceived": "Files Received",
     "GetAllDataProjectNotDelay": "departments list",
     "getAllDataDelaysProject": "Late Department Project",
-    "Back":"Back"
+    "Back": "Back"
   },
   "ProjectList": {
     "title": "Project Mutual",
@@ -121,7 +121,17 @@
       "Specifications": "Specifications",
       "Notes": "Notes",
       "ProductName": "Product Name",
-      "test": "tes"
+      "test": "tes",
+      "Edit": "Edit",
+      "Delete": "Delete",
+      "Total": "Total",
+      "RequistDelete": "Delete",
+      "RequistEdit": "Delete",
+      "RequistSendEdit": "Send Request Edit",
+      "RequistSendDelete": "Send Request Delete",
+      "send": "send",
+      "close": "close",
+      "sendToManger":" Send to Project Manager"
     },
     "PriceOffer": {
       "PriceOffer": "Price Offer",

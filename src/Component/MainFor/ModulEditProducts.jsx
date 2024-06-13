@@ -15,6 +15,7 @@ import {
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
 import { BottomSend } from "Component/Config/Content";
+import { useTranslation } from "react-i18next";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -35,9 +36,8 @@ export default function ModuleEdit(props) {
     typeProject: props?.item?.typeProject,
     license: props?.item?.license,
     PriceType: props?.item?.PriceType,
-    percent:props?.item?.percent,
-    PriceConvert:props?.item?.PriceConvert
-    
+    percent: props?.item?.percent,
+    PriceConvert: props?.item?.PriceConvert,
   });
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -95,9 +95,12 @@ export default function ModuleEdit(props) {
   React.useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
+  const { t } = useTranslation();
   return (
     <div>
-      <BottomSend onClick={handleClickOpen}> edit</BottomSend>
+      <BottomSend onClick={handleClickOpen}>
+        {t("ProductList.table.Edit")}
+      </BottomSend>
       <Dialog
         open={open}
         TransitionComponent={Transition}

@@ -179,10 +179,29 @@ export default function HandleDataMutualProject() {
       setIsSend(true);
     }
   }, [checkData, dataProject, handleSendProjectFromHodToProjectManager]);
+  const sumDataProjectIQD = () => {
+    const totalIQD = products.reduce((acc, item) => {
+      if (item.PriceType === "IQD") {
+        const itemTotal = item?.Quantity * item?.Price || 0;
+        return acc + itemTotal;
+      }
+      return acc;
+    }, 0);
+
+    const totalOther = products.reduce((acc, item) => {
+      if (item.PriceType !== "IQD") {
+        const itemTotal = item?.Quantity * item?.Price || 0;
+        return acc + itemTotal;
+      }
+      return acc;
+    }, 0);
+
+    return { totalIQD, totalOther };
+  };
 
   return (
     <div className="w-100">
-      <div className="p-5 d-block">
+      <div className="pb-2 d-block">
         <ColorLink onClick={handleBack}>
           {t("ProductList.BackButton")}
         </ColorLink>
@@ -236,11 +255,9 @@ export default function HandleDataMutualProject() {
               ))}
             </div>
             <div>
-              <ButtonClearState
-                onClick={handleSendProjectFromHodToProjectManager}
-              >
-                Send to Project Manager
-              </ButtonClearState>
+              <BottomSend onClick={handleSendProjectFromHodToProjectManager}>
+              {t("ProductList.table.sendToManger")}
+              </BottomSend>
             </div>
           </div>
           <hr />
@@ -250,30 +267,24 @@ export default function HandleDataMutualProject() {
           </div>
           <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
             {isSend &&
-              dataProject?.MutualProjectId?.ProjectManger?._id ==
-                info?._id&&(
-                  hasPermission(
-                    roles?.send_project_from_Employ_to_HOD?._id,
-                    Permission?.permissionIds
-                  ) ? (
-                    <BottomSend
-                      onClick={handleSend}
-                      className="me-2"
-                      variant="contained"
-                      color="secondary"
-                    >
-                      {t("ProductList.SendButton")}
-                    </BottomSend>
-                  ) : (
-                    <Button
-                      className="me-2"
-                      variant="contained"
-                      color="secondary"
-                    >
-                      {t("Authorized to send")}
-                    </Button>
-                  )
-                )}
+              dataProject?.MutualProjectId?.ProjectManger?._id == info?._id &&
+              (hasPermission(
+                roles?.send_project_from_Employ_to_HOD?._id,
+                Permission?.permissionIds
+              ) ? (
+                <BottomSend
+                  onClick={handleSend}
+                  className="me-2"
+                  variant="contained"
+                  color="secondary"
+                >
+                  {t("ProductList.SendButton")}
+                </BottomSend>
+              ) : (
+                <Button className="me-2" variant="contained" color="secondary">
+                  {t("Authorized to send")}
+                </Button>
+              ))}
 
             <ModulToploadFilePricedTechnical
               t={t}
@@ -288,9 +299,7 @@ export default function HandleDataMutualProject() {
               ProjectWorkNatural={dataProject?.WorkNatural}
             />
           </div>
-          <div className="w-100">
-            <p style={{ textAlign: "center" }}>Project has been sent</p>
-          </div>
+
           <Table
             striped
             bordered
@@ -310,6 +319,7 @@ export default function HandleDataMutualProject() {
                 <th>{t("ProductList.table.priceConvert")}</th>
                 <th>{t("ProductList.table.Notes")}</th>
                 <th>{t("ProductList.table.Specifications")}</th>
+                <th>{t("ProductList.table.Total")}</th>
                 <th>{t("ProductList.table.Unit")}</th>
                 <th>{t("ProductList.table.Action")}</th>
               </tr>
@@ -326,9 +336,9 @@ export default function HandleDataMutualProject() {
                     <td>{item?.Quantity}</td>
                     <td>{item?.percent}</td>
                     <td>{item?.PriceConvert}</td>
-
                     <td>{item?.comments}</td>
                     <td>{item?.description}</td>
+                    <td>{item?.Quantity * item?.Price}</td>
                     <td>{item?.UnitId?.Unit}</td>
 
                     <td className=" d-flex gap-2 f-wrap">
@@ -370,7 +380,7 @@ export default function HandleDataMutualProject() {
                                 )
                               }
                             >
-                              Delete
+                              {t("ProductList.table.Delete")}
                             </BottomSend>
                           </div>
                         ) : (
@@ -394,6 +404,11 @@ export default function HandleDataMutualProject() {
                   <p>No Data Found</p>
                 </div>
               )}
+              <tr>
+                <td colSpan={10}>المجموع </td>
+                <td>{sumDataProjectIQD().totalIQD} IQD</td>
+                <td>{sumDataProjectIQD().totalOther} USD</td>
+              </tr>
             </tbody>
           </Table>
           <div className="d-flex justify-content-center align-items-center">

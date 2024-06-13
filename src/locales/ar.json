@@ -38,8 +38,7 @@
     "FilesReceived": "الملفات المستلمة",
     "GetAllDataProjectNotDelay": "قائمةالاقسام",
     "getAllDataDelaysProject": "قائمة المشاريع المشتركة",
-    "Back":"رجوع"
-
+    "Back": "رجوع"
   },
   "ProjectList": {
     "title": "المشاريع المشتركة",
@@ -122,7 +121,16 @@
       "Specifications": "المواصفات",
       "Notes": "الملاحظات",
       "ProductName": "اسم المنتج ",
-      "test": "test"
+      "test": "اختبار",
+      "Edit": "تعديل",
+      "Delete": "حذف",
+      "RequistDelete": "طلب حذف",
+      "RequistEdit": "طلب تعديل",
+      "RequistSendEdit": "ارسال طلب تعديل",
+      "RequistSendDelete": "ارسال طلب حذف",
+      "send": "ارسال",
+      "close": "غلق",
+      "sendToManger": "ارسال البيانات الى مدير المشروع"
     },
     "PriceOffer": {
       "PriceOffer": " العرض السعري",

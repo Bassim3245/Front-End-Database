@@ -19,7 +19,7 @@ import {
   calculatePriceAfterPercentageWithQuantityAndConvertToUSD,
   calculatePriceAfterPercentageWithoutQuantityAndConvertToUSD,
 } from "Component/Config/Function";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "Component/Config/Loader";
 import PrintPdf from "./HandelFile/PrintPdf";
@@ -211,11 +211,12 @@ export default function OfferPrice(props) {
 
   return (
     <>
-      {loading && (
-        <div dir="ltr">
-          <Loader />
-        </div>
-      )}
+      {loading ||
+        (isLoading && (
+          <div dir="ltr">
+            <Loader />
+          </div>
+        ))}
       <div>
         <div className="w-100 mb-3 mt-3">
           <div style={{ direction: "rtl", fontFamily: "Arial, sans-serif" }}>

@@ -5,6 +5,7 @@ import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 // Style for the modal box
 const style = {
@@ -48,6 +49,7 @@ export default function AllowEdit(props) {
       toast.error(error?.response?.data?.message || "An error occurred");
     }
   };
+  const { t } = useTranslation();
   return (
     <div>
       <BottomSend onClick={handleOpen}>طلب تعديل</BottomSend>
@@ -59,10 +61,19 @@ export default function AllowEdit(props) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          <h3 className="text-center m-4">ارسال طلب التعديل </h3>
+          <h3 className="text-center m-4">
+            {" "}
+            {t("ProductList.table.RequistSendEdit")}{" "}
+          </h3>
           <div className="d-flex justify-content-between align-items-center">
-            <ButtonClearState onClick={handleSend}>ارسال</ButtonClearState>
-            <ButtonSave onClick={handleClose}>غلق</ButtonSave>
+            <ButtonClearState onClick={handleSend}>
+              {" "}
+              {t("ProductList.table.send")}
+            </ButtonClearState>
+            <ButtonSave onClick={handleClose}>
+              {" "}
+              {t("ProductList.table.close")}
+            </ButtonSave>
           </div>
         </Box>
       </Modal>

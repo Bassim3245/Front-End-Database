@@ -95,6 +95,26 @@ export default function OpenProject() {
   useEffect(() => {
     fetchDataByProjectId();
   }, [DeleteItem, anchorEl]);
+  const sumDataProjectIQD = () => {
+    const totalIQD = products.reduce((acc, item) => {
+      if (item.PriceType === "IQD") {
+        const itemTotal = item?.Quantity * item?.Price || 0;
+        return acc + itemTotal;
+      }
+      return acc;
+    }, 0);
+
+    const totalOther = products.reduce((acc, item) => {
+      if (item.PriceType !== "IQD") {
+        const itemTotal = item?.Quantity * item?.Price || 0;
+        return acc + itemTotal;
+      }
+      return acc;
+    }, 0);
+
+    return { totalIQD, totalOther };
+  };
+
   return (
     <div className={`w-100 `}>
       <ToastContainer
@@ -115,13 +135,13 @@ export default function OpenProject() {
         </div>
       ) : (
         <>
-          <div className="p-5 d-block">
+          <div className="pb-3 d-block">
             <ColorLink onClick={handleBack}>
               {t("ProductList.BackButton")}
             </ColorLink>
           </div>
           <div
-            className={`container  p-3 rad-10 ${
+            className={`p-3 rad-10 ${
               theme?.palette?.mode === "dark" ? "bg-dark" : "bg-eee"
             }`}
           >
@@ -290,6 +310,11 @@ export default function OpenProject() {
                           <p>No Data Found</p>
                         </div>
                       )}
+                      <tr>
+                        <td colSpan={10}>المجموع </td>
+                        <td>{sumDataProjectIQD().totalIQD} IQD</td>
+                        <td>{sumDataProjectIQD().totalOther} USD</td>
+                      </tr>
                     </tbody>
                   </Table>
                 ) : (
