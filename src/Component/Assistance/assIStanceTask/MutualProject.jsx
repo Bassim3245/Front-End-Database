@@ -60,9 +60,7 @@ function MutualProject({ setSecondaryData, HandleSubmit }) {
     },
     []
   );
-  useEffect(() => {
-    console.log("jhhfbhjjhvsdkjfg", checkedItems);
-  }, []);
+
   return (
     <div className="Project">
       <div

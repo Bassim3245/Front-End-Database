@@ -4,7 +4,7 @@ import { Table } from "react-bootstrap";
 import Module from "../MainFor/ModuleInsertProduct";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
-import { Slide, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { fetchDataProduct } from "../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../redux/ProductSlice/ProductAction";
@@ -13,23 +13,28 @@ import ModulToploadFilePricedTechnical from "../MainFor/ModulToploadFilePricedTe
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../redux/LanguageState";
 import Loader from "Component/Config/Loader";
-import { Delete, hasPermission } from "../Config/Function";
+import { hasPermission } from "../Config/Function";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import "react-toastify/dist/ReactToastify.css";
 import { ColorLink } from "Component/Config/Content";
 import Checkbox from "@mui/material/Checkbox";
+import { ButtonClearState } from "../Config/Content";
+import { idID } from "@mui/material/locale";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function HandelDataMutualProject() {
   const { id } = useParams();
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [message, setMessage] = useState("");
   const [dataProject, setDataProject] = useState([]);
   const [loadingProject, setLoading] = useState(false);
   const { products, loading } = useSelector((state) => state?.products);
   const [DeleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [checkData, setCheckData] = useState([]);
+  const [isActive, setIsActive] = useState({});
+  const [IsSend, setIsSende] = useState(false);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -38,7 +43,6 @@ export default function HandelDataMutualProject() {
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
   useEffect(() => {
     const userId = info?._id;
     if (userId && token) {
@@ -50,17 +54,13 @@ export default function HandelDataMutualProject() {
     dispatch(setLanguage());
   }, [dispatch]);
 
-  const detDataProductById = () => {
-    dispatch(displayProductByProjectName(id));
-  };
-
   useEffect(() => {
-    detDataProductById();
+    dispatch(displayProductByProjectName(id));
   }, [DeleteItem, dispatch, id]);
 
   const fetchDataByProjectId = async () => {
     try {
-      setLoading(true); // Set loading to true when starting to fetch data
+      setLoading(true);
       const response = await axios.get(
         `${BackendUrl}/api/getProjectById/${id}`
       );
@@ -70,9 +70,13 @@ export default function HandelDataMutualProject() {
     } catch (error) {
       console.error("Error fetching project data:", error);
     } finally {
-      setLoading(false); // Set loading to false when fetching is complete
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDataByProjectId();
+  }, [DeleteItem, anchorEl, id]);
 
   const handleSend = async () => {
     try {
@@ -80,9 +84,7 @@ export default function HandelDataMutualProject() {
         `${BackendUrl}/api/sendProject/${id}`,
         {},
         {
-          headers: {
-            token: token,
-          },
+          headers: { token: token },
         }
       );
       if (response?.data) {
@@ -95,13 +97,93 @@ export default function HandelDataMutualProject() {
   };
 
   const handleBack = () => {
-    window.history.back(-1);
+    window.history.back();
+  };
+
+  const getDataAllCheckByDepartmentId = async () => {
+    try {
+      const response = await axios.get(
+        `${BackendUrl}/api/getDataAllCheckByDepartmentId/${id}`
+      );
+      setCheckData(response?.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    fetchDataByProjectId();
-  }, [DeleteItem, anchorEl]);
+    getDataAllCheckByDepartmentId();
+  }, []);
 
+  useEffect(() => {
+    if (dataProject?.MutualProjectId?.DepartmentID) {
+      const initialStates = dataProject?.MutualProjectId?.DepartmentID?.reduce(
+        (acc, item) => {
+          acc[item?._id] =
+            (isActive && isActive[item._id]) ||
+            (checkData?.DepartmentID &&
+              checkData.DepartmentID.includes(item?._id));
+          return acc;
+        },
+        {}
+      );
+      setIsActive(initialStates);
+    }
+  }, [dataProject, checkData]);
+
+  const handleCheckboxChange = (id) => () => {
+    setIsActive((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const handelSendProjectFromHodToProjectManger = async () => {
+    try {
+      const DepartmentID = info?.DepartmentID;
+      const check = checkData ? checkData?._id : null;
+      const ProjectManager = dataProject?.MutualProjectId?.ProjectManger?._id;
+      const response = await axios.put(
+        `${BackendUrl}/api/sendProjectFromHodToProjectManger/${dataProject?._id}`,
+        {
+          isActive,
+          check,
+          DepartmentID,
+          ProjectManager,
+        },
+        {
+          headers: { token: token },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      Array.isArray(dataProject?.MutualProjectId) &&
+      dataProject.MutualProjectId.length > 0
+    ) {
+      const departmentIds = dataProject.MutualProjectId.map(
+        (department) => department?.DepartmentID?._id
+      );
+
+      if (
+        Array.isArray(checkData?.DepartmentID?._id) &&
+        departmentIds.length === checkData.DepartmentID._id.length
+      ) {
+        setIsSende(true);
+      }
+
+      console.log("Department IDs length:", departmentIds.length);
+      console.log(
+        "CheckData DepartmentID length:",
+        checkData?.DepartmentID?.length
+      );
+    }
+  }, [checkData,dataProject]);
   return (
     <div className="w-100">
       <div className="p-5 d-block">
@@ -110,45 +192,70 @@ export default function HandelDataMutualProject() {
         </ColorLink>
       </div>
       <div
-        className={`container p-3 rad-10 ${
+        className={`p-3 rad-10 ${
           theme?.palette?.mode === "dark" ? "bg-dark" : "bg-eee"
         }`}
       >
         <div className="mb-3">
-          <div>
-            <p>{dataProject.nameProject}</p>
-            {dataProject?.MutualProjectId?.DepartmentID?.map((item) => (
-              <FormControlLabel
-                key={item?._id}
-                control={
-                  <Checkbox
-                    {...label}
-                    defaultChecked
-                    sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-                  />
-                }
-                label={item?.departmentName}
-              />
-            ))}
+          <div className="d-flex justify-content-between" dir={rtl?.dir}>
+            <p>{dataProject?.nameProject}</p>
+            <h4>
+              Project Manager (
+              {dataProject?.MutualProjectId?.ProjectManger?.name})
+            </h4>
           </div>
-
+          <div className="d-flex justify-content-between" dir={rtl?.dir}>
+            <div>
+              {dataProject?.MutualProjectId?.DepartmentID?.map((item) => (
+                <FormControlLabel
+                  key={item?._id}
+                  control={
+                    <Checkbox
+                      {...label}
+                      checked={isActive[item?._id] || false}
+                      onChange={handleCheckboxChange(item?._id)}
+                      // disabled={
+                      //   info?.DepartmentID !== item?._id || isActive[item?._id]
+                      // }
+                      defaultChecked
+                      sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+                    />
+                  }
+                  label={item?.departmentName}
+                />
+              ))}
+            </div>
+            <div>
+              <ButtonClearState
+                onClick={handelSendProjectFromHodToProjectManger}
+              >
+                Send to Project Manager
+              </ButtonClearState>
+            </div>
+          </div>
+          <hr />
           <div dir={rtl?.dir}>
             <p>{dataProject.MutualProjectId?.name}</p>
             <h2>{t("ProductList.title")}</h2>
           </div>
           <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
-            {hasPermission(
-              roles?.send_project_from_Employ_to_HOD?._id,
-              Permission?.permissionIds
-            ) ? (
-              <Button onClick={handleSend} className="me-2" variant="outlined">
-                {t("ProductList.SendButton")}
-              </Button>
-            ) : (
-              <Button className="me-2" variant="contained" color="secondary">
-                {t("Authorized to send")}
-              </Button>
-            )}
+            {IsSend &&
+              (hasPermission(
+                roles?.send_project_from_Employ_to_HOD?._id,
+                Permission?.permissionIds
+              ) ? (
+                <Button
+                  onClick={handleSend}
+                  className="me-2"
+                  variant="outlined"
+                >
+                  {t("ProductList.SendButton")}
+                </Button>
+              ) : (
+                <Button className="me-2" variant="contained" color="secondary">
+                  {t("Authorized to send")}
+                </Button>
+              ))}
 
             <ModulToploadFilePricedTechnical
               t={t}
