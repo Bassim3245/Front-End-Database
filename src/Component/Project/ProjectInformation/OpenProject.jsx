@@ -26,6 +26,7 @@ import {
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
+
 export default function OpenProject() {
   const { id } = useParams();
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -33,7 +34,7 @@ export default function OpenProject() {
   const [dataProject, setDataProject] = useState([]);
   const [loadingProject, setLoading] = useState(false);
   const { products, loading } = useSelector((state) => state?.products);
-  const [DeleteItem, setDelete] = useState(false);
+  const [deleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
@@ -45,24 +46,29 @@ export default function OpenProject() {
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   useEffect(() => {
     detDataProductById();
   }, [message, dispatch]);
+
   useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  }, []);
+  }, [dispatch, info?._id, token]);
 
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
+
   const detDataProductById = () => {
     dispatch(displayProductByProjectName(id));
   };
-  useEffect(() => detDataProductById(), [DeleteItem]);
+
+  useEffect(() => detDataProductById(), [deleteItem, dispatch, id]);
+
   const fetchDataByProjectId = async () => {
     try {
-      setLoading(true); // Set loading to true when starting to fetch data
+      setLoading(true);
       const response = await axios.get(
         `${BackendUrl}/api/getProjectById/${id}`
       );
@@ -72,7 +78,7 @@ export default function OpenProject() {
     } catch (error) {
       console.error("Error fetching project data:", error);
     } finally {
-      setLoading(false); // Set loading to false when fetching is complete
+      setLoading(false);
     }
   };
 
@@ -95,15 +101,17 @@ export default function OpenProject() {
       toast.error(error?.response?.data?.message);
     }
   };
+
   const handleBack = () => {
-    window.history.back(-1);
+    window.history.back();
   };
+
   useEffect(() => {
     fetchDataByProjectId();
-  }, [DeleteItem, anchorEl]);
+  }, [deleteItem, anchorEl]);
 
   return (
-    <div className={`w-100 `}>
+    <div className={`w-100`}>
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -132,21 +140,21 @@ export default function OpenProject() {
               theme?.palette?.mode === "dark" ? "bg-dark" : "bg-eee"
             }`}
           >
-            <div className=" mb-3">
+            <div className="mb-3">
               {!dataProject?.SendProject ? (
                 <>
                   <div dir={rtl?.dir}>
                     <h2>{t("ProductList.title")}</h2>
                   </div>
                   <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
-                    {products ? (
+                    {products && (
                       <>
                         {hasPermission(
                           roles?.send_project_from_Employ_to_HOD?._id,
                           Permission?.permissionIds
                         ) ? (
                           <BottomSend
-                            onClick={() => handleSend(products?._id)}
+                            onClick={handleSend}
                             className="me-2"
                             variant="outlined"
                           >
@@ -168,7 +176,7 @@ export default function OpenProject() {
                           ProjectId={dataProject?._id}
                         />
                       </>
-                    ) : null}
+                    )}
                     <Module
                       t={t}
                       getDataProduct={fetchDataProduct}
@@ -180,14 +188,11 @@ export default function OpenProject() {
                 </>
               ) : (
                 <div className="w-100">
-                  {" "}
-                  <p style={{ textAlign: "center" }}>Project has been send</p>
+                  <p style={{ textAlign: "center" }}>Project has been sent</p>
                 </div>
               )}
-              {!(
-                // @ts-ignore
-                dataProject?.SendProject
-              ) &&
+              {Array.isArray(products) && products.length > 0 ? (
+                !dataProject?.SendProject &&
                 (products ? (
                   <Table
                     striped
@@ -200,7 +205,7 @@ export default function OpenProject() {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>{t("ProductList.table.ProductName")} </th>
+                        <th>{t("ProductList.table.ProductName")}</th>
                         <th>{t("ProductList.table.Price")}</th>
                         <th>{t("ProductList.table.PriceType")}</th>
                         <th>{t("ProductList.table.Quantity")}</th>
@@ -214,16 +219,15 @@ export default function OpenProject() {
                       </tr>
                     </thead>
                     <tbody>
-                      {products ? (
-                        Array.isArray(products) &&
-                        products?.map((item, index) => (
+                      {Array.isArray(products) &&
+                        products.map((item, index) => (
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{item?.nameProduct}</td>
                             <td>{FormatDataNumber(item?.Price)}</td>
                             <td>{item?.PriceType}</td>
                             <td>{item?.Quantity}</td>
-                            <td> {item?.percent}</td>
+                            <td>{item?.percent}</td>
                             <td>{item?.PriceConvert}</td>
                             <td>{item?.comments}</td>
                             <td>{item?.description}</td>
@@ -231,75 +235,48 @@ export default function OpenProject() {
                               {FormatDataNumber(item?.Quantity * item?.Price)}
                             </td>
                             <td>{item?.UnitId?.Unit}</td>
-
-                            <td className=" d-flex gap-2 f-wrap">
-                              <div>
-                                {item?.allowRequest ||
-                                info?.user_type === "H.O.D" ? (
-                                  <div className="d-flex">
-                                    <ModuleEdit
-                                      item={item}
-                                      getDataProduct={fetchDataProduct}
-                                      // @ts-ignore
-                                      ProjectWorkNatural={
-                                        dataProject?.WorkNatural
-                                      }
-                                    />
-                                  </div>
-                                ) : (
-                                  <>
-                                    {/* <Button>Delete</Button> */}
-                                    <div className="d-flex gap-2">
-                                      <AllowEdit
-                                        Id={item?._id}
-                                        label="AllowEdit"
-                                        title="تعديل"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                              <div>
-                                {item?.allowRequestDelete ||
-                                info?.user_type === "H.O.D" ? (
-                                  <div className="d-flex">
-                                    <BottomSend
-                                      onClick={() =>
-                                        Delete(
-                                          item?._id,
-                                          setDelete,
-                                          setAnchorEl,
-                                          token,
-                                          "DeleteProduct"
-                                        )
-                                      }
-                                    >
-                                      {t("ProductList.table.Delete")}
-                                    </BottomSend>
-                                  </div>
-                                ) : (
-                                  <>
-                                    {/* <Button>Delete</Button> */}
-                                    <div className="d-flex gap-2">
-                                      <AllowDelate
-                                        Id={item?._id}
-                                        label="AllowDelete"
-                                        title="حذف"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </div>
+                            <td className="d-flex gap-2 f-wrap">
+                              {item?.allowRequest ||
+                              info?.user_type === "H.O.D" ? (
+                                <ModuleEdit
+                                  item={item}
+                                  getDataProduct={fetchDataProduct}
+                                  ProjectWorkNatural={dataProject?.WorkNatural}
+                                />
+                              ) : (
+                                <AllowEdit
+                                  Id={item?._id}
+                                  label="AllowEdit"
+                                  title="تعديل"
+                                />
+                              )}
+                              {item?.allowRequestDelete ||
+                              info?.user_type === "H.O.D" ? (
+                                <BottomSend
+                                  onClick={() =>
+                                    Delete(
+                                      item?._id,
+                                      setDelete,
+                                      setAnchorEl,
+                                      token,
+                                      "DeleteProduct"
+                                    )
+                                  }
+                                >
+                                  {t("ProductList.table.Delete")}
+                                </BottomSend>
+                              ) : (
+                                <AllowDelate
+                                  Id={item?._id}
+                                  label="AllowDelete"
+                                  title="حذف"
+                                />
+                              )}
                             </td>
                           </tr>
-                        ))
-                      ) : (
-                        <div>
-                          <p>No Data Found</p>
-                        </div>
-                      )}
+                        ))}
                       <tr>
-                        <td colSpan={10}>المجموع </td>
+                        <td colSpan={10}>المجموع</td>
                         <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
                         <td>{sumDataProjectIQD(products).totalOther} USD</td>
                       </tr>
@@ -307,9 +284,14 @@ export default function OpenProject() {
                   </Table>
                 ) : (
                   <div>
-                    <CustomNoRowsOverlay />
+                    <h3>data hse been send</h3>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div>
+                  <CustomNoRowsOverlay />
+                </div>
+              )}
             </div>
           </div>
         </>
