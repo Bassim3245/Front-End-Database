@@ -12,16 +12,14 @@ import {
   MenuItem,
   TextField,
   createTheme,
+  Fab,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { useState, useEffect } from "react";
-import {
-  LevelOfAchevment,
-  PerformenceLevel,
-} from "../Config/SelectDrobdown";
+import { LevelOfAchevment, PerformenceLevel } from "../Config/SelectDrobdown";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { getData } from "../../redux/MinistriesState/MinistresAction.js";
@@ -30,12 +28,13 @@ import {
   ColorButtonEdit,
   Textarea,
 } from "../Config/Content.jsx";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   AddWorkNutral,
   getDataNatural,
 } from "../../redux/Whorkntural/WorkNutralAction.js";
-import { Add, Close } from "@mui/icons-material";
+import { Add, AddIcCallOutlined, Close } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -173,9 +172,11 @@ export default function MainForm(props) {
   });
   return (
     <React.Fragment>
-      <Button variant="contained" onClick={handleClickOpen}>
-        <Add fontSize="large" />
-      </Button>
+      <Box sx={{ "& > :not(style)": { m: 1 } }}>
+        <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Box>
       <Dialog
         fullScreen
         open={open}
@@ -377,20 +378,20 @@ export default function MainForm(props) {
                   </div>
                 </div>
                 <div className="mb-4">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="start"
-                      onChange={(value) => setStartTime(value)}
-                    />
-                    <DatePicker
-                      label="end"
-                      onChange={(value) => setEndTime(value)}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="start"
+                        onChange={(value) => setStartTime(value)}
+                      />
+                      <DatePicker
+                        label="end"
+                        onChange={(value) => setEndTime(value)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </div>
-             
+
                 {/* end Date for the project  */}
                 {/* start select */}
                 {/* start beneficiary*/}
@@ -422,7 +423,11 @@ export default function MainForm(props) {
                   onChange={handleInputChange}
                 >
                   {dataUserID
-                    .filter((option) => option.user_type !== users?.user_type && option.user_type !== "IT")
+                    .filter(
+                      (option) =>
+                        option.user_type !== users?.user_type &&
+                        option.user_type !== "IT"
+                    )
                     .map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}{" "}

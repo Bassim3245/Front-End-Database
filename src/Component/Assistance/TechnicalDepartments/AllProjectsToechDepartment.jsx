@@ -147,5 +147,4 @@ AllProjectsEchDepartment.propTypes = {
   id: PropTypes?.string?.isRequired,
   Label: PropTypes?.string?.isRequired,
 };
-
 export default React.memo(AllProjectsEchDepartment);

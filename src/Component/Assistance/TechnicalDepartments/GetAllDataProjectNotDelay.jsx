@@ -6,7 +6,6 @@ function GetAllDataProjectNotDelay() {
     <div>
       <DepartmentsList
         Path={"/Home/ProjectsListAssistance"}
-        
       />
     </div>
   );

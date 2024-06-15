@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getDataBySendUserProjectAndProduct } from "../Config/fetchData";
 import DataProductByProjectIsSend from "./DataProductByProjectIsSend";
 import "./STyle.css";
 import Loader from "../Config/Loader";
 import { Table } from "react-bootstrap";
-import { IconButton, MenuItem, useTheme } from "@mui/material";
+import { MenuItem, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../redux/LanguageState";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,8 @@ import { BackendUrl } from "../../redux/api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import DropDownGrid from "Component/Config/CustomMennu";
 import { formatDate } from "../Config/Function";
-function Product() {
+import PropTypes from "prop-types";
+function Product({ Label }) {
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -24,20 +25,17 @@ function Product() {
   const { t } = useTranslation();
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const theme = useTheme();
+  const { rtl } = useSelector((state) => state?.language);
+  const dispatch = useDispatch();
   const { isLoading, data, isError, error, isFetching } = useQuery(
     "dataSendByUser",
     () => getDataBySendUserProjectAndProduct(DepartmentID),
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      // refetchInterval: 5000,
     }
   );
-  const { rtl } = useSelector((state) => {
-    // @ts-ignore
-    return state?.language;
-  });
-  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -51,33 +49,27 @@ function Product() {
       showCancelButton: true,
       showCloseButton: true,
     }).then(async (result) => {
-      // Check if the user clicked "نعم"
       if (result.isConfirmed) {
-        await axios
-          .put(
+        try {
+          const response = await axios.put(
             `${BackendUrl}/api/CancelSendProject/${id}`,
             {},
-            {
-              headers: {
-                token: token,
-              },
-            }
-          )
-          .then((response) => {
-            if (response) {
-              console.log(response.data);
-              toast(response.data.message);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            { headers: { token: token } }
+          );
+          if (response) {
+            console.log(response.data);
+            toast(response.data.message);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         console.log("User clicked لا or closed the dialog");
       }
     });
   };
-  const handelSendData = (id) => {
+
+  const handleSendData = (id) => {
     Swal.fire({
       title: "هل تريد الاستمرار؟",
       icon: "question",
@@ -88,110 +80,120 @@ function Product() {
       showCloseButton: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axios
-          .put(
+        try {
+          const response = await axios.put(
             `${BackendUrl}/api/sendProjectToManger/${id}`,
             {},
-            {
-              headers: {
-                token: token,
-              },
-            }
-          )
-          .then((response) => {
-            if (response) {
-              console.log(response.data);
-              toast(response.data.message);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            { headers: { token: token } }
+          );
+          if (response) {
+            console.log(response.data);
+            toast(response.data.message);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         console.log("User clicked لا or closed the dialog");
       }
     });
   };
+  if (isLoading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <div>
-          {" "}
-          <Loader />{" "}
-        </div>
-      ) : (
-        <div
-          className={` container projects p-20 ${
-            theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
-          } rad-10 m-20 `}
-          style={{ margin: "auto", width: "100%", maxWidth: "100%" }}
+    <div
+      className={`container projects p-20 ${
+        theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
+      } rad-10 m-20`}
+      style={{ margin: "auto", width: "100%", maxWidth: "100%" }}
+      dir={rtl?.dir}
+    >
+      <ToastContainer />
+      <h2 className="mt-0 mb-20">{t("ProjectListReceive.title")}</h2>
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          striped
+          bordered
+          hover
+          variant={theme.palette.mode === "dark" ? "dark" : ""}
           dir={rtl?.dir}
         >
-          <ToastContainer />
-          <h2 className="mt-0 mb-20">{t("ProjectListReceive.title")}</h2>
-          <div className="" style={{ overflowX: "auto" }}>
-            <Table
-              striped
-              bordered
-              hover
-              variant={theme.palette.mode === "dark" ? "dark" : ""}
-              dir={rtl?.dir}
-            >
-              <thead>
-                <tr>
-                  <td>#</td>
-                  <td>{t("ProjectListReceive.table.DepartmentName")}</td>
-                  <td> {t("ProjectListReceive.table.ProjectName")}</td>
-                  <td> {t("ProjectListReceive.table.date")}</td>
-                  <td>{t("ProjectListReceive.table.sender")}</td>
-                  <td> {t("ProjectListReceive.table.SenderPhone")}</td>
-                  <td>{t("ProjectListReceive.table.Action")}</td>
-                </tr>
-              </thead>
-              <tbody>
-                {data &&
-                  data.length > 0 &&
-                  data?.map((Project, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{Project?.DepartmentID?.departmentName}</td>
-                      <td>{Project?.nameProject}</td>
-                      <td>{formatDate(Project?.createdAt)}</td>
+          <thead>
+            <tr>
+              <td>#</td>
+              <td>{t("ProjectListReceive.table.DepartmentName")}</td>
+              <td>{t("ProjectListReceive.table.ProjectName")}</td>
+              <td>{t("ProjectListReceive.table.date")}</td>
+              <td>{t("ProjectListReceive.table.sender")}</td>
+              <td>{t("ProjectListReceive.table.SenderPhone")}</td>
+              <td>{t("ProjectListReceive.table.Action")}</td>
+            </tr>
+          </thead>
+          <tbody>
+            {data &&
+              data.length > 0 &&
+              data.map((Project, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{Project?.DepartmentID?.departmentName}</td>
+                  <td>{Project?.nameProject}</td>
+                  <td>{formatDate(Project?.createdAt)}</td>
+                  {Label === "ProductListReceivedAssistance" ? (
+                    <>
+                      <td>{Project?.MutualProjectId?.ProjectManger?.name}</td>
+                      <td>{Project?.MutualProjectId?.ProjectManger?.Phone}</td>
+                    </>
+                  ) : (
+                    <>
                       <td>{Project?.userId?.name}</td>
                       <td>{Project?.userId?.Phone}</td>
-                      <td className="d-flex text-center">
-                        <DropDownGrid className="p-0">
-                          <MenuItem onClick={() => showSwal(Project?._id)}>
-                            <span className="me-2">
-                              {" "}
-                              <CancelScheduleSend />
-                            </span>
-                            Cancel sending
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => handelSendData(Project?._id)}
-                          >
-                            <span className="me-2">
-                              {" "}
-                              <Send />
-                            </span>
-                            send
-                          </MenuItem>
-                        </DropDownGrid>
-                        <span className="ms-3">
-                          <DataProductByProjectIsSend
-                            projectId={Project?._id}
-                          />
+                    </>
+                  )}
+
+                  <td className="d-flex text-center">
+                    <DropDownGrid className="p-0">
+                      <MenuItem onClick={() => showSwal(Project?._id)}>
+                        <span className="me-2">
+                          <CancelScheduleSend />
                         </span>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
-          </div>
-        </div>
-      )}
-    </>
+                        Cancel sending
+                      </MenuItem>
+                      <MenuItem onClick={() => handleSendData(Project?._id)}>
+                        <span className="me-2">
+                          <Send />
+                        </span>
+                        Send
+                      </MenuItem>
+                    </DropDownGrid>
+                    <span className="ms-3">
+                      <DataProductByProjectIsSend projectId={Project?._id} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
+    </div>
   );
 }
-export default Product;
+Product.propTypes = {
+  DepartmentID: PropTypes.string,
+  data: PropTypes.array,
+  Label: PropTypes?.string?.isRequired,
+};
+
+export default React.memo(Product);

@@ -12,8 +12,12 @@ import { BackendUrl } from "../../redux/api/axios";
 import { displayProductByProjectName } from "../../redux/ProductSlice/ProductAction";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import { setLanguage } from "../../redux/LanguageState";
-import Loader from "../Config/Loader";
-import { Delete, hasPermission } from "../Config/Function";
+import {
+  CustomNoRowsOverlay,
+  Delete,
+  hasPermission,
+  sumDataProjectIQD,
+} from "../Config/Function";
 import { ColorLink, ButtonClearState, BottomSend } from "../Config/Content";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchDataProduct } from "Component/Config/fetchData";
@@ -102,7 +106,6 @@ export default function HandleDataMutualProject() {
   const handleBack = () => {
     window.history.back();
   };
-
   const getDataAllCheckByDepartmentId = async () => {
     try {
       const response = await axios.get(
@@ -140,7 +143,6 @@ export default function HandleDataMutualProject() {
       [id]: !prevState[id],
     }));
   };
-
   const handleSendProjectFromHodToProjectManager = async () => {
     try {
       const DepartmentID = info?.DepartmentID;
@@ -163,7 +165,6 @@ export default function HandleDataMutualProject() {
       console.error(error);
     }
   };
-
   useEffect(() => {
     const departmentIds = Array.isArray(
       dataProject?.MutualProjectId?.DepartmentID
@@ -179,26 +180,6 @@ export default function HandleDataMutualProject() {
       setIsSend(true);
     }
   }, [checkData, dataProject, handleSendProjectFromHodToProjectManager]);
-  const sumDataProjectIQD = () => {
-    const totalIQD = products.reduce((acc, item) => {
-      if (item.PriceType === "IQD") {
-        const itemTotal = item?.Quantity * item?.Price || 0;
-        return acc + itemTotal;
-      }
-      return acc;
-    }, 0);
-
-    const totalOther = products.reduce((acc, item) => {
-      if (item.PriceType !== "IQD") {
-        const itemTotal = item?.Quantity * item?.Price || 0;
-        return acc + itemTotal;
-      }
-      return acc;
-    }, 0);
-
-    return { totalIQD, totalOther };
-  };
-
   return (
     <div className="w-100">
       <div className="pb-2 d-block">
@@ -256,7 +237,7 @@ export default function HandleDataMutualProject() {
             </div>
             <div>
               <BottomSend onClick={handleSendProjectFromHodToProjectManager}>
-              {t("ProductList.table.sendToManger")}
+                {t("ProductList.table.sendToManger")}
               </BottomSend>
             </div>
           </div>
@@ -285,7 +266,6 @@ export default function HandleDataMutualProject() {
                   {t("Authorized to send")}
                 </Button>
               ))}
-
             <ModulToploadFilePricedTechnical
               t={t}
               DepartmentID={dataProject?.DepartmentID}
@@ -299,121 +279,118 @@ export default function HandleDataMutualProject() {
               ProjectWorkNatural={dataProject?.WorkNatural}
             />
           </div>
+          {Array.isArray(products) && products.length > 0 ? (
+            <Table
+              striped
+              bordered
+              hover
+              variant={theme?.palette?.mode === "dark" ? "dark" : ""}
+              dir={rtl?.dir}
+              responsive
+            >
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{t("ProductList.table.ProductName")}</th>
+                  <th>{t("ProductList.table.Price")}</th>
+                  <th>{t("ProductList.table.PriceType")}</th>
+                  <th>{t("ProductList.table.Quantity")}</th>
+                  <th>{t("ProductList.table.AdditionPercentage")}</th>
+                  <th>{t("ProductList.table.priceConvert")}</th>
+                  <th>{t("ProductList.table.Notes")}</th>
+                  <th>{t("ProductList.table.Specifications")}</th>
+                  <th>{t("ProductList.table.Total")}</th>
+                  <th>{t("ProductList.table.Unit")}</th>
+                  <th>{t("ProductList.table.Action")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(products) &&
+                  products &&
+                  products?.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item?.nameProduct}</td>
+                      <td>{item?.Price}</td>
+                      <td>{item?.PriceType}</td>
+                      <td>{item?.Quantity}</td>
+                      <td>{item?.percent}</td>
+                      <td>{item?.PriceConvert}</td>
+                      <td>{item?.comments}</td>
+                      <td>{item?.description}</td>
+                      <td>{item?.Quantity * item?.Price}</td>
+                      <td>{item?.UnitId?.Unit}</td>
 
-          <Table
-            striped
-            bordered
-            hover
-            variant={theme?.palette?.mode === "dark" ? "dark" : ""}
-            dir={rtl?.dir}
-            responsive
-          >
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>{t("ProductList.table.ProductName")}</th>
-                <th>{t("ProductList.table.Price")}</th>
-                <th>{t("ProductList.table.PriceType")}</th>
-                <th>{t("ProductList.table.Quantity")}</th>
-                <th>{t("ProductList.table.AdditionPercentage")}</th>
-                <th>{t("ProductList.table.priceConvert")}</th>
-                <th>{t("ProductList.table.Notes")}</th>
-                <th>{t("ProductList.table.Specifications")}</th>
-                <th>{t("ProductList.table.Total")}</th>
-                <th>{t("ProductList.table.Unit")}</th>
-                <th>{t("ProductList.table.Action")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products ? (
-                Array.isArray(products) &&
-                products?.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{item?.nameProduct}</td>
-                    <td>{item?.Price}</td>
-                    <td>{item?.PriceType}</td>
-                    <td>{item?.Quantity}</td>
-                    <td>{item?.percent}</td>
-                    <td>{item?.PriceConvert}</td>
-                    <td>{item?.comments}</td>
-                    <td>{item?.description}</td>
-                    <td>{item?.Quantity * item?.Price}</td>
-                    <td>{item?.UnitId?.Unit}</td>
-
-                    <td className=" d-flex gap-2 f-wrap">
-                      <div>
-                        {item?.allowRequest || info?.user_type === "H.O.D" ? (
-                          <div className="d-flex">
-                            <ModuleEdit
-                              item={item}
-                              getDataProduct={fetchDataProduct}
-                              // @ts-ignore
-                              ProjectWorkNatural={dataProject?.WorkNatural}
-                            />
-                          </div>
-                        ) : (
-                          <>
-                            {/* <Button>Delete</Button> */}
-                            <div className="d-flex gap-2">
-                              <AllowEdit
-                                Id={item?._id}
-                                label="AllowEdit"
-                                title="تعديل"
+                      <td className=" d-flex gap-2 f-wrap">
+                        <div>
+                          {item?.allowRequest || info?.user_type === "H.O.D" ? (
+                            <div className="d-flex">
+                              <ModuleEdit
+                                item={item}
+                                getDataProduct={fetchDataProduct}
+                                // @ts-ignore
+                                ProjectWorkNatural={dataProject?.WorkNatural}
                               />
                             </div>
-                          </>
-                        )}
-                      </div>
-                      <div>
-                        {item?.allowRequestDelete ||
-                        info?.user_type === "H.O.D" ? (
-                          <div className="d-flex">
-                            <BottomSend
-                              onClick={() =>
-                                Delete(
-                                  item?._id,
-                                  setDelete,
-                                  setAnchorEl,
-                                  token,
-                                  "DeleteProduct"
-                                )
-                              }
-                            >
-                              {t("ProductList.table.Delete")}
-                            </BottomSend>
-                          </div>
-                        ) : (
-                          <>
-                            {/* <Button>Delete</Button> */}
-                            <div className="d-flex gap-2">
-                              <AllowDelate
-                                Id={item?._id}
-                                label="AllowDelete"
-                                title="حذف"
-                              />
+                          ) : (
+                            <>
+                              {/* <Button>Delete</Button> */}
+                              <div className="d-flex gap-2">
+                                <AllowEdit
+                                  Id={item?._id}
+                                  label="AllowEdit"
+                                  title="تعديل"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div>
+                          {item?.allowRequestDelete ||
+                          info?.user_type === "H.O.D" ? (
+                            <div className="d-flex">
+                              <BottomSend
+                                onClick={() =>
+                                  Delete(
+                                    item?._id,
+                                    setDelete,
+                                    setAnchorEl,
+                                    token,
+                                    "DeleteProduct"
+                                  )
+                                }
+                              >
+                                {t("ProductList.table.Delete")}
+                              </BottomSend>
                             </div>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <div>
-                  <p>No Data Found</p>
-                </div>
-              )}
-              <tr>
-                <td colSpan={10}>المجموع </td>
-                <td>{sumDataProjectIQD().totalIQD} IQD</td>
-                <td>{sumDataProjectIQD().totalOther} USD</td>
-              </tr>
-            </tbody>
-          </Table>
-          <div className="d-flex justify-content-center align-items-center">
-            {loading ? <Loader /> : "Data not found"}
-          </div>
+                          ) : (
+                            <>
+                              {/* <Button>Delete</Button> */}
+                              <div className="d-flex gap-2">
+                                <AllowDelate
+                                  Id={item?._id}
+                                  label="AllowDelete"
+                                  title="حذف"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                <tr>
+                  <td colSpan={10}>المجموع </td>
+                  <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
+                  <td>{sumDataProjectIQD(products).totalOther} USD</td>
+                </tr>
+              </tbody>
+            </Table>
+          ) : (
+            <div>
+              <CustomNoRowsOverlay />
+            </div>
+          )}
         </div>
       </div>
     </div>

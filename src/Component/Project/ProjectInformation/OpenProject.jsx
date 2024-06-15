@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ColorLink } from "../../Config/Content";
+import { BottomSend, ColorLink } from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../../MainFor/ModuleInsertProduct";
 import axios from "axios";
@@ -16,7 +16,13 @@ import ModulToploadFilePricedTechnical from "../../MainFor/ModulToploadFilePrice
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 import Loader from "Component/Config/Loader";
-import { Delete, hasPermission } from "../../Config/Function";
+import {
+  CustomNoRowsOverlay,
+  Delete,
+  FormatDataNumber,
+  hasPermission,
+  sumDataProjectIQD,
+} from "../../Config/Function";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
@@ -95,25 +101,6 @@ export default function OpenProject() {
   useEffect(() => {
     fetchDataByProjectId();
   }, [DeleteItem, anchorEl]);
-  const sumDataProjectIQD = () => {
-    const totalIQD = products.reduce((acc, item) => {
-      if (item.PriceType === "IQD") {
-        const itemTotal = item?.Quantity * item?.Price || 0;
-        return acc + itemTotal;
-      }
-      return acc;
-    }, 0);
-
-    const totalOther = products.reduce((acc, item) => {
-      if (item.PriceType !== "IQD") {
-        const itemTotal = item?.Quantity * item?.Price || 0;
-        return acc + itemTotal;
-      }
-      return acc;
-    }, 0);
-
-    return { totalIQD, totalOther };
-  };
 
   return (
     <div className={`w-100 `}>
@@ -158,13 +145,13 @@ export default function OpenProject() {
                           roles?.send_project_from_Employ_to_HOD?._id,
                           Permission?.permissionIds
                         ) ? (
-                          <Button
+                          <BottomSend
                             onClick={() => handleSend(products?._id)}
                             className="me-2"
                             variant="outlined"
                           >
                             {t("ProductList.SendButton")}
-                          </Button>
+                          </BottomSend>
                         ) : (
                           <Button
                             className="me-2"
@@ -221,7 +208,7 @@ export default function OpenProject() {
                         <th>{t("ProductList.table.priceConvert")}</th>
                         <th>{t("ProductList.table.Notes")}</th>
                         <th>{t("ProductList.table.Specifications")}</th>
-                        <th>المجموع</th>
+                        <th>{t("ProductList.table.Total")}</th>
                         <th>{t("ProductList.table.Unit")}</th>
                         <th>{t("ProductList.table.Action")}</th>
                       </tr>
@@ -233,15 +220,16 @@ export default function OpenProject() {
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{item?.nameProduct}</td>
-                            <td>{item?.Price}</td>
+                            <td>{FormatDataNumber(item?.Price)}</td>
                             <td>{item?.PriceType}</td>
                             <td>{item?.Quantity}</td>
-                            <td>{item?.percent}</td>
+                            <td> {item?.percent}</td>
                             <td>{item?.PriceConvert}</td>
-
                             <td>{item?.comments}</td>
                             <td>{item?.description}</td>
-                            <td>{item?.Quantity * item?.Price}</td>
+                            <td>
+                              {FormatDataNumber(item?.Quantity * item?.Price)}
+                            </td>
                             <td>{item?.UnitId?.Unit}</td>
 
                             <td className=" d-flex gap-2 f-wrap">
@@ -275,7 +263,7 @@ export default function OpenProject() {
                                 {item?.allowRequestDelete ||
                                 info?.user_type === "H.O.D" ? (
                                   <div className="d-flex">
-                                    <Button
+                                    <BottomSend
                                       onClick={() =>
                                         Delete(
                                           item?._id,
@@ -286,8 +274,8 @@ export default function OpenProject() {
                                         )
                                       }
                                     >
-                                      Delete
-                                    </Button>
+                                      {t("ProductList.table.Delete")}
+                                    </BottomSend>
                                   </div>
                                 ) : (
                                   <>
@@ -312,15 +300,14 @@ export default function OpenProject() {
                       )}
                       <tr>
                         <td colSpan={10}>المجموع </td>
-                        <td>{sumDataProjectIQD().totalIQD} IQD</td>
-                        <td>{sumDataProjectIQD().totalOther} USD</td>
+                        <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
+                        <td>{sumDataProjectIQD(products).totalOther} USD</td>
                       </tr>
                     </tbody>
                   </Table>
                 ) : (
-                  <div className=" d-flex justify-content-center align-item-center">
-                    {" "}
-                    data not found
+                  <div>
+                    <CustomNoRowsOverlay />
                   </div>
                 ))}
             </div>

@@ -43,6 +43,8 @@ import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartme
 import MutualProjectClint from "Component/MutualProject/MutualProjectClaint";
 import SetPermissionToGroup from "Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/SetPermisition";
 import HandelDataMutualProject from "Component/MutualProject/HandelDataMutualProject";
+import ProductListHOD from "Component/Product/ProductListHOD";
+import ProductListRecivedAssistance from "Component/Product/ProductListRecivedAssistance";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -143,11 +145,17 @@ export default function App() {
                 path="MutualProjectClint"
                 element={<MutualProjectClint />}
               />
-               <Route
+              <Route
                 path="SetPermissionToGroup/:id"
                 element={<SetPermissionToGroup />}
               />
-                  <Route
+              <Route path="ProductListHOD" element={<ProductListHOD />} />
+              <Route
+                path="ProductListRecivedAssistance"
+                element={<ProductListRecivedAssistance />}
+              />
+
+              <Route
                 path="HandelDataMutualProject/:id"
                 element={<HandelDataMutualProject />}
               />

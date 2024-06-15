@@ -25,6 +25,7 @@ import {
   GroupAdd,
   Home,
   HourglassBottom,
+  KeyboardAlt,
   PermDataSetting,
   Person,
   StackedLineChart,
@@ -147,7 +148,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
         },
         {
           text: t("layout.GeneralData"),
-          icon: <PermDataSetting />,
+          icon: <KeyboardAlt />,
           path: "GeneralDataInformation",
           checkPermission: roles?.Add_General_Data?._id,
         },
@@ -192,7 +193,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
         {
           text: t("layout.ProductList"),
           icon: <ReceiptOutlinedIcon />,
-          path: "ProductList",
+          path: "ProductListHOD",
           checkPermission: roles?.view_data_send?._id,
         },
         {
@@ -254,7 +255,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
       Route1 = [
         {
           text: t("layout.Assistance"),
-          icon: <Dataset />,
+          icon: <KeyboardAlt />,
           path: "Assistance",
           checkPermission: roles?.form_Mutual_projects?._id,
         },
@@ -282,6 +283,12 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "FilesReceived",
           checkPermission:
             roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
+        },
+        {
+          text: t("layout.ProductList"),
+          icon: <ReceiptOutlinedIcon />,
+          path: "ProductListRecivedAssistance",
+          checkPermission: roles?.view_data_send?._id,
         },
         {
           text: t("layout.Profile"),

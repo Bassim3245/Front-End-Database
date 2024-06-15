@@ -85,6 +85,23 @@ export const getDataBySendUserProjectAndProduct = async (DepartmentID) => {
     throw new Error(error.message);
   }
 };
+export const getDataBySendUserProjectAndProductAssistance = async (DepartmentID) => {
+  const token = localStorage.getItem("token") || {};
+  try {
+    const response = await axios.get(
+      `${BackendUrl}/api/getDataBySendUserProjectAndProduct/${DepartmentID}`,
+      {
+        // @ts-ignore
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 export const GetDataEventByDepartmentId = async (DepartmentId) => {
   try {
     const response = await axios.get(
