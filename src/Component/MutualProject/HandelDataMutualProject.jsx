@@ -14,6 +14,7 @@ import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import { setLanguage } from "../../redux/LanguageState";
 import {
   CustomNoRowsOverlay,
+  CustomNoRowsOverlaySentData,
   Delete,
   hasPermission,
   sumDataProjectIQD,
@@ -21,7 +22,7 @@ import {
 import { ColorLink, ButtonClearState, BottomSend } from "../Config/Content";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchDataProduct } from "Component/Config/fetchData";
-import AllowDelate from "Component/Project/ProjectInformation/AllowDelete";
+import AllowDelete from "Component/Project/ProjectInformation/AllowDelete";
 import AllowEdit from "Component/Project/ProjectInformation/AlllowEdit";
 import ModuleEdit from "Component/MainFor/ModulEditProducts";
 
@@ -194,7 +195,7 @@ export default function HandleDataMutualProject() {
       >
         <div className="mb-3">
           <div className="d-flex justify-content-between" dir={rtl?.dir}>
-            <h4 className="">{dataProject?.nameProject}</h4>
+            <h4>{dataProject?.nameProject}</h4>
             <h4>
               Project Manager (
               {dataProject?.MutualProjectId?.ProjectManger?.name})
@@ -248,7 +249,7 @@ export default function HandleDataMutualProject() {
           </div>
           <div className="d-flex justify-content-center gap-2 ms-2 me-2 mb-2">
             {isSend &&
-              dataProject?.MutualProjectId?.ProjectManger?._id == info?._id &&
+              dataProject?.MutualProjectId?.ProjectManger?._id === info?._id &&
               (hasPermission(
                 roles?.send_project_from_Employ_to_HOD?._id,
                 Permission?.permissionIds
@@ -266,48 +267,52 @@ export default function HandleDataMutualProject() {
                   {t("Authorized to send")}
                 </Button>
               ))}
-            <ModulToploadFilePricedTechnical
-              t={t}
-              DepartmentID={dataProject?.DepartmentID}
-              ProjectId={dataProject?._id}
-            />
-            <ModuleInsertProduct
-              t={t}
-              getDataProduct={fetchDataProduct}
-              DepartmentID={dataProject?.DepartmentID}
-              ProjectId={dataProject?._id}
-              ProjectWorkNatural={dataProject?.WorkNatural}
-            />
+            {!dataProject?.SendProject && (
+              <ModulToploadFilePricedTechnical
+                t={t}
+                DepartmentID={dataProject?.DepartmentID}
+                ProjectId={dataProject?._id}
+              />
+            )}
+
+            {!checkData?.DepartmentID?.includes(info?.DepartmentID) && (
+              <ModuleInsertProduct
+                t={t}
+                getDataProduct={fetchDataProduct}
+                DepartmentID={dataProject?.DepartmentID}
+                ProjectId={dataProject?._id}
+                ProjectWorkNatural={dataProject?.WorkNatural}
+              />
+            )}
           </div>
           {Array.isArray(products) && products.length > 0 ? (
-            <Table
-              striped
-              bordered
-              hover
-              variant={theme?.palette?.mode === "dark" ? "dark" : ""}
-              dir={rtl?.dir}
-              responsive
-            >
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>{t("ProductList.table.ProductName")}</th>
-                  <th>{t("ProductList.table.Price")}</th>
-                  <th>{t("ProductList.table.PriceType")}</th>
-                  <th>{t("ProductList.table.Quantity")}</th>
-                  <th>{t("ProductList.table.AdditionPercentage")}</th>
-                  <th>{t("ProductList.table.priceConvert")}</th>
-                  <th>{t("ProductList.table.Notes")}</th>
-                  <th>{t("ProductList.table.Specifications")}</th>
-                  <th>{t("ProductList.table.Total")}</th>
-                  <th>{t("ProductList.table.Unit")}</th>
-                  <th>{t("ProductList.table.Action")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(products) &&
-                  products &&
-                  products?.map((item, index) => (
+            !dataProject?.SendProject ? (
+              <Table
+                striped
+                bordered
+                hover
+                variant={theme?.palette?.mode === "dark" ? "dark" : ""}
+                dir={rtl?.dir}
+                responsive
+              >
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{t("ProductList.table.ProductName")}</th>
+                    <th>{t("ProductList.table.Price")}</th>
+                    <th>{t("ProductList.table.PriceType")}</th>
+                    <th>{t("ProductList.table.Quantity")}</th>
+                    <th>{t("ProductList.table.AdditionPercentage")}</th>
+                    <th>{t("ProductList.table.priceConvert")}</th>
+                    <th>{t("ProductList.table.Notes")}</th>
+                    <th>{t("ProductList.table.Specifications")}</th>
+                    <th>{t("ProductList.table.Total")}</th>
+                    <th>{t("ProductList.table.Unit")}</th>
+                    <th>{t("ProductList.table.Action")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((item, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item?.nameProduct}</td>
@@ -320,72 +325,57 @@ export default function HandleDataMutualProject() {
                       <td>{item?.description}</td>
                       <td>{item?.Quantity * item?.Price}</td>
                       <td>{item?.UnitId?.Unit}</td>
-
-                      <td className=" d-flex gap-2 f-wrap">
-                        <div>
-                          {item?.allowRequest || info?.user_type === "H.O.D" ? (
-                            <div className="d-flex">
-                              <ModuleEdit
-                                item={item}
-                                getDataProduct={fetchDataProduct}
-                                // @ts-ignore
-                                ProjectWorkNatural={dataProject?.WorkNatural}
-                              />
-                            </div>
-                          ) : (
-                            <>
-                              {/* <Button>Delete</Button> */}
-                              <div className="d-flex gap-2">
-                                <AllowEdit
-                                  Id={item?._id}
-                                  label="AllowEdit"
-                                  title="تعديل"
-                                />
-                              </div>
-                            </>
-                          )}
-                        </div>
-                        <div>
-                          {item?.allowRequestDelete ||
-                          info?.user_type === "H.O.D" ? (
-                            <div className="d-flex">
-                              <BottomSend
-                                onClick={() =>
-                                  Delete(
-                                    item?._id,
-                                    setDelete,
-                                    setAnchorEl,
-                                    token,
-                                    "DeleteProduct"
-                                  )
-                                }
-                              >
-                                {t("ProductList.table.Delete")}
-                              </BottomSend>
-                            </div>
-                          ) : (
-                            <>
-                              {/* <Button>Delete</Button> */}
-                              <div className="d-flex gap-2">
-                                <AllowDelate
-                                  Id={item?._id}
-                                  label="AllowDelete"
-                                  title="حذف"
-                                />
-                              </div>
-                            </>
-                          )}
-                        </div>
+                      <td className="d-flex gap-2 f-wrap">
+                        {item?.allowRequest || info?.user_type === "H.O.D" ? (
+                          <ModuleEdit
+                            item={item}
+                            getDataProduct={fetchDataProduct}
+                            ProjectWorkNatural={dataProject?.WorkNatural}
+                          />
+                        ) : (
+                          <AllowEdit
+                            Id={item?._id}
+                            label="AllowEdit"
+                            title="تعديل"
+                          />
+                        )}
+                        {item?.allowRequestDelete ||
+                        info?.user_type === "H.O.D" ? (
+                          <BottomSend
+                            onClick={() =>
+                              Delete(
+                                item?._id,
+                                setDelete,
+                                setAnchorEl,
+                                token,
+                                "DeleteProduct"
+                              )
+                            }
+                          >
+                            {t("ProductList.table.Delete")}
+                          </BottomSend>
+                        ) : (
+                          <AllowDelete
+                            Id={item?._id}
+                            label="AllowDelete"
+                            title="حذف"
+                          />
+                        )}
                       </td>
                     </tr>
                   ))}
-                <tr>
-                  <td colSpan={10}>المجموع </td>
-                  <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
-                  <td>{sumDataProjectIQD(products).totalOther} USD</td>
-                </tr>
-              </tbody>
-            </Table>
+                  <tr>
+                    <td colSpan={10}>المجموع </td>
+                    <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
+                    <td>{sumDataProjectIQD(products).totalOther} USD</td>
+                  </tr>
+                </tbody>
+              </Table>
+            ) : (
+              <div>
+                <CustomNoRowsOverlaySentData />
+              </div>
+            )
           ) : (
             <div>
               <CustomNoRowsOverlay />

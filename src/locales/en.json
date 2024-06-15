@@ -110,6 +110,7 @@
     "SendButton": "Send Project",
     "InsertButton": "Insert Product",
     "ButtonUpload": "File Upload",
+    "sum": "price total",
     "table": {
       "Action": "Action",
       "Unit": "Unit",
@@ -121,7 +122,7 @@
       "Specifications": "Specifications",
       "Notes": "Notes",
       "ProductName": "Product Name",
-      "test": "tes",
+      "test": "test",
       "Edit": "Edit",
       "Delete": "Delete",
       "Total": "Total",
@@ -131,7 +132,7 @@
       "RequistSendDelete": "Send Request Delete",
       "send": "send",
       "close": "close",
-      "sendToManger":" Send to Project Manager"
+      "sendToManger": " Send to Project Manager"
     },
     "PriceOffer": {
       "PriceOffer": "Price Offer",
@@ -172,5 +173,7 @@
     "TechnicalDepartments": "Technical Departments",
     "HumanResource": "Human Resource"
   },
-  "Authorized": "Unauthorized"
+  "Authorized": "Unauthorized",
+  "NotFoundData": "No Data",
+  "sentData": "Project has been sent"
 }

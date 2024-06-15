@@ -110,6 +110,7 @@
     "SendButton": "ارسال المشروع",
     "InsertButton": "اضافة منتج",
     "ButtonUpload": "رفع فايل",
+    "sum": "price total",
     "table": {
       "Action": "اجراء",
       "Unit": "الوحدة",
@@ -124,6 +125,7 @@
       "test": "اختبار",
       "Edit": "تعديل",
       "Delete": "حذف",
+      "Total": "السعر الكلي",
       "RequistDelete": "طلب حذف",
       "RequistEdit": "طلب تعديل",
       "RequistSendEdit": "ارسال طلب تعديل",
@@ -171,5 +173,7 @@
     "TechnicalDepartments": "الاقسام الفنية ",
     "HumanResource": "الموارد البشرية"
   },
-  "Authorized": "غير مصرح"
+  "Authorized": "غير مصرح",
+  "NotFoundData": "لاتوجد بيانات",
+  "sentData": "تم ارسال المشروع"
 }

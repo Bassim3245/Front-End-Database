@@ -114,8 +114,8 @@ const StyledDataGrid = styled(DataGrid)(
       // position: 'absolute !important', top: '0', left: '0',
       padding: "0 3px !important",
       backgroundColor: gridTheme.mainColor,
-      minHeight: "60px !important",
-      maxHeight: "60px !important",
+      minHeight:"60px !important",
+      maxHeight:"60px !important",
       // fontSize:"20px"
     },
 

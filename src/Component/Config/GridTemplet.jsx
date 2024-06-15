@@ -33,7 +33,7 @@ const GridTemplate = ({ columns, rows }) => {
             }}
             getRowId={(row) => row.id}
             // hideFooter={true} // This line hides the footer
-            // pagination
+            pagination
             autoPageSize
             pageSize={8} // Number of rows per page
             slots={{

@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Box, MenuItem, useTheme } from "@mui/material";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 export function getFileIcon(fileName) {
   if (typeof fileName !== "string") {
     return null;
@@ -421,6 +422,7 @@ export const StyledGridOverlay = styled("div")(({ theme }) => ({
 
 export function CustomNoRowsOverlay() {
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <StyledGridOverlay theme={theme}>
       <svg
@@ -463,11 +465,31 @@ export function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Data</Box>
+      <Box sx={{ mt: 1 }}>
+        <h5>{t("NotFoundData")}</h5>
+      </Box>
     </StyledGridOverlay>
   );
 }
-
+export function CustomNoRowsOverlaySentData() {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  return (
+    <StyledGridOverlay theme={theme}>
+      <Box>
+        <img
+          width={"400px"}
+          height={"350px"}
+          src="/image/message-has-been-sent-successfully-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg"
+          alt="Project has been sent"
+        />
+      </Box>
+      <Box sx={{ mt: 1 }}>
+        <h5>{t("sentData")}</h5>
+      </Box>
+    </StyledGridOverlay>
+  );
+}
 export const FormatDataNumber = (Number) => {
   return new Intl.NumberFormat().format(Number);
 };
