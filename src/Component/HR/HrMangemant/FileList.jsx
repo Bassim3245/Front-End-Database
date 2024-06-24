@@ -1,4 +1,4 @@
-import { CloudDownload, Delete, Share } from "@mui/icons-material";
+import { Cached, CloudDownload, Delete, Share } from "@mui/icons-material";
 import DepartmentInHr from "./Departments";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -6,26 +6,20 @@ import { BackendUrl } from "../../../redux/api/axios";
 import {
   formatDate,
   getFileIcon,
+  getTimeAgo,
   handleDownload,
 } from "Component/Config/Function";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { GridMoreVertIcon } from "@mui/x-data-grid";
+import { Fab, IconButton } from "@mui/material";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { formatSize } from "../../Config/Function";
+import { formatDistanceToNow } from "date-fns";
 function FileList(props) {
-  const ITEM_HEIGHT = 48;
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [deleteFile, setDelete] = useState("");
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [RefreshButton, setRefreshButton] = useState(false);
   const getAllDataFileUpload = async () => {
     try {
       const response = await axios.get(`${BackendUrl}/api/getAllFiles`, {
@@ -39,11 +33,9 @@ function FileList(props) {
       console.error(error); // Log any errors for debugging
     }
   };
-
   useEffect(() => {
     getAllDataFileUpload();
-  }, [props?.action, deleteFile]);
-
+  }, [props?.action, deleteFile, RefreshButton]);
   const HandleDelete = async (id) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -52,7 +44,6 @@ function FileList(props) {
       },
       buttonsStyling: false,
     });
-
     try {
       const result = await swalWithBootstrapButtons.fire({
         title: "Are you sure?",
@@ -63,7 +54,6 @@ function FileList(props) {
         cancelButtonText: "No, cancel!",
         reverseButtons: true,
       });
-
       if (result.isConfirmed) {
         // @ts-ignore
         const response = await axios({
@@ -73,7 +63,6 @@ function FileList(props) {
             token: token,
           },
         });
-
         setDelete(toast.success(response?.data?.message));
         setAnchorEl(null);
         swalWithBootstrapButtons.fire({
@@ -92,6 +81,11 @@ function FileList(props) {
       console.log(error);
     }
   };
+  const handleRefresh = () => {
+    setRefreshButton((prev) => !prev); // Toggle the refresh state
+  };
+
+
   return (
     <div className="files-content d-grid gap-20">
       {data?.map((file, index) => (
@@ -101,50 +95,33 @@ function FileList(props) {
           </IconButton>
           <div className="icon txt-c">{getFileIcon(file?.file)}</div>
           <div className="txt-c mb-10 fs-14">{file?.BookName}</div>
-          <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between w-100">
             <p className="c-grey fs-13 mt-2">{file?.department}</p>
             <span>
-              <div>
-                <IconButton
-                  aria-label="more"
-                  id="long-button"
-                  aria-controls={open ? "long-menu" : undefined}
-                  aria-expanded={open ? "true" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <GridMoreVertIcon />
+              <div className="d-flex justify-content-between w-100">
+                <IconButton onClick={() => HandleDelete(file?._id)}>
+                  <Delete />
                 </IconButton>
-                <Menu
-                  id="long-menu"
-                  MenuListProps={{
-                    "aria-labelledby": "long-button",
-                  }}
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  PaperProps={{
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5,
-                      width: "20ch",
-                    },
-                  }}
-                >
-                  <DepartmentInHr UploadId={file?._id} />
-                  <MenuItem onClick={() => HandleDelete(file?._id)}>
-                    <Delete />
-                    <span className="ms-3">Delete</span>
-                  </MenuItem>
-                </Menu>
+                <DepartmentInHr
+                  UploadId={file?._id}
+                  setAnchorEl={setAnchorEl}
+                />
               </div>
             </span>
           </div>
           <div className="info between-flex mt-10 pt-10 fs-13 c-grey">
-            <span>{formatDate(file?.createdAt)}</span>
+            <span>{getTimeAgo(file?.createdAt)}</span>
             <span>{formatSize(file?.size)}</span>
           </div>
         </div>
       ))}
+      <div className="posisionRefersh">
+        <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
+          <span className="refreshButton">
+            <Cached />
+          </span>
+        </Fab>
+      </div>
     </div>
   );
 }

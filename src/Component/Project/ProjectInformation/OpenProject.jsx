@@ -11,7 +11,7 @@ import { fetchDataProduct } from "../../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
 import ModuleEdit from "../../MainFor/ModulEditProducts";
-import { Button, useTheme } from "@mui/material";
+import { Button, Fab, useTheme } from "@mui/material";
 import ModulToploadFilePricedTechnical from "../../MainFor/ModulToploadFilePricedTechnical";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
@@ -26,6 +26,7 @@ import {
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
+import { Cached } from "@mui/icons-material";
 
 export default function OpenProject() {
   const { id } = useParams();
@@ -36,6 +37,7 @@ export default function OpenProject() {
   const { products, loading } = useSelector((state) => state?.products);
   const [deleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [RefreshButton, setRefreshButton] = useState(false);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -54,7 +56,7 @@ export default function OpenProject() {
   useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  }, [dispatch, info?._id, token]);
+  }, [dispatch, info?._id, token, RefreshButton]);
 
   useEffect(() => {
     dispatch(setLanguage());
@@ -64,8 +66,10 @@ export default function OpenProject() {
     dispatch(displayProductByProjectName(id));
   };
 
-  useEffect(() => detDataProductById(), [deleteItem, dispatch, id]);
-
+  useEffect(
+    () => detDataProductById(),
+    [deleteItem, dispatch, id, RefreshButton]
+  );
   const fetchDataByProjectId = async () => {
     try {
       setLoading(true);
@@ -108,8 +112,10 @@ export default function OpenProject() {
 
   useEffect(() => {
     fetchDataByProjectId();
-  }, [deleteItem, anchorEl]);
-
+  }, [deleteItem, anchorEl, RefreshButton]);
+  const handleRefresh = () => {
+    setRefreshButton((prev) => !prev); // Toggle the refresh state
+  };
   return (
     <div className={`w-100`}>
       <ToastContainer
@@ -296,6 +302,13 @@ export default function OpenProject() {
           </div>
         </>
       )}
+      <div className="posisionRefersh">
+        <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
+          <span className="refreshButton">
+            <Cached />
+          </span>
+        </Fab>
+      </div>
     </div>
   );
 }

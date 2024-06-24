@@ -1,5 +1,5 @@
 import { Box, Button, Menu } from "@mui/material";
-import { cyan, grey, indigo, pink, purple } from "@mui/material/colors";
+import { cyan, grey, indigo, pink, purple, red } from "@mui/material/colors";
 import { alpha, styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -50,8 +50,16 @@ export const BottomSend = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(indigo[500]),
   backgroundColor: indigo[500],
   "&:hover": {
-    color:indigo[500],
-    backgroundColor:"white",
+    color: indigo[500],
+    backgroundColor: "white",
+  },
+}));
+export const BottomClose = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(red[500]),
+  backgroundColor: red[500],
+  "&:hover": {
+    color: red[500],
+    backgroundColor: "white",
   },
 }));
 export const BoxCostom = styled(Box)(({ theme }) => ({
@@ -110,13 +118,13 @@ const blue = {
 export const Textarea = styled(BaseTextareaAutosize)(
   ({ theme }) => `
   box-sizing: border-box;
-  width: 320px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 8px 12px;
-  border-radius: 8px;
+    width: 320px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 12px 12px 0 12px;
   color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
   background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
   border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
@@ -141,45 +149,92 @@ export const Textarea = styled(BaseTextareaAutosize)(
   }
 `
 );
+export const Textarea2 = styled(BaseTextareaAutosize)(
+  ({ theme }) => `
+    box-sizing: border-box;
+    width: 100%;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px 12px 0 12px;
+    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 2px ${
+      theme.palette.mode === "dark" ? grey[900] : grey[50]
+    };
+
+    &:hover {
+      border-color: ${blue[400]};
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: ${blue[400]};
+      box-shadow: 0 0 0 3px ${
+        theme.palette.mode === "dark" ? blue[600] : blue[200]
+      };
+    }
+
+    // firefox
+    &:focus-visible {
+      outline: 0;
+    }
+  `
+);
+
+// return (
+//   <Textarea
+//     aria-label="empty textarea"
+//     placeholder="اسم المنتج او المنظومة"
+//     name={props?.name}
+//     value={props?.value}
+//     onChange={props?.onChange}
+//   />
+// );
 
 export const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
+      vertical: "bottom",
+      horizontal: "right",
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
+      vertical: "top",
+      horizontal: "right",
     }}
     {...props}
   />
 ))(({ theme }) => ({
-  '& .MuiPaper-root': {
+  "& .MuiPaper-root": {
     borderRadius: 6,
     marginTop: theme.spacing(1),
     minWidth: 180,
     color:
-      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+      theme.palette.mode === "light"
+        ? "rgb(55, 65, 81)"
+        : theme.palette.grey[300],
     boxShadow:
-      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-    '& .MuiMenu-list': {
-      padding: '4px 0',
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    "& .MuiMenu-list": {
+      padding: "4px 0",
     },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
+    "& .MuiMenuItem-root": {
+      "& .MuiSvgIcon-root": {
         fontSize: 18,
         color: theme.palette.text.secondary,
         marginRight: theme.spacing(1.5),
       },
-      '&:active': {
+      "&:active": {
         backgroundColor: alpha(
           theme.palette.primary.main,
-          theme.palette.action.selectedOpacity,
+          theme.palette.action.selectedOpacity
         ),
       },
     },
   },
 }));
-

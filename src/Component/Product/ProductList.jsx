@@ -115,7 +115,7 @@ function Product({ Label }) {
 
   return (
     <div
-      className={`container projects p-20 ${
+      className={` projects p-20 ${
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
       } rad-10 m-20`}
       style={{ margin: "auto", width: "100%", maxWidth: "100%" }}

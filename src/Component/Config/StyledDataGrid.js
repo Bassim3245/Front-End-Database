@@ -56,12 +56,12 @@ const StyledDataGrid = styled(DataGrid)(
         wordWrap: "break-word !important",
         spaceWord: "break-word !important",
         whiteSpace: "break-spaces !important",
-        overflow: "auto",
+        // overflow: "auto",
         padding: "10px",
         textOverflow: "ellipsis",
         // @ts-ignore
         whiteSpace: "wrap",
-        lineBreak: "anywhere !important",
+        // lineBreak: "anywhere !important",
       },
     // @ts-ignore
     "& .MuiDataGrid-cell": {

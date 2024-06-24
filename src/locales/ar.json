@@ -9,7 +9,11 @@
     "revenueGenerated": "الإيرادات المولدة",
     "recentTransactions": "التحويلات الأخيرة",
     "campaign": "حملة",
-    "salesQuantity": "كمية المبيعات"
+    "salesQuantity": "كمية المبيعات",
+    "CurrentProjects": "المشاريع الحالية",
+    "AllProjects": "كل المشاريع ",
+    "DelayedProjects": "المشاريع المتأخرة",
+    "ProjectsDelivered": "المشاريع التي تم تسليمها "
   },
   "appBar": {
     "userName": " {{name}}",

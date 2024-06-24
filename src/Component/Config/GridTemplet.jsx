@@ -1,11 +1,18 @@
 // @ts-ignore
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box, IconButton, ThemeProvider, useTheme } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  ThemeProvider,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import StyledDataGrid from "Component/Config/StyledDataGrid";
 import { CustomNoRowsOverlay } from "./Function";
 
 const GridTemplate = ({ columns, rows }) => {
   const theme = useTheme();
+  const isWidth760 = useMediaQuery("(max-width:760px)");
   return (
     <ThemeProvider theme={theme}>
       <div style={{ width: "100%" }}>
@@ -25,7 +32,7 @@ const GridTemplate = ({ columns, rows }) => {
             }}
             // autoHeight
             theme={theme}
-            getRowHeight={() => "auto"}
+            getRowHeight={() => (isWidth760 ? null : "auto")}
             rows={rows}
             columns={columns}
             columnVisibilityModel={{

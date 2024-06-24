@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { Box, MenuItem, useTheme } from "@mui/material";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { formatDistanceToNow } from "date-fns";
 export function getFileIcon(fileName) {
   if (typeof fileName !== "string") {
     return null;
@@ -28,7 +29,7 @@ export function getFileIcon(fileName) {
         alt="DOCX Icon"
       />
     );
-  } else if (extension === "png") {
+  } else if (extension === "png" || extension === "jpg") {
     return (
       <img
         src="/image/photo.png"
@@ -516,3 +517,7 @@ export const sumDataProjectIQD = (products) => {
 
   return { totalIQD: formattedTotalIQD, totalOther: formattedTotalOther };
 };
+export function getTimeAgo(date) {
+  // Use formatDistanceToNow to calculate the time ago with a suffix
+  return formatDistanceToNow(new Date(date), { addSuffix: true });
+}

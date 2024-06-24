@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, MenuItem } from "@mui/material";
+import { Box, Divider, Fab, MenuItem } from "@mui/material";
 import Header from "../../Layout/Header";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import {
   getProjectByDepartmentMutualById,
 } from "../../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
-import { HourglassBottom, OpenInNew } from "@mui/icons-material";
+import { Cached, HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../../Config/CustomMennu";
 import ModuleFormEditProject from "../../MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -31,6 +31,7 @@ const ProjectMutual = (props) => {
   const { setProject, loading } = useSelector((state) => state?.Project);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const token = localStorage.getItem("token") || {};
+  const [RefreshButton, setRefreshButton] = useState(false);
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -42,7 +43,7 @@ const ProjectMutual = (props) => {
   };
   useEffect(() => {
     getPermmission();
-  }, []);
+  }, [RefreshButton]);
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -141,7 +142,7 @@ const ProjectMutual = (props) => {
       field: "Action",
       headerName: t("ProjectList.Action"),
       headerAlign: "center",
-      width:44,
+      width: 44,
       renderCell: (params) => {
         return (
           <div>
@@ -204,7 +205,7 @@ const ProjectMutual = (props) => {
   };
   useEffect(() => {
     fetchDataProject();
-  }, []);
+  }, [RefreshButton]);
   const HandelOpen = (id) => {
     navigate(`/Home/HandelDataMutualProject/${id}`);
   };
@@ -225,22 +226,28 @@ const ProjectMutual = (props) => {
       });
     }
   }, [setProject]);
+  const handleRefresh = () => {
+    setRefreshButton((prev) => !prev); // Toggle the refresh state
+  };
   return (
-    <Box dir={rtl?.dir}>
-      {loading && (
-        <div className="handelLoader">
-          <div>
-            <Loader />
-          </div>
-        </div>
-      )}
-      <Header
-        title={t("ProjectList.title")}
-        subTitle={t("ProjectList.subTitle")}
-        dir={rtl?.dir}
-      />
-      <GridTemplate rows={rows} columns={columns} />
-    </Box>
+    <>
+      {loading && <Loader />}
+      <Box dir={rtl?.dir}>
+        <Header
+          title={t("ProjectList.title")}
+          subTitle={t("ProjectList.subTitle")}
+          dir={rtl?.dir}
+        />
+        <GridTemplate rows={rows} columns={columns} />
+      </Box>
+      <div className="posisionRefersh">
+        <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
+          <span className="refreshButton">
+            <Cached />
+          </span>
+        </Fab>
+      </div>
+    </>
   );
 };
 export default ProjectMutual;

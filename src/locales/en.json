@@ -9,7 +9,11 @@
     "revenueGenerated": "Revenue Generated",
     "recentTransactions": "Recent Transactions",
     "campaign": "Campaign",
-    "salesQuantity": "Sales Quantity"
+    "salesQuantity": "Sales Quantity",
+    "CurrentProjects": "Current projects",
+    "AllProjects": "All Projects",
+    "DelayedProjects": "Delayed Projects",
+    "ProjectsDelivered": "Projects delivered"
   },
   "appBar": {
     "userName": "{{name}}",

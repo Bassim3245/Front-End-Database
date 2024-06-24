@@ -7,13 +7,18 @@ import MainForm from "../MainFor/Modul";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartment } from "../../redux/ProjectSlice/ProjectAction";
 import Header from "../Layout/Header.jsx";
-import { Box, Divider, MenuItem, useTheme } from "@mui/material";
+import { Box, Divider, Fab, MenuItem, useTheme } from "@mui/material";
 import ModuleFormEditProject from "../MainFor/ModuleEditProject";
 import Loader from "../Config/Loader";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import { HourglassBottom, OpenInNew } from "@mui/icons-material";
+import {
+  Cached,
+  HourglassBottom,
+  OpenInNew,
+  Refresh,
+} from "@mui/icons-material";
 import DropDownGrid from "Component/Config/CustomMennu";
 import {
   Delete,
@@ -34,6 +39,7 @@ const Projects = () => {
   const token = localStorage.getItem("token") || {};
   const dispatch = useDispatch();
   const [DeleteItem, setDelete] = useState([]);
+  const [RefreshButton, setRefreshButton] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(setLanguage());
@@ -44,13 +50,18 @@ const Projects = () => {
     const departmentID = info.DepartmentID;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
+
+  const handleRefresh = () => {
+    setRefreshButton((prev) => !prev); // Toggle the refresh state
+  };
+
   const columns = [
     { field: "_id", headerName: "_id", hideable: false },
     { field: "id", headerName: "ID", width: 33 },
     {
       field: "Code",
       headerName: t("ProjectList.Code"),
-     flex:1.5
+      flex: 1.5,
     },
     { field: "DepartmentID", headerName: " Department Name", flex: 1.5 },
     {
@@ -61,7 +72,6 @@ const Projects = () => {
     {
       field: "NumberBook",
       headerName: t("ProjectList.NumberBook"),
-   
     },
     {
       field: "beneficiary",
@@ -108,7 +118,7 @@ const Projects = () => {
       field: "Action",
       headerName: t("ProjectList.Action"),
       headerAlign: "center",
-      width:"20",
+      width: "20",
       renderCell: (params) => {
         return (
           <div>
@@ -126,7 +136,14 @@ const Projects = () => {
               ) &&
                 renderMenuItem(
                   "delete",
-                  () => Delete(params?.row?._id, setDelete, setAnchorEl, token,"deleteProject"),
+                  () =>
+                    Delete(
+                      params?.row?._id,
+                      setDelete,
+                      setAnchorEl,
+                      token,
+                      "deleteProject"
+                    ),
                   DeleteIcon,
                   "Delete"
                 )}
@@ -142,8 +159,7 @@ const Projects = () => {
                       params?.row?._id,
                       token,
                       setDelete,
-                      setAnchorEl,
-                      
+                      setAnchorEl
                     ),
                   HourglassBottom,
                   "Project Delay"
@@ -169,18 +185,23 @@ const Projects = () => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
   }, []);
-  useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete]);
+  useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete,RefreshButton]);
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
     ...item,
     DepartmentID: item?.DepartmentID?.departmentName,
     WorkNatural: item?.WorkNatural?.workNaturalData,
   }));
+
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
-      <ToastContainer/>
+      <ToastContainer />
       {loading ? (
-        <div className="position-absolute"  dir="ltr"style={{ top: "50%", left: "50%" }}>
+        <div
+          className="position-absolute"
+          dir="ltr"
+          style={{ top: "50%", left: "50%" }}
+        >
           <Loader />
         </div>
       ) : (
@@ -190,13 +211,18 @@ const Projects = () => {
             subTitle={t("ProjectTable.subTitle")}
             dir={rtl?.dir}
           />
-          <Box className={"mb-2"}>
+          <Box sx={{ display: "flex",gap:"5px" }}>
             {hasPermission(
               roles?.Add_data_project?._id,
               Permission?.permissionIds
             ) ? (
               <MainForm fetchDataProject={fetchDataProject} />
             ) : null}
+            <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
+              <span className="refreshButton">
+                <Cached />
+              </span>
+            </Fab>
           </Box>
           <GridTemplate rows={rows} columns={columns} />
         </Box>

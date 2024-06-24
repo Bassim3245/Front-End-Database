@@ -15,7 +15,8 @@ import { BackendUrl } from "../../redux/api/axios";
 import { toast } from "react-toastify";
 import { getDataSystemPrice } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
-import { BottomSend } from "Component/Config/Content";
+import { BottomSend, EmptyTextarea, Textarea2 } from "Component/Config/Content";
+import { Textarea } from "@nextui-org/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -130,10 +131,9 @@ export default function Module(props) {
           component="form"
           onSubmit={handleSubmit}
         >
-          <TextField
-            fullWidth
-            label="اسم المنتج او المنظومة"
-            className="mb-3"
+          <Textarea2
+            minRows={2}
+            placeholder="اسم المنتج او المنظومة"
             name="nameProduct"
             value={formData.nameProduct}
             onChange={handleInputChange}
@@ -175,7 +175,6 @@ export default function Module(props) {
               label="سعر الصرف"
               className="mb-3"
               name="PriceConvert"
-         
               value={formData.PriceConvert}
               onChange={handleInputChange}
             />
@@ -252,7 +251,9 @@ export default function Module(props) {
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button type="submit" onClick={(e)=>handleSubmit(e)}>Save</Button>
+          <Button type="submit" onClick={(e) => handleSubmit(e)}>
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

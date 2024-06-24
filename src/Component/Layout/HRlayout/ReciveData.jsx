@@ -41,7 +41,9 @@ export default function ReceiveData(props) {
       refetchOnWindowFocus: false,
     }
   );
-
+React.useEffect(()=>{
+console.log("ddd",data);
+},[])
   return (
     <Box sx={{ display: "flex" }}>
       <IconButton

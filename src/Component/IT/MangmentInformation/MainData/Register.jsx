@@ -45,7 +45,7 @@ function Register(props) {
     setUserType("");
     setUsername("");
     setDepartmentID("");
-    if (props?.setDataEmploy) props.setDataEmploy(formData);
+    if (props?.setDataEmploy) props.setDataEmploy(true);
   };
   useEffect(() => {
     if (isSuccess) {

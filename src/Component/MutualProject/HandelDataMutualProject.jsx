@@ -42,30 +42,25 @@ export default function HandleDataMutualProject() {
   const [isActive, setIsActive] = useState({});
   const [isSend, setIsSend] = useState(false);
   const [DeleteItem, setDelete] = useState(false);
-
+  const [RefreshButton, setRefreshButton] = useState(false);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
-
   const { products, loading } = useSelector((state) => state?.products);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const { rtl } = useSelector((state) => state?.language);
-
   useEffect(() => {
     const userId = info?._id;
     if (userId && token) {
       dispatch(getRoleAndUserId({ userId, token }));
     }
   }, [info, token, dispatch]);
-
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
-
   useEffect(() => {
     dispatch(displayProductByProjectName(id));
-  }, [deleteItem, dispatch, id]);
-
+  }, [deleteItem, dispatch, id, RefreshButton]);
   const fetchDataByProjectId = async () => {
     try {
       setLoadingProject(true);
@@ -81,11 +76,9 @@ export default function HandleDataMutualProject() {
       setLoadingProject(false);
     }
   };
-
   useEffect(() => {
     fetchDataByProjectId();
-  }, [deleteItem, anchorEl, id]);
-
+  }, [deleteItem, anchorEl, id, RefreshButton]);
   const handleSend = async () => {
     try {
       const response = await axios.put(
@@ -103,7 +96,6 @@ export default function HandleDataMutualProject() {
       toast.error(error?.response?.data?.message);
     }
   };
-
   const handleBack = () => {
     window.history.back();
   };
@@ -117,11 +109,9 @@ export default function HandleDataMutualProject() {
       console.error(error);
     }
   };
-
   useEffect(() => {
     getDataAllCheckByDepartmentId();
   }, []);
-
   useEffect(() => {
     if (dataProject?.MutualProjectId?.DepartmentID) {
       const initialStates = dataProject?.MutualProjectId?.DepartmentID?.reduce(
@@ -129,7 +119,7 @@ export default function HandleDataMutualProject() {
           acc[item?._id] =
             (isActive && isActive[item._id]) ||
             (checkData?.DepartmentID &&
-              checkData.DepartmentID.includes(item?._id));
+              checkData?.DepartmentID?.includes(item?._id));
           return acc;
         },
         {}
@@ -181,6 +171,10 @@ export default function HandleDataMutualProject() {
       setIsSend(true);
     }
   }, [checkData, dataProject, handleSendProjectFromHodToProjectManager]);
+
+  const handleRefresh = () => {
+    setRefreshButton((prev) => !prev); // Toggle the refresh state
+  };
   return (
     <div className="w-100">
       <div className="pb-2 d-block">

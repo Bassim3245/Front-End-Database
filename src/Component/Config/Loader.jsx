@@ -1,4 +1,3 @@
-import React from "react";
 import "./LoaderStyle.css";
 function Loader() {
   return (
@@ -62,5 +61,4 @@ function Loader() {
     </div>
   );
 }
-
 export default Loader;

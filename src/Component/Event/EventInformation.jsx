@@ -5,11 +5,12 @@ import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { Button, ThemeProvider, createTheme, useTheme } from "@mui/material";
 import { Form } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import moment from "moment";
 import { useQuery } from "react-query";
 import { GetDataEventByDepartmentId } from "../Config/fetchData";
 import Loader from "../Config/Loader";
+import { getTimeAgo } from "Component/Config/Function";
 const Event = () => {
   const [info, setInfo] = useState(() =>
     JSON.parse(localStorage.getItem("user"))
@@ -97,11 +98,6 @@ const Event = () => {
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  };
-
-  const formatDate = (Data) => {
-    const date = new Date(Data);
-    return moment(date).format(" h:m:s YYYY/MM/DD ");
   };
   return (
     <>
@@ -353,7 +349,7 @@ const Event = () => {
                                 style={{ color: "rgba(33, 37, 41, 0.75)" }}
                               >
                                 {" "}
-                                {formatDate(item?.createdAt)}
+                                {getTimeAgo(item?.createdAt)}
                               </p>
                             </div>
                           </div>

@@ -24,6 +24,7 @@ import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { getData } from "../../redux/MinistriesState/MinistresAction.js";
 import {
+  BottomClose,
   ButtonClearState,
   ColorButtonEdit,
   Textarea,
@@ -172,7 +173,7 @@ export default function MainForm(props) {
   });
   return (
     <React.Fragment>
-      <Box sx={{ "& > :not(style)": { m: 1 } }}>
+      <Box sx={{ "& > :not(style)": { } }}>
         <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
           <AddIcon />
         </Fab>
@@ -446,19 +447,22 @@ export default function MainForm(props) {
               className="container "
               style={{ width: "82%", maxWidth: "100%" }}
             >
+            
               <ButtonClearState
-                onClick={handleClose}
-                style={{ width: "100%", fontSize: "20px" }}
-                className="mb-3"
-              >
-                Close
-              </ButtonClearState>
-              <ColorButtonEdit
                 onClick={(e) => HandleSubmit(e)}
                 style={{ width: "100%", fontSize: "20px" }}
               >
                 Save
-              </ColorButtonEdit>
+              </ButtonClearState>
+              <BottomClose
+                onClick={handleClose}
+                variant="contained"
+                // color="warning"
+                style={{ width: "100%", fontSize: "20px" }}
+                className="mb-3 mt-3"
+              >
+                Close
+              </BottomClose>
             </div>
           </div>
         </div>

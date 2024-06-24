@@ -17,7 +17,6 @@ const Row1 = () => {
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      // refetchInterval: 5000,
     }
   );
   useEffect(() => {
@@ -38,7 +37,7 @@ const Row1 = () => {
           />
         }
         title={data?.count2}
-        subTitle={"Projects delivered "}
+        subTitle={t("dashboard.ProjectsDelivered")}
         increase={"+14%"}
         data={data1}
         scheme={"nivo"}
@@ -51,7 +50,7 @@ const Row1 = () => {
           />
         }
         title={data?.count}
-        subTitle={"Current projects"}
+        subTitle={t("dashboard.CurrentProjects")}
         increase={"+21%"}
         data={data2}
         scheme={"category10"}
@@ -64,7 +63,7 @@ const Row1 = () => {
           />
         }
         title={data?.count1}
-        subTitle={"All Projects"}
+        subTitle={t("dashboard.AllProjects")}
         increase={"+5%"}
         data={data3}
         scheme={"accent"}
@@ -76,7 +75,7 @@ const Row1 = () => {
           />
         }
         title={data?.count3}
-        subTitle={"Delayed Projects"}
+        subTitle={t("dashboard.DelayedProjects")}
         increase={"+5%"}
         data={data3}
         scheme={"accent"}

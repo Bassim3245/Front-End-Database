@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import { BackendUrl } from "../../../redux/api/axios";
 import { CloudDownload } from "@mui/icons-material";
-import { formatDate, getFileIcon } from "Component/Config/Function";
+import { formatDate, getFileIcon, getTimeAgo } from "Component/Config/Function";
 import SendToUsers from "./SendToUsers";
 function DatarecivedByHod({ data }) {
   const handleDownload = (file) => {
@@ -51,7 +51,7 @@ function DatarecivedByHod({ data }) {
                     </span>
                   </div>
                   <div className="info between-flex mt-10 pt-10 fs-13 c-grey">
-                    <span>{formatDate(item?.UploadBookId?.createdAt)}</span>
+                    <span>{getTimeAgo(item?.createdAt)}</span>
                   </div>
                 </Box>
               ))
