@@ -192,7 +192,7 @@ const Projects = () => {
     DepartmentID: item?.DepartmentID?.departmentName,
     WorkNatural: item?.WorkNatural?.workNaturalData,
   }));
-
+  
   return (
     <div style={{ width: "100%" }} dir={rtl?.dir}>
       <ToastContainer />

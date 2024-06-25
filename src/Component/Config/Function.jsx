@@ -338,7 +338,8 @@ export const sendProjectEndTime = async (
   _id,
   token,
   setDelete,
-  setAnchorEl
+  setAnchorEl,
+  LabelCancelSendProjectDelay
 ) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -360,10 +361,16 @@ export const sendProjectEndTime = async (
     });
 
     if (result.isConfirmed) {
-      // @ts-ignore
+      let url;
+      if (LabelCancelSendProjectDelay === "CancelSendProjectDelay") {
+        url = `${BackendUrl}/api/CancelSendProjectDelay/${_id}`;
+      } else {
+        url = `${BackendUrl}/api/delayProjectFinaltime/${_id}`;
+      }
+
       const response = await axios({
         method: "put",
-        url: `${BackendUrl}/api/delayProjectFinaltime/${_id}`,
+        url: url,
         headers: {
           token: token,
         },
@@ -373,18 +380,23 @@ export const sendProjectEndTime = async (
       setAnchorEl(null);
       swalWithBootstrapButtons.fire({
         title: "Deleted!",
-        text: "Your file has been deleted.",
+        text: "Your operation was successful.",
         icon: "success",
       });
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       swalWithBootstrapButtons.fire({
         title: "Cancelled",
-        text: "Your imaginary file is safe :)",
+        text: "Your operation was cancelled.",
         icon: "error",
       });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error:", error);
+    swalWithBootstrapButtons.fire({
+      title: "Error!",
+      text: "An error occurred while processing your request.",
+      icon: "error",
+    });
   }
 };
 export const hasPermission = (role, permissions) => {

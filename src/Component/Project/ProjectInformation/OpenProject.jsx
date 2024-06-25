@@ -11,7 +11,7 @@ import { fetchDataProduct } from "../../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
 import ModuleEdit from "../../MainFor/ModulEditProducts";
-import { Button, Fab, useTheme } from "@mui/material";
+import { Autocomplete, Button, Fab, TextField, useTheme } from "@mui/material";
 import ModulToploadFilePricedTechnical from "../../MainFor/ModulToploadFilePricedTechnical";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
@@ -28,6 +28,26 @@ import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
 import { Cached } from "@mui/icons-material";
 
+const FormatTextarea2 = ({ data }) => {
+  if (typeof data !== "string") {
+    console.warn("FormatTextarea: Input data is not a string.");
+    return null;
+  }
+
+  let formattedData = data;
+  formattedData = formattedData.replace(/_/g, "<br/>");
+
+  if (formattedData.includes("-")) {
+    formattedData = formattedData.replace(/-/g, "\n-");
+
+    if (formattedData.startsWith("\n")) {
+      formattedData = formattedData.substring(1);
+    }
+  }
+
+  return <p dangerouslySetInnerHTML={{ __html: formattedData }} />;
+};
+
 export default function OpenProject() {
   const { id } = useParams();
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -38,6 +58,8 @@ export default function OpenProject() {
   const [deleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [RefreshButton, setRefreshButton] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -70,6 +92,7 @@ export default function OpenProject() {
     () => detDataProductById(),
     [deleteItem, dispatch, id, RefreshButton]
   );
+
   const fetchDataByProjectId = async () => {
     try {
       setLoading(true);
@@ -113,9 +136,27 @@ export default function OpenProject() {
   useEffect(() => {
     fetchDataByProjectId();
   }, [deleteItem, anchorEl, RefreshButton]);
+
   const handleRefresh = () => {
-    setRefreshButton((prev) => !prev); // Toggle the refresh state
+    setRefreshButton((prev) => !prev);
   };
+  useEffect(() => {
+
+
+    
+  }, []);
+  const handleFilter = (inputValue) => {
+    if (inputValue) {
+      setFilteredProducts(
+        products.filter((product) =>
+          product.nameProduct.toLowerCase().includes(inputValue.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredProducts(products);
+    }
+  };
+
   return (
     <div className={`w-100`}>
       <ToastContainer
@@ -140,6 +181,24 @@ export default function OpenProject() {
             <ColorLink onClick={handleBack}>
               {t("ProductList.BackButton")}
             </ColorLink>
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={products}
+              getOptionLabel={(option) => option.nameProduct}
+              filterOptions={(options, state) => {
+                handleFilter(state.inputValue);
+                return options.filter((option) =>
+                  option.nameProduct
+                    .toLowerCase()
+                    .includes(state.inputValue.toLowerCase())
+                );
+              }}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Product Name" />
+              )}
+            />
           </div>
           <div
             className={`p-3 rad-10 ${
@@ -197,9 +256,10 @@ export default function OpenProject() {
                   <p style={{ textAlign: "center" }}>Project has been sent</p>
                 </div>
               )}
-              {Array.isArray(products) && products.length > 0 ? (
+              {Array.isArray(filteredProducts) &&
+              filteredProducts.length > 0 ? (
                 !dataProject?.SendProject &&
-                (products ? (
+                (filteredProducts ? (
                   <Table
                     striped
                     bordered
@@ -225,11 +285,13 @@ export default function OpenProject() {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(products) &&
-                        products.map((item, index) => (
+                      {Array.isArray(filteredProducts) &&
+                        filteredProducts.map((item, index) => (
                           <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{item?.nameProduct}</td>
+                            <td dir="rtl">
+                              <FormatTextarea2 data={item?.nameProduct} />
+                            </td>
                             <td>{FormatDataNumber(item?.Price)}</td>
                             <td>{item?.PriceType}</td>
                             <td>{item?.Quantity}</td>
@@ -283,14 +345,18 @@ export default function OpenProject() {
                         ))}
                       <tr>
                         <td colSpan={10}>المجموع</td>
-                        <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
-                        <td>{sumDataProjectIQD(products).totalOther} USD</td>
+                        <td>
+                          {sumDataProjectIQD(filteredProducts).totalIQD} IQD
+                        </td>
+                        <td>
+                          {sumDataProjectIQD(filteredProducts).totalOther} USD
+                        </td>
                       </tr>
                     </tbody>
                   </Table>
                 ) : (
                   <div>
-                    <h3>data hse been send</h3>
+                    <h3>data has been sent</h3>
                   </div>
                 ))
               ) : (

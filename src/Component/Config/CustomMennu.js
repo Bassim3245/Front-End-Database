@@ -52,37 +52,36 @@ export const StyledMenu = styled((props) => (
 export default function DropDownGrid(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        {/* <Tooltip title={props?.title}> */}
         <IconButton
-           aria-label="more"
-           id="long-button"
-           aria-controls={open ? "long-menu" : undefined}
-           aria-expanded={open ? "true" : undefined}
-           aria-haspopup="true"
-           onClick={handleClick}
+          aria-label="more"
+          id="long-button"
+          aria-controls={open ? "long-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={open ? handleClose : handleClick} // Toggle open/close on button click
         >
           <SettingsIcon fontSize="medium" sx={{ fontSize: "25px" }} />
         </IconButton>
-        {/* </Tooltip> */}
       </Box>
       <StyledMenu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
-        onClose={handleClose}
-        onClick={handleClose}
+        onClose={handleClose} // Ensure menu closes when clicked outside or on Escape key
         PaperProps={{
           elevation: 0,
-        
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}

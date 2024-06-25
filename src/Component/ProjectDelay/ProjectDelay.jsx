@@ -23,6 +23,7 @@ const ProjectDelay = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { setProject, loading } = useSelector((state) => state?.Project);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const LabelCancelSendProjectDelay="CancelSendProjectDelay";
   const token = localStorage.getItem("token") || {};
   const { rtl } = useSelector((state) => {
     return state?.language;
@@ -74,7 +75,7 @@ const ProjectDelay = () => {
     {
       field: "DateBook",
       valueFormatter: (params) => moment(params.value).format("YYYY/MM/DD"),
-      headerName: "Date Request",
+      headerName: t("ProjectList.DateBook"),
       flex: 1,
     },
     {
@@ -133,7 +134,8 @@ const ProjectDelay = () => {
                       params?.row?._id,
                       token,
                       setDelete,
-                      setAnchorEl
+                      setAnchorEl,
+                      LabelCancelSendProjectDelay
                     ),
                   HourglassBottom,
                   " Project Cancel Delay"

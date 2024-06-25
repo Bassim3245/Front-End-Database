@@ -28,28 +28,26 @@ export const AddProject = createAsyncThunk(
 export const getProjectByDepartment = createAsyncThunk(
   "GetALL/getProjectByDepartment",
   async ({ departmentID, info, token }, thunkAPI) => {
+    const isAuthorizedUser = ["H.O.D", "management", "Assistance"].includes(
+      info?.user_type
+    );
+    const url = isAuthorizedUser
+      ? `${BackendUrl}/api/getProjects/${departmentID}`
+      : `${BackendUrl}/api/getDataByUserID/${info?._id}`;
+
     try {
-      const response = await axios({
-        method: "get",
-        url:
-          info?.user_type === "H.O.D" ||
-          info?.user_type === "management" ||
-          info?.user_type === "Assistance"
-            ? `${BackendUrl}/api/getProjects/${departmentID}`
-            : `${BackendUrl}/api/getDataByUserID/${info?._id} `,
+      const response = await axios.get(url, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
-          token: token,
+          token,
         },
       });
-      if (response || response?.data) {
-        return response.data;
-      }
+
+      return response.data;
     } catch (error) {
-      if (error || error.response) {
-        return thunkAPI.rejectWithValue(error.response.data.message);
-      }
+      const errorMessage = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
