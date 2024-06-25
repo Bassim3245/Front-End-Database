@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../../redux/userSlice/authActions";
 import { clearState } from "../../../../redux/userSlice/userSlice";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { ColorButton, VisuallyHiddenInput } from "../../../Config/Content";
 import { Button, useTheme } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { getRole } from "../../../Config/fetchData";
 import { useQuery } from "react-query";
+import { useTranslation } from "react-i18next";
+
 function Register(props) {
   const { isSuccess, isError, message } = useSelector((state) => state?.user);
   const [image, setImage] = useState(null);
@@ -19,6 +21,7 @@ function Register(props) {
   const [DepartmentID, setDepartmentID] = useState("");
   const [RoleId, setRoleId] = useState("");
   const dispatch = useDispatch();
+
   const { isLoading, data, error, refetch } = useQuery("getRole", getRole, {});
   useEffect(() => {
     refetch();
@@ -58,6 +61,8 @@ function Register(props) {
     }
   }, [isSuccess, isError, message, dispatch]);
   const theme = useTheme();
+  const { t } = useTranslation();
+
   return (
     <div
       className={`social-boxes p-20 ${
@@ -67,19 +72,19 @@ function Register(props) {
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-lg-12 col-xl-11">
           <div className="card-body p-md-3">
-            <div className="row justify-content-center">
+            <div className="row justify-content-center" >
               <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                 <p
                   className="h1 fw-bold mb-3 mx-1 mx-md-4 mt-3"
-                  style={{ direction: "rtl" }}
+                 
                 >
-                  بيانات العاملين
+                  {t("register.dataUser")}
                 </p>
                 <form className="mx-1 mx-md-4" onSubmit={handleSubmit}>
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="name">
-                        Your Name:
+                        {t("register.nameUser")}:
                       </label>
                       <input
                         data-bs-theme={
@@ -98,7 +103,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="username">
-                        Username:
+                        {t("register.username")}:
                       </label>
                       <input
                         data-bs-theme={
@@ -117,7 +122,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="password">
-                        Password:
+                        {t("register.password")}:
                       </label>
                       <input
                         data-bs-theme={
@@ -136,7 +141,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="Phone">
-                        Phone:
+                        {t("register.phone")}:
                       </label>
                       <input
                         data-bs-theme={
@@ -155,7 +160,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="user_type">
-                        Type User:
+                        {t("register.CareerTitle")}:{" "}
                       </label>
                       <select
                         data-bs-theme={
@@ -180,7 +185,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="DepartmentID">
-                        Department:
+                        {t("register.Department")}:
                       </label>
                       <select
                         data-bs-theme={
@@ -204,7 +209,7 @@ function Register(props) {
                   <div className="d-flex flex-row align-items-center mb-1">
                     <div className="form-outline flex-fill mb-0">
                       <label className="form-label" htmlFor="DepartmentID">
-                        Role:
+                        {t("register.CareerTitle")}:
                       </label>
                       <select
                         data-bs-theme={

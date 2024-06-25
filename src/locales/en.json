@@ -179,5 +179,16 @@
   },
   "Authorized": "Unauthorized",
   "NotFoundData": "No Data",
-  "sentData": "Project has been sent"
+  "sentData": "Project has been sent",
+  "register":{
+    "dataUser":"Employees Data",
+    "nameUser":" Your Name",
+    "password":"password",
+    "username":"username",
+    "phone":"Phone",
+    "CareerTitle":"Career Title",
+    "Department":"Department select"
+
+  }
+
 }

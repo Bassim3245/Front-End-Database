@@ -179,5 +179,14 @@
   },
   "Authorized": "غير مصرح",
   "NotFoundData": "لاتوجد بيانات",
-  "sentData": "تم ارسال المشروع"
+  "sentData": "تم ارسال المشروع",
+  "register": {
+    "dataUser": "بيانات الموظفين ",
+    "nameUser": "الاسم",
+    "password": "كلمة المرور",
+    "username": "اسم المستخدم",
+    "phone": "رقم الهاتف",
+    "CareerTitle": "العنوان الوظيفي",
+    "Department": "تحديد الاقسام"
+  }
 }
