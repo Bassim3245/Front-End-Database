@@ -32,6 +32,7 @@ import {
   ButtonClearState,
   ButtonSave,
   ColorButtonEdit,
+  Textarea,
 } from "../Config/Content.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import {
@@ -62,14 +63,18 @@ export default function ModuleFormEditProject(props) {
     return state?.language;
   });
   const [open, setOpen] = useState(false);
-  const [DateBook, setDateBook] = useState("");
-  const [DateClose, setDateClose] = useState("");
+
   const [OtherOption, setOtherOpthion] = useState(true);
   const [dataUserID, setDataUserID] = useState([]);
   const dispatch = useDispatch();
   const [dataProject, setDataProject] = React.useState({});
+  const [DateBook, setDateBook] = useState(dataProject?.DateBook || "");
+  const [DateClose, setDateClose] = useState(dataProject?.DateClose || "");
   const [formData, setFormData] = React.useState({});
-
+  const [startTime, setStartTime] = React.useState(
+    dataProject?.startTime || ""
+  );
+  const [endTime, setEndTime] = React.useState(dataProject?.endTime || "");
   const getDataByProjectID = async () => {
     const token = localStorage.getItem("token") || {};
     try {
@@ -94,12 +99,10 @@ export default function ModuleFormEditProject(props) {
 
   React.useEffect(() => {
     setFormData({
-      // @ts-ignore
       nameProject: dataProject?.nameProject || "",
       NumberBook: dataProject?.NumberBook || "",
       PersonCharge: dataProject?.userId?._id || "",
       WorkNatural: dataProject?.WorkNatural || "",
-      // @ts-ignore
       beneficiary: dataProject?.beneficiary || "",
       MethodOption: dataProject?.MethodOption || "",
       Stage: dataProject?.stageId || "",
@@ -107,6 +110,7 @@ export default function ModuleFormEditProject(props) {
       LevelPerformance: dataProject?.LevelPerformance || "",
       Description: dataProject?.Description || "",
       nameProduct: dataProject?.nameProduct || "",
+      comments: dataProject?.dataProject || "",
     });
     // console.log(PersonCharge);
   }, [dataProject]); // Update formData when dataProject changes
@@ -127,6 +131,7 @@ export default function ModuleFormEditProject(props) {
     Stage,
     CompletionRate,
     LevelPerformance,
+    comments,
   } = formData;
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -143,6 +148,7 @@ export default function ModuleFormEditProject(props) {
         LevelPerformance,
         DateBook,
         DateClose,
+        comments,
       };
       // @ts-ignore
       if (!dataProject?._id) {
@@ -211,7 +217,6 @@ export default function ModuleFormEditProject(props) {
     dispatch(getDataNatural());
   }, [AddWorkNutral]);
 
-  
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
@@ -220,7 +225,6 @@ export default function ModuleFormEditProject(props) {
       <MenuItem onClick={handleClickOpen}>
         <EditIcon />
         <span className="ms-2">Edit</span>
-        
       </MenuItem>
       <Dialog
         fullScreen
@@ -260,56 +264,68 @@ export default function ModuleFormEditProject(props) {
               >
                 <TextField
                   id="outlined-select-currency"
-                  sx={{ width: "500px", maxWidth: "100%" }}
+                  sx={{ width: "100%", maxWidth: "100%" }}
+                  className="mb-4 me-3"
                   select
                   label="طبيعة العمل"
-                  className="mb-4"
                   name="WorkNatural"
-                  dir={rtl?.dir}
+                  dir="rtl"
                   value={WorkNatural}
                   onChange={handleInputChange}
+                  defaultValue={"0%"}
                 >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {getDtaInfo.map((option) => (
+                    <MenuItem key={option?._id} value={option?._id}>
+                      {option?.workNaturalData}
                     </MenuItem>
                   ))}
                 </TextField>
+                {/* end WorkNatural */}
+
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
                   className="mb-4"
-                  select
                   label="طريقة التحصيل"
                   name="MethodOption"
-                  dir={rtl?.dir}
+                  dir="rtl"
                   value={MethodOption}
                   onChange={handleInputChange}
-                >
-                  {optionMethod.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                ></TextField>
+                {/* end MethodOption */}
+
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
                   className="mb-4 me-3"
-                  select
                   label="المرحلة "
                   name="Stage"
-                  dir={rtl?.dir}
+                  dir="rtl"
                   value={Stage}
                   onChange={handleInputChange}
+                ></TextField>
+
+                {/* end Stage */}
+                {/*textarea  */}
+                <Textarea
+                  aria-label="minimum height"
+                  minRows={3}
+                  placeholder="الملاحضات"
+                  name="comments"
+                  value={comments}
+                  className="mb-4"
+                  onChange={handleInputChange}
+                  style={{
+                    height: "75px",
+                    width: "500px",
+                    maxWidth: "100%",
+                  }}
+                />
+                {/* end comments */}
+                <Box
+                  className="mb-4 d-flex gap-3 "
+                  sx={{ width: "500px", maxWidth: "100%" }}
                 >
-                  {getDtaInfo.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.workNaturalData}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <Box className="mb-4 d-flex gap-3 ">
                   <TextField
                     id="outlined-select-currency"
                     sx={{ width: "100%", maxWidth: "100%" }}
@@ -317,7 +333,7 @@ export default function ModuleFormEditProject(props) {
                     select
                     label="مستوى الاداء"
                     name="LevelPerformance"
-                    dir={rtl?.dir}
+                    dir="rtl"
                     value={LevelPerformance}
                     onChange={handleInputChange}
                     defaultValue={"0%"}
@@ -328,21 +344,22 @@ export default function ModuleFormEditProject(props) {
                       </MenuItem>
                     ))}
                   </TextField>
+                  {/* LevelPerformance */}
                   <TextField
                     id="outlined-select-currency"
-                    sx={{ width: "500px", maxWidth: "100%" }}
+                    sx={{ width: "100%", maxWidth: "100%" }}
                     className="mb-4 me-3"
                     select
                     label="نسبة الانجاز"
-                    dir={rtl?.dir}
+                    dir="rtl"
                     name="CompletionRate"
                     value={CompletionRate}
                     onChange={handleInputChange}
                     defaultValue={"0%"}
                   >
-                    {LevelOfAchevment.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    {LevelOfAchevment?.map((option) => (
+                      <MenuItem key={option?.value} value={option?.value}>
+                        {option?.label}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -380,88 +397,59 @@ export default function ModuleFormEditProject(props) {
                   onChange={handleInputChange}
                 />
                 {/* start Date Project */}
-                <div className="mb-4 d-flex gap-4 dispalyDataColomMMobile">
-                  <div style={{}}>
+                <div
+                  className="displayDate mb-4"
+                  style={{ width: "500px", maxWidth: "100%" }}
+                >
+                  <div style={{ width: "100%", maxWidth: "100%" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
                           label="تاريخ الاستلام"
-                          value={DateBook}
                           onChange={(value) => setDateBook(value)}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <div style={{}}>
+                  <div style={{ width: "100%", maxWidth: "100%" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
-                          label="تاريغ الغلق"
-                          value={DateClose}
+                          label="تاريخ الغلق"
                           onChange={(value) => setDateClose(value)}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
                 </div>
+                <div className="mb-4">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="start"
+                        onChange={(value) => setStartTime(value)}
+                      />
+                      <DatePicker
+                        label="end"
+                        onChange={(value) => setEndTime(value)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
                 {/* end Date for the project  */}
 
                 {/* start select */}
-                <div className="d-flex gap-4">
-                  {OtherOption ? (
-                    <TextField
-                      id="outlined-select-currency"
-                      sx={{ width: "500px", maxWidth: "100%" }}
-                      select
-                      label=" الجهة المستفيدة"
-                      className="mb-4"
-                      name="beneficiary"
-                      dir={rtl?.dir}
-                      value={beneficiary}
-                      onChange={handleInputChange}
-                    >
-                      {Ministries?.map((option) => (
-                        <MenuItem key={option?._id} value={option?.ministries}>
-                          {option?.ministries}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key="otherOption">
-                        <ButtonSave
-                          onClick={() => handleSelectDropdown()}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            maxWidth: "100%",
-                          }}
-                        >
-                          كتابة أختيار أخر
-                        </ButtonSave>
-                      </MenuItem>
-                    </TextField>
-                  ) : (
-                    <div className="d-bloke">
-                      <TextField
-                        fullWidth
-                        sx={{ width: "500px", maxWidth: "100%" }}
-                        label=" اكتب الاختيار"
-                        id="fullWidth"
-                        className=""
-                        dir={rtl?.dir}
-                        name="beneficiary"
-                        value={beneficiary}
-                        onChange={handleInputChange}
-                      />
-                      <div style={{ textAlign: "right" }}>
-                        <IconButton
-                          aria-label="back"
-                          onClick={() => handleBack()}
-                        >
-                          <ArrowBackIcon />
-                        </IconButton>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <TextField
+                    fullWidth
+                    sx={{ width: "500px", maxWidth: "100%" }}
+                    label=" الجهات المستفيدة"
+                    id="fullWidth"
+                    className="mb-3"
+                    dir="rtl"
+                    name="beneficiary"
+                    value={beneficiary}
+                    onChange={handleInputChange}
+                  />
 
                 {/* end other  option and slect drob down */}
                 <TextField

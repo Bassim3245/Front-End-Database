@@ -26,7 +26,6 @@ import { getData } from "../../redux/MinistriesState/MinistresAction.js";
 import {
   BottomClose,
   ButtonClearState,
-  ColorButtonEdit,
   Textarea,
 } from "../Config/Content.jsx";
 import { toast } from "react-toastify";
