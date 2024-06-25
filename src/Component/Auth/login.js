@@ -49,6 +49,13 @@ function Login() {
       setLoading(false);
     }, 4000);
   }, []);
+  const [loadingImage, setLoadingImage] = useState(true);
+  useEffect(() => {
+    setLoadingImage(true);
+    setTimeout(() => {
+      setLoadingImage(false);
+    }, 4000);
+  }, []);
   return (
     <>
       {loading ? (
@@ -58,105 +65,124 @@ function Login() {
       ) : (
         <section className="vh-100  gradient-custom">
           <ToastContainer />
-          <div className="container h-100">
-            <div className="row d-flex justify-content-center align-items-center h-100">
-              <>
-                <div className="col-lg-12 col-xl-11">
-                  <div className="card text-black" style={{ borderRadius: 25 }}>
-                    <div className="card-body p-md-5">
-                      <div className="row justify-content-center">
-                        <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+          {loadingImage ? (
+            <>
+              <img
+                src="/image/image.png"
+                alt="logo"
+                className="ImageLogostart"
+              />
+              <div className="typewriter">
+                <h2 className="text-uppercase " style={{ direction: "rtl" }}>
+                  {" "}
+                  مرحبا بك في نظام الاتمتة الالكتروني
+                </h2>
+              </div>
+            </>
+          ) : (
+            <div className="container h-100">
+              <div className="row d-flex justify-content-center align-items-center h-100">
+                <>
+                  <div className="col-lg-12 col-xl-11">
+                    <div
+                      className="card text-black"
+                      style={{ borderRadius: 25 }}
+                    >
+                      <div className="card-body p-md-5">
+                        <div className="row justify-content-center">
+                          <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                            <p
+                              className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-3"
+                              style={{ direction: "rtl" }}
+                            >
+                              تسجيل الدخول
+                            </p>
+                            <form
+                              className="mx-1 mx-md-4"
+                              onSubmit={(e) => handleSubmit(e)}
+                            >
+                              <div className="d-flex flex-row align-items-center mb-2">
+                                <i className="fas fa-envelope fa-lg me-3 fa-fw" />
+                                <div className="form-outline flex-fill mb-0">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="form3Example3c"
+                                    style={{ width: "100%", direction: "rtl" }}
+                                  >
+                                    اسم المستخدم
+                                  </label>
+                                  <input
+                                    style={{ direction: "rtl" }}
+                                    type="username"
+                                    id="username"
+                                    name="username"
+                                    className="form-control"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    placeholder="ادخل الاسم"
+                                  />
+                                </div>
+                              </div>
+                              <div className="d-flex flex-row align-items-center mb-2">
+                                <i className="fas fa-lock fa-lg me-3 fa-fw" />
+                                <div className="form-outline flex-fill mb-0">
+                                  <label
+                                    className="form-label"
+                                    htmlFor="form3Example4c"
+                                    style={{ width: "100%", direction: "rtl" }}
+                                  >
+                                    كلمة المرور
+                                  </label>
+                                  <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    style={{ direction: "rtl" }}
+                                    className="form-control"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    placeholder="ادخل كلمة المرور"
+                                  />
+                                </div>
+                              </div>
+                              <div className="mt-4">
+                                <ColorButton
+                                  type="submit"
+                                  style={{
+                                    maxWidth: "100%",
+                                    margin: "auto",
+                                    width: "100%",
+                                    height: "auto",
+                                  }}
+                                  onClick={(e) => handleSubmit(e)}
+                                >
+                                  login
+                                </ColorButton>
+                              </div>
+                            </form>
+                          </div>
+                          <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                            <img
+                              className="imagelogoMobile"
+                              src="/image/image.png"
+                              style={{ margin: "auto", maxWidth: "70%" }}
+                              alt="Description of the image"
+                            />
+                          </div>
                           <p
-                            className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-3"
+                            className="mt-2 mb-20 c-grey fs-20 p-absolute bottom-0 me-2 hiddenveston "
                             style={{ direction: "rtl" }}
                           >
-                            تسجيل الدخول
+                            V:(1.1.1)
                           </p>
-                          <form
-                            className="mx-1 mx-md-4"
-                            onSubmit={(e) => handleSubmit(e)}
-                          >
-                            <div className="d-flex flex-row align-items-center mb-2">
-                              <i className="fas fa-envelope fa-lg me-3 fa-fw" />
-                              <div className="form-outline flex-fill mb-0">
-                                <label
-                                  className="form-label"
-                                  htmlFor="form3Example3c"
-                                  style={{ width: "100%", direction: "rtl" }}
-                                >
-                                  اسم المستخدم
-                                </label>
-                                <input
-                                  style={{ direction: "rtl" }}
-                                  type="username"
-                                  id="username"
-                                  name="username"
-                                  className="form-control"
-                                  value={formData.username}
-                                  onChange={handleInputChange}
-                                  placeholder="ادخل الاسم"
-                                />
-                              </div>
-                            </div>
-                            <div className="d-flex flex-row align-items-center mb-2">
-                              <i className="fas fa-lock fa-lg me-3 fa-fw" />
-                              <div className="form-outline flex-fill mb-0">
-                                <label
-                                  className="form-label"
-                                  htmlFor="form3Example4c"
-                                  style={{ width: "100%", direction: "rtl" }}
-                                >
-                                  كلمة المرور
-                                </label>
-                                <input
-                                  type="password"
-                                  id="password"
-                                  name="password"
-                                  style={{ direction: "rtl" }}
-                                  className="form-control"
-                                  value={formData.password}
-                                  onChange={handleInputChange}
-                                  placeholder="ادخل كلمة المرور"
-                                />
-                              </div>
-                            </div>
-                            <div className="mt-4">
-                              <ColorButton
-                                type="submit"
-                                style={{
-                                  maxWidth: "100%",
-                                  margin: "auto",
-                                  width: "100%",
-                                  height: "auto",
-                                }}
-                                onClick={(e) => handleSubmit(e)}
-                              >
-                                login
-                              </ColorButton>
-                            </div>
-                          </form>
                         </div>
-                        <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                          <img
-                            className="imagelogoMobile"
-                            src="/image/image.png"
-                            style={{ margin: "auto", maxWidth: "70%" }}
-                            alt="Description of the image"
-                          />
-                        </div>
-                        <p
-                          className="mt-2 mb-20 c-grey fs-20 p-absolute bottom-0 me-2 hiddenveston "
-                          style={{ direction: "rtl" }}
-                        >
-                          V:(1.1.1)
-                        </p>
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
+                </>
+              </div>
             </div>
-          </div>
+          )}
         </section>
       )}
     </>
