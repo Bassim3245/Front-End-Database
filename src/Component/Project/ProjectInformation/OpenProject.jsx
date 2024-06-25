@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { BottomSend, ColorLink } from "../../Config/Content";
+import {
+  BottomSend,
+  ColorLink,
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+} from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../../MainFor/ModuleInsertProduct";
 import axios from "axios";
@@ -27,6 +33,8 @@ import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
 import { Cached } from "@mui/icons-material";
+import SearchIcon from "@mui/icons-material/Search";
+import AutocompleteExample from "../../Config/AutoCompletSearch";
 
 const FormatTextarea2 = ({ data }) => {
   if (typeof data !== "string") {
@@ -140,22 +148,6 @@ export default function OpenProject() {
   const handleRefresh = () => {
     setRefreshButton((prev) => !prev);
   };
-  useEffect(() => {
-
-
-    
-  }, []);
-  const handleFilter = (inputValue) => {
-    if (inputValue) {
-      setFilteredProducts(
-        products.filter((product) =>
-          product.nameProduct.toLowerCase().includes(inputValue.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredProducts(products);
-    }
-  };
 
   return (
     <div className={`w-100`}>
@@ -177,27 +169,14 @@ export default function OpenProject() {
         </div>
       ) : (
         <>
-          <div className="pb-3 d-block">
+          <div className="pb-3 d-flex justify-content-between">
             <ColorLink onClick={handleBack}>
               {t("ProductList.BackButton")}
             </ColorLink>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={products}
-              getOptionLabel={(option) => option.nameProduct}
-              filterOptions={(options, state) => {
-                handleFilter(state.inputValue);
-                return options.filter((option) =>
-                  option.nameProduct
-                    .toLowerCase()
-                    .includes(state.inputValue.toLowerCase())
-                );
-              }}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Product Name" />
-              )}
+            <AutocompleteExample
+              products={products}
+              setFilteredProducts={setFilteredProducts}
+              filteredProducts={filteredProducts}
             />
           </div>
           <div
