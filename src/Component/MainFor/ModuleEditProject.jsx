@@ -440,16 +440,16 @@ export default function ModuleFormEditProject(props) {
 
                 {/* start select */}
                 <TextField
-                    fullWidth
-                    sx={{ width: "500px", maxWidth: "100%" }}
-                    label=" الجهات المستفيدة"
-                    id="fullWidth"
-                    className="mb-3"
-                    dir="rtl"
-                    name="beneficiary"
-                    value={beneficiary}
-                    onChange={handleInputChange}
-                  />
+                  fullWidth
+                  sx={{ width: "500px", maxWidth: "100%" }}
+                  label=" الجهات المستفيدة"
+                  id="fullWidth"
+                  className="mb-3"
+                  dir="rtl"
+                  name="beneficiary"
+                  value={beneficiary}
+                  onChange={handleInputChange}
+                />
 
                 {/* end other  option and slect drob down */}
                 <TextField
@@ -459,15 +459,27 @@ export default function ModuleFormEditProject(props) {
                   label=" القائم بالعمل"
                   className="mb-4"
                   name="PersonCharge"
-                  dir={rtl?.dir}
-                  value={PersonCharge || ""} // Provide a default value if PersonCharge is undefined
+                  dir="rtl"
+                  value={PersonCharge}
                   onChange={handleInputChange}
                 >
-                  {dataUserID.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
+                  {dataUserID
+                    .filter(
+                      (option) =>
+                        option.user_type !== users?.user_type &&
+                        option.user_type !== "IT"
+                    )
+                    .map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}{" "}
+                        <span
+                          className="text-secondary ms-3"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {option.user_type}
+                        </span>
+                      </MenuItem>
+                    ))}
                 </TextField>
               </Box>
             </div>
