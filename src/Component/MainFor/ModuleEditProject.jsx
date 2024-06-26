@@ -196,7 +196,7 @@ export default function ModuleFormEditProject(props) {
       try {
         const response = await axios({
           method: "get",
-          url: `http://127.0.0.1:4000/api/getallDataUser/${users?.DepartmentID}`,
+          url: `${BackendUrl}/api/getallDataUser/${users?.DepartmentID}`,
         });
         if (response && response?.data) {
           setDataUserID(response?.data);
@@ -466,12 +466,12 @@ export default function ModuleFormEditProject(props) {
                   {dataUserID
                     .filter(
                       (option) =>
-                        option.user_type !== users?.user_type &&
-                        option.user_type !== "IT"
+                        option?.user_type !== users?.user_type &&
+                        option?.user_type !== "IT"
                     )
                     .map((option) => (
                       <MenuItem key={option._id} value={option._id}>
-                        {option.name}{" "}
+                        {option?.name}{" "}
                         <span
                           className="text-secondary ms-3"
                           style={{ fontSize: "15px" }}
