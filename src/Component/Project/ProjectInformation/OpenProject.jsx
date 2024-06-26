@@ -62,16 +62,13 @@ export default function OpenProject() {
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(displayProductByProjectName(id));
   }, []);
-
   useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
   }, [dispatch, info?._id, token, refreshButton,message]);
-
   useEffect(() => {
     console.log(products);
     dispatch(setLanguage());
@@ -122,8 +119,8 @@ export default function OpenProject() {
   };
 
   const productRows = useMemo(() => {
-    return Array.isArray(filteredProducts)
-      ? filteredProducts.map((item, index) => (
+    return Array.isArray(products)
+      ? products.map((item, index) => (
           <tr key={index}>
             <td>{index + 1}</td>
             <td dir="rtl">
@@ -290,10 +287,10 @@ export default function OpenProject() {
                       <tr>
                         <td colSpan={10}>المجموع</td>
                         <td>
-                          {sumDataProjectIQD(filteredProducts).totalIQD} IQD
+                          {sumDataProjectIQD(products).totalIQD} IQD
                         </td>
                         <td>
-                          {sumDataProjectIQD(filteredProducts).totalOther} USD
+                          {sumDataProjectIQD(products).totalOther} USD
                         </td>
                       </tr>
                     </tbody>

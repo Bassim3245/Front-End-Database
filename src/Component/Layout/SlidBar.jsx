@@ -163,7 +163,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
           icon: <ReceiptOutlinedIcon />,
           path: "FilesReceived",
           checkPermission:
-          roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
+            roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
         },
         {
           text: t("layout.Profile"),
@@ -284,13 +284,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
           path: "ProjectDelay",
           checkPermission: roles?.view_data_delay_Project?._id,
         },
-        {
-          text: t("layout.FilesReceived"),
-          icon: <ReceiptOutlinedIcon />,
-          path: "FilesReceived",
-          checkPermission:
-            roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
-        },
+
         {
           text: t("layout.ProductList"),
           icon: <ReceiptOutlinedIcon />,
@@ -324,6 +318,13 @@ const SideBar = ({ open, handleDrawerClose }) => {
           icon: <Event />,
           path: "Event",
           checkPermission: roles?.Event_Assistance?._id,
+        },
+        {
+          text: t("layout.FilesReceived"),
+          icon: <ReceiptOutlinedIcon />,
+          path: "FilesReceived",
+          checkPermission:
+            roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
         },
         {
           text: t("layout.Profile"),

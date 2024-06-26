@@ -115,6 +115,17 @@ export default function OfferPrice(props) {
   useEffect(() => {
     collectData(Products);
   }, [Products]);
+  const getPriceOrigin = (item, label) => {
+    let PriceData;
+    if (item.PriceType === "USD" && label === "USD") {
+      PriceData = item.Price; // Assuming price is already in USD
+    } else if (item.PriceType === "IQD" && label === "IQD") {
+      PriceData = item.Price; // Convert IQR to USD
+    } else {
+      return null
+    }
+    return PriceData;
+  };
   const handleDataPdf = async (label) => {
     try {
       if (dataProjectTest) {
@@ -192,6 +203,8 @@ export default function OfferPrice(props) {
             </td>
           </>
         )}
+        <td className="arabicText">{getPriceOrigin(item, "USD")}</td>
+        <td className="arabicText">{getPriceOrigin(item, "IQD")}</td>
         <td className="arabicText"> {item?.UnitId?.Unit}</td>
         <td className="arabicText">{item?.Quantity}</td>
         <td className="arabicText">
@@ -310,6 +323,8 @@ export default function OfferPrice(props) {
                   <th>Price USD</th>
                 </>
               )}
+              <th>Price Origin USD</th>
+              <th>Price Origin IQR</th>
               <th>Unit</th>
               <th>Quantity</th>
               <th>Product name</th>

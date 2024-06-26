@@ -133,30 +133,33 @@ export function SumTotalPriceAfterAddPercentageAndConvertToUSD(
   PriceConvertToIQD
 ) {
   const selectPriceType = "Normal";
+
   if (selectPriceType === "Normal") {
     const totalSum = Products?.reduce((accumulator, currentItem) => {
-      let PriceInUSD = 0; // Initialize to 0
-      let PriceInIQD = 0; // Initialize to 0
-      if (currentItem.PriceType === "IQD") {
-        PriceInIQD = currentItem?.Price;
-      }
-      if (currentItem.PriceType === "USD") {
-        PriceInUSD = currentItem?.Price * currentItem?.PriceConvert || 0; // Convert USD price to IQR
-      }
-      const percentage = currentItem?.percent / 100;
+      let PriceInUSD = 0;
+      let PriceInIQD = 0;
 
+      if (currentItem.PriceType === "IQD") {
+        PriceInIQD = currentItem?.Price || 0;
+      }
+
+      if (currentItem.PriceType === "USD") {
+        PriceInUSD =
+          (currentItem?.Price || 0) * (currentItem?.PriceConvert || 0);
+      }
+
+      const percentage = (currentItem?.percent || 0) / 100;
       const PriceAfterConvert = PriceInUSD + PriceInIQD;
       const priceAfterPercent = PriceAfterConvert * (1 + percentage);
       const PriceInIQR = priceAfterPercent;
 
-      return Math.ceil(
+      return (
         accumulator +
-          (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
+        (PriceInIQR * currentItem.Quantity) / (PriceConvertToIQD || 1600)
       );
     }, 0);
-    const formattedTotalSum = new Intl.NumberFormat().format(
-      Math.ceil(totalSum)
-    );
+
+    const formattedTotalSum = new Intl.NumberFormat().format(totalSum);
     return formattedTotalSum;
   }
 }
@@ -170,14 +173,17 @@ export function calculatePriceAfterPercentageWithQuantity(item) {
   const quantity = Number(item.Quantity);
   const priceAfterPercent = price * (1 + percentage);
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      priceAfterPercent * priceConvert * quantity
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   priceAfterPercent * priceConvert * quantity
+    // );
+    const priceTotalEachProductAfterPercentage =
+      priceAfterPercent * priceConvert * quantity;
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      priceAfterPercent * quantity
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   priceAfterPercent * quantity
+    // );
+    const priceTotalEachProductAfterPercentage = priceAfterPercent * quantity;
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
@@ -190,12 +196,15 @@ export function calculatePriceAfterPercentageWithoutQuantity(item) {
   const priceAfterPercent = price * (1 + percentage);
 
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      priceAfterPercent * priceConvert
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   priceAfterPercent * priceConvert
+    // );
+    const priceTotalEachProductAfterPercentage =
+      priceAfterPercent * priceConvert;
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage = Math.ceil(priceAfterPercent);
+    // const priceTotalEachProductAfterPercentage = Math.ceil(priceAfterPercent);
+    const priceTotalEachProductAfterPercentage = priceAfterPercent;
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
@@ -211,14 +220,19 @@ export function calculatePriceAfterPercentageWithoutQuantityAndConvertToUSD(
   const priceAfterPercent = price * (1 + percentage);
 
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      (priceAfterPercent * priceConvert) / (PriceConvertToIQD || priceToConvert)
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   (priceAfterPercent * priceConvert) / (PriceConvertToIQD || priceToConvert)
+    // );
+    const priceTotalEachProductAfterPercentage =
+      (priceAfterPercent * priceConvert) /
+      (PriceConvertToIQD || priceToConvert);
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      priceAfterPercent / (PriceConvertToIQD || priceToConvert)
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   priceAfterPercent / (PriceConvertToIQD || priceToConvert)
+    // );
+    const priceTotalEachProductAfterPercentage =
+      priceAfterPercent / (PriceConvertToIQD || priceToConvert);
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
@@ -235,15 +249,20 @@ export function calculatePriceAfterPercentageWithQuantityAndConvertToUSD(
   const priceAfterPercent = price * (1 + percentage);
 
   if (item.PriceType === "USD") {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   (priceAfterPercent * priceConvert * quantity) /
+    //     (PriceConvertToIQD || priceToConvert)
+    // );
+    const priceTotalEachProductAfterPercentage =
       (priceAfterPercent * priceConvert * quantity) /
-        (PriceConvertToIQD || priceToConvert)
-    );
+      (PriceConvertToIQD || priceToConvert);
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   } else {
-    const priceTotalEachProductAfterPercentage = Math.ceil(
-      (priceAfterPercent * quantity) / (PriceConvertToIQD || priceToConvert)
-    );
+    // const priceTotalEachProductAfterPercentage = Math.ceil(
+    //   (priceAfterPercent * quantity) / (PriceConvertToIQD || priceToConvert)
+    // );
+    const priceTotalEachProductAfterPercentage =
+      (priceAfterPercent * quantity) / (PriceConvertToIQD || priceToConvert);
     return new Intl.NumberFormat().format(priceTotalEachProductAfterPercentage);
   }
 }
