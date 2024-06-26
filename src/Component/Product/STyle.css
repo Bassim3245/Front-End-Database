@@ -182,9 +182,25 @@
   /* Optional: Set margins to zero */
 }
 
+@media print {
+  @page {
+    margin: 1cm;
+  } 
+
+   body::after {
+    content: "Page" counter(page);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 1cm;
+    color: black;
+    font-size: 12px;
+  } 
+}
+
 .a4-page {
   width: 210mm;
-  height: 297mm;
+  /* height: 297mm; */
   margin: auto;
   padding: 3mm;
   /* Optional: Add padding if needed */
@@ -197,6 +213,7 @@
 .contentPage {
   font-family: Arial, sans-serif;
   font-size: 12pt;
+  margin: 6px;
 }
 
 

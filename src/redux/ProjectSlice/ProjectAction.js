@@ -32,8 +32,8 @@ export const getProjectByDepartment = createAsyncThunk(
       info?.user_type
     );
     const url = isAuthorizedUser
-      ? `${BackendUrl}/api/getProjects?departmentID=${departmentID}&&rowsPerPage=${rowsPerPage}&&page=${page}`
-      : `${BackendUrl}/api/getDataByUserID?id=${info?._id}&&rowsPerPage=${rowsPerPage}&&page=${page}`;
+      ? `${BackendUrl}/api/getProjects?departmentID=${departmentID}&rowsPerPage=${rowsPerPage}&page=${page}`
+      : `${BackendUrl}/api/getDataByUserID?userId=${info?._id}&rowsPerPage=${rowsPerPage}&page=${page}`;
     try {
       const response = await axios.get(url, {
         headers: {
@@ -42,7 +42,6 @@ export const getProjectByDepartment = createAsyncThunk(
           token,
         },
       });
-
       return response.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;

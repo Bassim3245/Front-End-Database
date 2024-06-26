@@ -13,16 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Close, LocalPrintshop } from "@mui/icons-material";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
-import html2pdf from "html2pdf.js";
+import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { BackendUrl } from "../../../../redux/api/axios";
-import { usePDF } from "react-to-pdf";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 export default function PrintPdf(props) {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -31,47 +29,6 @@ export default function PrintPdf(props) {
     content: () => componentRef.current,
     documentTitle: `${props?.dataProjectTest?.nameProject}_${props?.label}`,
   });
-
-  // const handlePrint = () => {
-  //   // Ensure componentRef has the latest content
-  //   const content = componentRef.current;
-
-  //   // Use html2pdf to generate PDF
-  //   html2pdf()
-  //     .from(content)
-  //     .toPdf()
-  //     .then(function (data) {
-  //       // Convert the PDF to base64 format
-  //       const pdfBase64 = data.replace(/^data:image\/pdf;base64,/, "");
-  //       // Send the base64 data to your backend to save to the database
-  //       saveToDatabase(pdfBase64);
-  //     });
-  // };
-
-  // const saveToDatabase = (pdfBase64) => {
-  //   // Make a POST request to your backend API to save the PDF
-  //   axios
-  //     .post(`${BackendUrl}/api/setPdfDataOverPrice`, {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //       body: JSON.stringify({
-  //         pdf: pdfBase64,
-  //         filename: `${props?.dataProjectTest?.nameProject}_${props?.label}.pdf`,
-  //       }),
-  //     })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("PDF saved successfully:", data);
-  //       // Handle success (e.g., show a success message)
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error saving PDF:", error);
-  //       // Handle error (e.g., show an error message)
-  //     });
-  // };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -143,7 +100,7 @@ export default function PrintPdf(props) {
     } else if (props?.label === "OfferPriceIQRAfterPercent") {
       total = props?.dataSet?.SumTotalPriceAfterAdd;
     } else if (props?.label === "OfferPriceUSD") {
-      total = props?.dataSet?.SumTotalPriceAfterAddPercentageAndConvert;
+      total = props?.dataSet?.SumTFrNmFBpzPfDvDX8m4i7KdjsoNxzK2E62avert;
     }
     return total;
   };
@@ -159,6 +116,7 @@ export default function PrintPdf(props) {
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
+        TransitionComponent={Transition}
       >
         <DialogContent>
           <AppBar
@@ -182,6 +140,24 @@ export default function PrintPdf(props) {
           </AppBar>
           <div className="a4-page mt-4">
             <div className="contentPage" ref={componentRef}>
+              <style>
+                {`
+                  @media print {
+                    @page {
+                      margin: 1cm;
+                    }
+                    body::after {
+                      content: "Page " counter(page);
+                      position: fixed;
+                      bottom: 0;
+                      right: 0;
+                      padding: 1cm;
+                      color: black;
+                      font-size: 12px;
+                    }
+                  }
+                `}
+              </style>
               <div className="">
                 <div className="">
                   <div className="">
