@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
+import { getTimeAgo } from "../../../Config/Function";
 function FilesReceived() {
   const [token] = useState(localStorage.getItem("token"));
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
@@ -17,9 +18,6 @@ function FilesReceived() {
   useEffect(() => {
     console.log("hhh", data);
   }, []);
-  const timeAgo = formatDistanceToNow(new Date(2024 / 5 / 8), {
-    addSuffix: true,
-  });
 
   return (
     <div className="sectionFileRecived">
@@ -38,15 +36,15 @@ function FilesReceived() {
                     </div>
                     <div className="notification-list_detail">
                       <p dir="rtl">
-                        <b className="ms-2">{item?.userId?.name}</b> sent the
-                        project
+                        <b className="ms-2">{item?.userId?.name}</b> ارسل
+                        المشروع
                       </p>
-                      <p className="text-muted">
-                        {item?.DepartmentID?.departmentName} and{" "}
+                      <p className="text-muted" dir="rtl">
                         {item?.nameProject}
+                        من ({item?.DepartmentID?.departmentName})
                       </p>
                       <p className="text-muted">
-                        <small>{timeAgo}</small>
+                        <small>{getTimeAgo(item?.dateSendToManger)}</small>
                       </p>
                     </div>
                   </div>

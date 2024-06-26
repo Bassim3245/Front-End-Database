@@ -10,7 +10,7 @@ import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 import Header from "../../Layout/Header";
-export default function DepartmentsList({ Path }) {
+export default function DepartmentsList({ Path, title, subTitle }) {
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -45,46 +45,44 @@ export default function DepartmentsList({ Path }) {
   };
   return (
     <>
-      <Header
-        title={t("tableDelayProject.title")}
-        subTitle={t("tableDelayProject.subTitle")}
-      />
-      <Table
-        striped
-        bordered
-        hover
-        dir={rtl?.dir}
-        variant={theme?.palette?.mode === "dark" ? "dark" : ""}
-      >
-        <thead>
-          <tr>
-            <>
-              <th>#</th>
-              <th>{t("DepartmentTable.DepartmentName")}</th>
-              <th>{t("DepartmentTable.Action")}</th>
-            </>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((data, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{data?.departmentName}</td>
-              <td>
-                {/* <ButtonSave
+      <div dir={rtl?.dir}>
+        <Header title={title} subTitle={subTitle} />
+        <Table
+          striped
+          bordered
+          hover
+          variant={theme?.palette?.mode === "dark" ? "dark" : ""}
+        >
+          <thead>
+            <tr>
+              <>
+                <th>#</th>
+                <th>{t("DepartmentTable.DepartmentName")}</th>
+                <th>{t("DepartmentTable.Action")}</th>
+              </>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.map((data, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data?.departmentName}</td>
+                <td>
+                  {/* <ButtonSave
                       className="ms-3"
                       onClick={() => deleteById(data?._id)}
                     >
                       حذف
                     </ButtonSave> */}
-                <ButtonClearState onClick={() => handleClickOpen(data._id)}>
-                  open
-                </ButtonClearState>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+                  <ButtonClearState onClick={() => handleClickOpen(data._id)}>
+                    open
+                  </ButtonClearState>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </>
   );
 }

@@ -51,11 +51,15 @@ export const getDataByProjectID = async (projectID) => {
     console.log(error);
   }
 };
-export const getAllDataProductBYdepartmentId = async (DepartmentID) => {
+export const getAllDataProductBYdepartmentId = async (
+  DepartmentID,
+  rowsPerPage,
+  page
+) => {
   const token = localStorage.getItem("token") || {};
   try {
     const response = await axios.get(
-      `${BackendUrl}/api/getAllDataProductBYdepartmentId/${DepartmentID}`,
+      `${BackendUrl}/api/getAllDataProductBYdepartmentId?DepartmentId=${DepartmentID}&&rowsPerPage=${rowsPerPage}&&page=${page}`,
       {
         // @ts-ignore
         headers: {
@@ -85,7 +89,9 @@ export const getDataBySendUserProjectAndProduct = async (DepartmentID) => {
     throw new Error(error.message);
   }
 };
-export const getDataBySendUserProjectAndProductAssistance = async (DepartmentID) => {
+export const getDataBySendUserProjectAndProductAssistance = async (
+  DepartmentID
+) => {
   const token = localStorage.getItem("token") || {};
   try {
     const response = await axios.get(
@@ -134,7 +140,7 @@ export const fetchDataAllDepartment = async () => {
 };
 export const getDataUserById = async (id, token) => {
   try {
-    console.log("ddd",id);
+    console.log("ddd", id);
     const response = await axios({
       method: "get",
       url: `${BackendUrl}/api/getDataUserById/${id}`,
@@ -245,7 +251,7 @@ export const getDataFileINMangerSection = async (id, token) => {
     const response = await axios.get(
       `${BackendUrl}/api/getDataFileINMangerSection/${id}`,
       {
-        headers: {
+        headers:{
           token: token,
         },
       }
@@ -280,7 +286,9 @@ export const getRole = async (token) => {
 };
 export const getAllProJECTaNDcOUNT5 = async (token) => {
   try {
-    const response = await axios.get(`${BackendUrl}/api/getNumberOfProjectsCurrently`);
+    const response = await axios.get(
+      `${BackendUrl}/api/getNumberOfProjectsCurrently`
+    );
     if (response) {
       console.log("tt", response.data);
       return response.data;
@@ -293,4 +301,3 @@ export const getAllProJECTaNDcOUNT5 = async (token) => {
     }
   }
 };
-

@@ -1,13 +1,11 @@
-import React from 'react'
-import { useParams } from 'react-router';
-import AllProjectsEchDepartment from './AllProjectsToechDepartment';
+import { useParams } from "react-router";
+import AllProjectsEchDepartment from "./AllProjectsToechDepartment";
 function ProjectsListAssistance() {
-    const { id } = useParams();
-    
+  const { id } = useParams();
   return (
     <div>
-      <AllProjectsEchDepartment id={ id} />
+      <AllProjectsEchDepartment id={id} />
     </div>
-  )
+  );
 }
-export default ProjectsListAssistance
+export default ProjectsListAssistance;

@@ -2,21 +2,33 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   Box,
-  IconButton,
   ThemeProvider,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import StyledDataGrid from "Component/Config/StyledDataGrid";
 import { CustomNoRowsOverlay } from "./Function";
+import CostumePagination from "./CostumPagination";
 
-const GridTemplate = ({ columns, rows }) => {
+const GridTemplate = ({
+  columns,
+  rows,
+  setRowsPerPage,
+  setPage,
+  rowsPerPage,
+  page,
+}) => {
   const theme = useTheme();
   const isWidth760 = useMediaQuery("(max-width:760px)");
   return (
     <ThemeProvider theme={theme}>
       <div style={{ width: "100%" }}>
-        <Box sx={{}}>
+        <Box
+          sx={{
+            boxShadow:
+              " 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)",
+          }}
+        >
           <StyledDataGrid
             slots={{
               toolbar: GridToolbar,
@@ -39,14 +51,17 @@ const GridTemplate = ({ columns, rows }) => {
               _id: false,
             }}
             getRowId={(row) => row.id}
-            // hideFooter={true} // This line hides the footer
+            hideFooter={true} // This line hides the footer
             pagination
             autoPageSize
             pageSize={8} // Number of rows per page
-            slots={{
-              toolbar: GridToolbar,
-            }}
           />
+       <CostumePagination
+         setRowsPerPage={setRowsPerPage}
+         setPage={setPage}
+         page={page}
+         rowsPerPage={rowsPerPage}
+       />
         </Box>
       </div>
     </ThemeProvider>

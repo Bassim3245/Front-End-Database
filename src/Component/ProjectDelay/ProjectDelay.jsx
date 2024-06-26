@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box, Divider, MenuItem } from "@mui/material";
+import { Box, Divider, Fab, MenuItem } from "@mui/material";
 import Header from "../Layout/Header";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartmentDelay } from "../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
-import { HourglassBottom, OpenInNew } from "@mui/icons-material";
+import { Cached, HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../Config/CustomMennu";
 import ModuleFormEditProject from "../MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,17 +18,23 @@ import {
 import GridTemplate from "Component/Config/GridTemplet";
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
+import RefreshButtonData from "../Config/RefreshButton";
 const ProjectDelay = () => {
   const [DeleteItem, setDelete] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const { setProject, loading } = useSelector((state) => state?.Project);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
-  const LabelCancelSendProjectDelay="CancelSendProjectDelay";
+  const LabelCancelSendProjectDelay = "CancelSendProjectDelay";
   const token = localStorage.getItem("token") || {};
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
   const { t } = useTranslation();
+  const [RefreshButton, setRefreshButton] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { Permission, roles } = useSelector((state) => state?.RolesData);
@@ -44,12 +50,19 @@ const ProjectDelay = () => {
       headerName: t("ProjectList.Code"),
       flex: 1,
     },
-    { field: "DepartmentID", headerName: " Department Name" },
+    {
+      field: "DepartmentID",
+      headerName: " Department Name",
+      minWidth: "150px",
+      maxWidth: "175px",
+      flex: 1.5,
+    },
     {
       field: "nameProject",
       headerName: t("ProjectList.nameProject"),
-      flex: 1,
-      cellClassName: "name-column--cell",
+      minWidth: "150px",
+      maxWidth: "175px",
+      flex: 1.5,
     },
     {
       field: "NumberBook",
@@ -157,11 +170,19 @@ const ProjectDelay = () => {
   const fetchDataProject = () => {
     // @ts-ignore
     const departmentID = info?.DepartmentID;
-    dispatch(getProjectByDepartmentDelay({ departmentID, info, token }));
+    dispatch(
+      getProjectByDepartmentDelay({
+        departmentID,
+        info,
+        token,
+        rowsPerPage,
+        page,
+      })
+    );
   };
   useEffect(() => {
     fetchDataProject();
-  }, []);
+  }, [RefreshButton, rowsPerPage, page]);
   const HandelOpen = (id) => {
     navigate(`/Home/OpenProject/${id}`);
   };
@@ -170,13 +191,22 @@ const ProjectDelay = () => {
     ...item,
     DepartmentID: item?.DepartmentID?.departmentName,
   }));
+
   return (
     <Box dir={rtl?.dir}>
       <Header
         title={t("tableDelayProject.title")}
         subTitle={t("tableDelayProject.subTitle")}
       />
-      <GridTemplate rows={rows} columns={columns} />
+      <GridTemplate
+        rows={rows}
+        columns={columns}
+        setRowsPerPage={setRowsPerPage}
+        setPage={setPage}
+        page={page}
+        rowsPerPage={rowsPerPage}
+      />
+      <RefreshButtonData setRefreshButton={setRefreshButton} />
     </Box>
   );
 };

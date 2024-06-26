@@ -6,6 +6,8 @@ function GetAllDataProjectNotDelay() {
     <div>
       <DepartmentsList
         Path={"/Home/ProjectsListAssistance"}
+        title={"المشاريع الحالية"}
+        subTitle={"قائمة المشاريع الحالية"}
       />
     </div>
   );

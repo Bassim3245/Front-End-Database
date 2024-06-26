@@ -8,6 +8,8 @@ import saveAs from "file-saver";
 import Loader from "../../Config/Loader";
 import { setLanguage } from "../../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
+import CostumePagination from "../../Config/CostumPagination";
+import RefreshButtonData from "../../Config/RefreshButton";
 function BusinessPersonsMain() {
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
@@ -15,7 +17,10 @@ function BusinessPersonsMain() {
   const [token, setToken] = useState(() => localStorage.getItem("token") || {});
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { setProject, isLoading } = useSelector((state) => state?.Project);
+  const [refreshButton, setRefreshButton] = useState(false);
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -26,7 +31,7 @@ function BusinessPersonsMain() {
     const departmentID = info.DepartmentID;
     dispatch(getProjectByDepartment({ departmentID, info, token }));
   };
-  useEffect(() => fetchDataProject(), []);
+  useEffect(() => fetchDataProject(), [refreshButton]);
   const theme = useTheme();
   const exportToExcel = () => {
     const fileName = "AnalyticsData.xlsx";
@@ -111,7 +116,15 @@ function BusinessPersonsMain() {
                 )}
               </tbody>
             </Table>
+            <CostumePagination
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
           </div>
+          <RefreshButtonData setRefreshButton={setRefreshButton} />
+
         </div>
       )}
     </>

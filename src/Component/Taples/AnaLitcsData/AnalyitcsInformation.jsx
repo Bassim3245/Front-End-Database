@@ -9,6 +9,8 @@ import Loader from "../../Config/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "../../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
+import CostumePagination from "../../Config/CostumPagination";
+import RefreshButtonData from "../../Config/RefreshButton";
 function AnalyticsData() {
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
@@ -17,21 +19,27 @@ function AnalyticsData() {
     return state?.language;
   });
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [refreshButton, setRefreshButton] = useState(false);
   const theme = useTheme();
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
   const { t } = useTranslation();
-  const { isLoading, data, isError, error, isFetching } = useQuery(
+  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "DataProductByDEPARTMENT",
-    () => getAllDataProductBYdepartmentId(info?.DepartmentID),
+    () =>
+      getAllDataProductBYdepartmentId(info?.DepartmentID, rowsPerPage, page),
     {
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
-      refetchInterval: 5000,
     }
   );
 
+  useEffect(() => {
+    refetch();
+  }, [page, rowsPerPage, refreshButton, refetch]); // Added refetch to dependency array
   // Function to export data as Excel
   const exportToExcel = () => {
     const fileName = "AnalyticsData.xlsx";
@@ -134,9 +142,16 @@ function AnalyticsData() {
                 )}
               </tbody>
             </Table>
+            <CostumePagination
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
           </div>
         </div>
       )}
+      <RefreshButtonData setRefreshButton={setRefreshButton} />
     </div>
   );
 }

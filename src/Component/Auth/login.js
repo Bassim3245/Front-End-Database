@@ -173,7 +173,7 @@ function Login() {
                             className="mt-2 mb-20 c-grey fs-20 p-absolute bottom-0 me-2 hiddenveston "
                             style={{ direction: "rtl" }}
                           >
-                            V:(1.1.1)
+                            V:(1.2.2)
                           </p>
                         </div>
                       </div>

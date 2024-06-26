@@ -12,7 +12,6 @@ import {
 import { formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
-
 const AllProjectsEchDepartment = ({ id, Label }) => {
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const { setProject, loading } = useSelector((state) => state?.Project);
@@ -20,15 +19,12 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const [token] = useState(() => localStorage.getItem("token"));
   const [openProjectId, setOpenProjectId] = useState(null);
-
   const handleOpen = (projectId) => {
     setOpenProjectId(openProjectId === projectId ? null : projectId);
   };
-
   const fetchDataProject = useCallback(() => {
     const departmentID = id;
     const action =

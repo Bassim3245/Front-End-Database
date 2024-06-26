@@ -21,7 +21,6 @@ export default function SendToUsers(props) {
   const [open, setOpen] = useState(false);
   const [checkData, setCheckData] = useState([]);
   const [isActive, setIsActive] = useState({});
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [users, setUsers] = useState(() => {

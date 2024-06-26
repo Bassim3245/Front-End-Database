@@ -13,12 +13,7 @@ import Loader from "../Config/Loader";
 import "./ProjectStyle.css";
 import { setLanguage } from "../../redux/LanguageState";
 import { useTranslation } from "react-i18next";
-import {
-  Cached,
-  HourglassBottom,
-  OpenInNew,
-  Refresh,
-} from "@mui/icons-material";
+import { Cached, HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "Component/Config/CustomMennu";
 import {
   Delete,
@@ -33,6 +28,8 @@ const Projects = () => {
   const { setProject, loading } = useSelector((state) => state?.Project);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -48,7 +45,9 @@ const Projects = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const fetchDataProject = () => {
     const departmentID = info.DepartmentID;
-    dispatch(getProjectByDepartment({ departmentID, info, token }));
+    dispatch(
+      getProjectByDepartment({ departmentID, info, token, rowsPerPage, page })
+    );
   };
 
   const handleRefresh = () => {
@@ -61,20 +60,32 @@ const Projects = () => {
     {
       field: "Code",
       headerName: t("ProjectList.Code"),
+
       flex: 1.5,
     },
-    { field: "DepartmentID", headerName: " Department Name", flex: 1.5 },
+    {
+      field: "DepartmentID",
+      headerName: " Department Name",
+      minWidth: "150px",
+      maxWidth: "175px",
+      flex: 1.5,
+    },
     {
       field: "nameProject",
       headerName: t("ProjectList.nameProject"),
+      minWidth: "150px",
+      maxWidth: "175px",
       flex: 1,
     },
     {
       field: "NumberBook",
+
       headerName: t("ProjectList.NumberBook"),
     },
     {
       field: "beneficiary",
+      minWidth: "150px",
+      maxWidth: "175px",
       headerName: t("ProjectList.beneficiary"),
       flex: 2,
     },
@@ -185,16 +196,19 @@ const Projects = () => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
   }, []);
-  useEffect(() => fetchDataProject(), [dispatch, DeleteItem, setDelete,RefreshButton]);
+  useEffect(
+    () => fetchDataProject(),
+    [dispatch, DeleteItem, setDelete, RefreshButton]
+  );
   const rows = setProject?.map((item, index) => ({
     id: index + 1,
     ...item,
     DepartmentID: item?.DepartmentID?.departmentName,
     WorkNatural: item?.WorkNatural?.workNaturalData,
   }));
-  
+
   return (
-    <div style={{ width: "100%" }} dir={rtl?.dir}>
+    <div style={{ width: "100%" }}>
       <ToastContainer />
       {loading ? (
         <div
@@ -205,13 +219,13 @@ const Projects = () => {
           <Loader />
         </div>
       ) : (
-        <Box className="">
+        <Box className="" dir={rtl?.dir}>
           <Header
             title={t("ProjectTable.title")}
             subTitle={t("ProjectTable.subTitle")}
             dir={rtl?.dir}
           />
-          <Box sx={{ display: "flex",gap:"5px" }}>
+          <Box sx={{ display: "flex", gap: "5px" }}>
             {hasPermission(
               roles?.Add_data_project?._id,
               Permission?.permissionIds
@@ -224,7 +238,14 @@ const Projects = () => {
               </span>
             </Fab>
           </Box>
-          <GridTemplate rows={rows} columns={columns} />
+          <GridTemplate
+            rows={rows}
+            columns={columns}
+            setRowsPerPage={setRowsPerPage}
+            setPage={setPage}
+            page={page}
+            rowsPerPage={rowsPerPage}
+          />
         </Box>
       )}
     </div>

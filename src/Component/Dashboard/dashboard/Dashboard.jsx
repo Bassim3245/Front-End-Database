@@ -14,14 +14,18 @@ const Dashboard = () => {
     // @ts-ignore
     return state?.language;
   });
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
   const { t } = useTranslation();
   const theme = useTheme();
   return (
-    <div style={{ width: "100%", maxWidth: "100%" }} className="container"    dir={`${rtl?.dir}`}>
+    <div
+      style={{ width: "100%", maxWidth: "100%" }}
+      className="container"
+      dir={`${rtl?.dir}`}
+    >
       <Stack
         direction={"row"}
         justifyContent={"space-between"}
@@ -45,8 +49,14 @@ const Dashboard = () => {
           </Button>
         </Box>
       </Stack>
-      <Row1  />
-      {/* <Row2  /> */}
+      <Box>
+        {" "}
+        <Row1 />
+      </Box>
+      <Box sx={{ mt: "10px" }}>
+        <Row2 />
+      </Box>
+
       {/* <Row3  /> */}
     </div>
   );

@@ -3,7 +3,7 @@ import {
   AddProject,
   getProjectByDepartment,
   getProjectByDepartmentDelay,
-  getProjectByDepartmentMutual,
+  getDataAllByIdProjectMutual,
   getProjectByDepartmentMutualById
 } from "./ProjectAction";
 const initialState = {
@@ -75,24 +75,6 @@ const ProjectSLice = createSlice({
         state.isSuccess = false;
         state.message = payload;
       });
-    builder
-      .addCase(getProjectByDepartmentMutual.pending, (state) => {
-        state = { ...state, loading: true };
-      })
-      .addCase(getProjectByDepartmentMutual.fulfilled, (state, action) => {
-        if (action?.payload) {
-          state.isError = false;
-          state.isSuccess = true;
-          state.loading = false;
-          state.setProject = action.payload;
-        }
-      })
-      .addCase(getProjectByDepartmentMutual.rejected, (state, { payload }) => {
-        state.isError = true;
-        state.loading = false;
-        state.isSuccess = false;
-        state.message = payload;
-      });
       builder
       .addCase(getProjectByDepartmentMutualById.pending, (state) => {
         state = { ...state, loading: true };
@@ -106,6 +88,24 @@ const ProjectSLice = createSlice({
         }
       })
       .addCase(getProjectByDepartmentMutualById.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.loading = false;
+        state.isSuccess = false;
+        state.message = payload;
+      });
+      builder
+      .addCase(getDataAllByIdProjectMutual.pending, (state) => {
+        state = { ...state, loading: true };
+      })
+      .addCase(getDataAllByIdProjectMutual.fulfilled, (state, action) => {
+        if (action?.payload) {
+          state.isError = false;
+          state.isSuccess = true;
+          state.loading = false;
+          state.setProject = action.payload;
+        }
+      })
+      .addCase(getDataAllByIdProjectMutual.rejected, (state, { payload }) => {
         state.isError = true;
         state.loading = false;
         state.isSuccess = false;

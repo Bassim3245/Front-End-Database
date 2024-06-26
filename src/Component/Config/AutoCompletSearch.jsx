@@ -36,7 +36,7 @@ function AutocompleteExample({
       inputValue={inputValue}
       onInputChange={handleInputChange}
       sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Product Name" />}
+      renderInput={(params) => <TextField {...params} label="Search Data" />}
     />
   );
 }

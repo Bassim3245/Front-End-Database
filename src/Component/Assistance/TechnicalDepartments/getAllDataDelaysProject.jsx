@@ -4,7 +4,7 @@ import DepartmentsList from "./DepartmentsList";
 function GetAllDataDelaysProject() {
   return (
     <div>
-      <DepartmentsList Path={"/Home/ProjectDelayListAssistance"} />
+      <DepartmentsList Path={"/Home/ProjectDelayListAssistance"} title={"المشاريع المتأخرة"} subTitle={"قائمة المشاريع المتأخر"} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Button, useTheme, useThemeProps } from "@mui/material";
 import Loader from "../../Config/Loader";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
+import CostumePagination from "../../Config/CostumPagination";
 function PerformsnceAnalytcsMain() {
   const [info, setInfo] = useState(
     () => JSON.parse(localStorage.getItem("user")) || {}
@@ -16,6 +17,8 @@ function PerformsnceAnalytcsMain() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const { t } = useTranslation();
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { setProject, isLoading } = useSelector((state) => state.Project);
   const fetchDataProject = () => {
     const departmentID = info.DepartmentID;
@@ -107,6 +110,13 @@ function PerformsnceAnalytcsMain() {
                 )}
               </tbody>
             </Table>
+            <CostumePagination
+             
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
           </div>
         </div>
       )}

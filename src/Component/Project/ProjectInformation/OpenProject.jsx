@@ -1,12 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  BottomSend,
-  ColorLink,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-} from "../../Config/Content";
+import { BottomSend, ColorLink, StyledInputBase } from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../../MainFor/ModuleInsertProduct";
 import axios from "axios";
@@ -17,7 +11,7 @@ import { fetchDataProduct } from "../../Config/fetchData";
 import { useDispatch, useSelector } from "react-redux";
 import { displayProductByProjectName } from "../../../redux/ProductSlice/ProductAction";
 import ModuleEdit from "../../MainFor/ModulEditProducts";
-import { Autocomplete, Button, Fab, TextField, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import ModulToploadFilePricedTechnical from "../../MainFor/ModulToploadFilePricedTechnical";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
@@ -32,9 +26,8 @@ import {
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
-import { Cached } from "@mui/icons-material";
-import SearchIcon from "@mui/icons-material/Search";
 import AutocompleteExample from "../../Config/AutoCompletSearch";
+import RefreshButtonData from "../../Config/RefreshButton";
 
 const FormatTextarea2 = ({ data }) => {
   if (typeof data !== "string") {
@@ -42,15 +35,9 @@ const FormatTextarea2 = ({ data }) => {
     return null;
   }
 
-  let formattedData = data;
-  formattedData = formattedData.replace(/_/g, "<br/>");
-
-  if (formattedData.includes("-")) {
-    formattedData = formattedData.replace(/-/g, "\n-");
-
-    if (formattedData.startsWith("\n")) {
-      formattedData = formattedData.substring(1);
-    }
+  let formattedData = data.replace(/_/g, "<br/>").replace(/-/g, "\n-");
+  if (formattedData.startsWith("\n")) {
+    formattedData = formattedData.substring(1);
   }
 
   return <p dangerouslySetInnerHTML={{ __html: formattedData }} />;
@@ -65,57 +52,50 @@ export default function OpenProject() {
   const { products, loading } = useSelector((state) => state?.products);
   const [deleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [RefreshButton, setRefreshButton] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState(products);
-
+  const [refreshButton, setRefreshButton] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState(products || "");
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
   const { Permission, roles } = useSelector((state) => state?.RolesData);
-  const { rtl } = useSelector((state) => {
-    return state?.language;
-  });
+  const { rtl } = useSelector((state) => state?.language);
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    detDataProductById();
-  }, [message, dispatch]);
+    dispatch(displayProductByProjectName(id));
+  }, []);
 
   useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  }, [dispatch, info?._id, token, RefreshButton]);
+  }, [dispatch, info?._id, token, refreshButton,message]);
 
   useEffect(() => {
+    console.log(products);
     dispatch(setLanguage());
   }, [dispatch]);
 
-  const detDataProductById = () => {
-    dispatch(displayProductByProjectName(id));
-  };
-
-  useEffect(
-    () => detDataProductById(),
-    [deleteItem, dispatch, id, RefreshButton]
-  );
-
-  const fetchDataByProjectId = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `${BackendUrl}/api/getProjectById/${id}`
-      );
-      if (response.data) {
-        setDataProject(response?.data);
+  useEffect(() => {
+    const fetchDataByProjectId = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${BackendUrl}/api/getProjectById/${id}`
+        );
+        if (response.data) {
+          setDataProject(response?.data);
+        }
+      } catch (error) {
+        console.error("Error fetching project data:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching project data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchDataByProjectId();
+  }, [deleteItem, anchorEl, refreshButton, id]);
 
   const handleSend = async () => {
     try {
@@ -141,13 +121,55 @@ export default function OpenProject() {
     window.history.back();
   };
 
-  useEffect(() => {
-    fetchDataByProjectId();
-  }, [deleteItem, anchorEl, RefreshButton]);
-
-  const handleRefresh = () => {
-    setRefreshButton((prev) => !prev);
-  };
+  const productRows = useMemo(() => {
+    return Array.isArray(filteredProducts)
+      ? filteredProducts.map((item, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+            <td dir="rtl">
+              <FormatTextarea2 data={item?.nameProduct} />
+            </td>
+            <td>{FormatDataNumber(item?.Price)}</td>
+            <td>{item?.PriceType}</td>
+            <td>{item?.Quantity}</td>
+            <td>{item?.percent}</td>
+            <td>{item?.PriceConvert}</td>
+            <td>{item?.comments}</td>
+            <td>{item?.description}</td>
+            <td>{FormatDataNumber(item?.Quantity * item?.Price)}</td>
+            <td>{item?.UnitId?.Unit}</td>
+            <td className="d-flex gap-2 f-wrap">
+              {item?.allowRequest || info?.user_type === "H.O.D" ? (
+                <ModuleEdit
+                  item={item}
+                  getDataProduct={fetchDataProduct}
+                  ProjectWorkNatural={dataProject?.WorkNatural}
+                />
+              ) : (
+                <AllowEdit Id={item?._id} label="AllowEdit" title="تعديل" />
+              )}
+              {item?.allowRequestDelete || info?.user_type === "H.O.D" ? (
+                <BottomSend
+                  onClick={() =>
+                    Delete(
+                      item?._id,
+                      setDelete,
+                      setAnchorEl,
+                      token,
+                      "DeleteProduct"
+                    )
+                  }
+                >
+                  {t("ProductList.table.Delete")}
+                </BottomSend>
+              ) : (
+                <AllowDelate Id={item?._id} label="AllowDelete" title="حذف" />
+              )}
+            </td>
+          </tr>
+        ))
+      : [];
+  }, [filteredProducts, t, info, token, dataProject]);
 
   return (
     <div className={`w-100`}>
@@ -264,64 +286,7 @@ export default function OpenProject() {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(filteredProducts) &&
-                        filteredProducts.map((item, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td dir="rtl">
-                              <FormatTextarea2 data={item?.nameProduct} />
-                            </td>
-                            <td>{FormatDataNumber(item?.Price)}</td>
-                            <td>{item?.PriceType}</td>
-                            <td>{item?.Quantity}</td>
-                            <td>{item?.percent}</td>
-                            <td>{item?.PriceConvert}</td>
-                            <td>{item?.comments}</td>
-                            <td>{item?.description}</td>
-                            <td>
-                              {FormatDataNumber(item?.Quantity * item?.Price)}
-                            </td>
-                            <td>{item?.UnitId?.Unit}</td>
-                            <td className="d-flex gap-2 f-wrap">
-                              {item?.allowRequest ||
-                              info?.user_type === "H.O.D" ? (
-                                <ModuleEdit
-                                  item={item}
-                                  getDataProduct={fetchDataProduct}
-                                  ProjectWorkNatural={dataProject?.WorkNatural}
-                                />
-                              ) : (
-                                <AllowEdit
-                                  Id={item?._id}
-                                  label="AllowEdit"
-                                  title="تعديل"
-                                />
-                              )}
-                              {item?.allowRequestDelete ||
-                              info?.user_type === "H.O.D" ? (
-                                <BottomSend
-                                  onClick={() =>
-                                    Delete(
-                                      item?._id,
-                                      setDelete,
-                                      setAnchorEl,
-                                      token,
-                                      "DeleteProduct"
-                                    )
-                                  }
-                                >
-                                  {t("ProductList.table.Delete")}
-                                </BottomSend>
-                              ) : (
-                                <AllowDelate
-                                  Id={item?._id}
-                                  label="AllowDelete"
-                                  title="حذف"
-                                />
-                              )}
-                            </td>
-                          </tr>
-                        ))}
+                      {productRows}
                       <tr>
                         <td colSpan={10}>المجموع</td>
                         <td>
@@ -347,13 +312,7 @@ export default function OpenProject() {
           </div>
         </>
       )}
-      <div className="posisionRefersh">
-        <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
-          <span className="refreshButton">
-            <Cached />
-          </span>
-        </Fab>
-      </div>
+      <RefreshButtonData setRefreshButton={setRefreshButton} />
     </div>
   );
 }

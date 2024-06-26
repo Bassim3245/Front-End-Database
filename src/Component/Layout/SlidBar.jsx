@@ -159,6 +159,13 @@ const SideBar = ({ open, handleDrawerClose }) => {
           checkPermission: roles?.View_data_project?._id,
         },
         {
+          text: t("layout.FilesReceived"),
+          icon: <ReceiptOutlinedIcon />,
+          path: "FilesReceived",
+          checkPermission:
+          roles?.data_project_send_from_HOD_to_HR_Assistance?._id,
+        },
+        {
           text: t("layout.Profile"),
           icon: <Person />,
           path: "profile",

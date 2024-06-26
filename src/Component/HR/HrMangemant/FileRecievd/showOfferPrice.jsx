@@ -1,12 +1,9 @@
 import { getDataFileINMangerSection } from "Component/Config/fetchData";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import {
-  formatDate,
-  getFileIcon,
-  handleDownload,
-} from "Component/Config/Function";
+import { getFileIcon, handleDownload } from "Component/Config/Function";
 import "../../Style/FileStyle.css";
+import { formatDate, getTimeAgo } from "../../../Config/Function";
 function DataFileINHrSection({ id }) {
   const [token] = useState(localStorage.getItem("token"));
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(

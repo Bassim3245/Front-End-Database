@@ -4,7 +4,7 @@ import Header from "../../Layout/Header";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getProjectByDepartmentMutual,
+  getDataAllByIdProjectMutual,
   getProjectByDepartmentMutualById,
 } from "../../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
@@ -23,6 +23,7 @@ import GridTemplate from "../../Config/GridTemplet";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
+import SendToUsers from "Component/Layout/HRlayout/SendToUsers";
 
 const ProjectMutual = (props) => {
   const [DeleteItem, setDelete] = useState([]);
@@ -181,6 +182,11 @@ const ProjectMutual = (props) => {
                   "Project Delay"
                 )}
               <Divider sx={{ my: 0.5 }} />
+              {props.label === "getDataMutualToEchDepartment" ? (
+                <MenuItem>
+                  <SendToUsers /> <span> send</span>
+                </MenuItem>
+              ) : null}
               <MenuItem
                 onClick={() => HandelOpen(params.row._id)}
                 disableRipple
@@ -200,7 +206,7 @@ const ProjectMutual = (props) => {
     if (props.label === "getDataMutualToEchDepartment") {
       dispatch(getProjectByDepartmentMutualById({ DepartmentId, token }));
     } else {
-      dispatch(getProjectByDepartmentMutual({ DepartmentId, token }));
+      dispatch(getDataAllByIdProjectMutual({ DepartmentId, token }));
     }
   };
   useEffect(() => {
