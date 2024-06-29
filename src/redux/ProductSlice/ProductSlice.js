@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  displayProductByProjectName,
-
-} from "./ProductAction";
+import { displayProductByProjectName } from "./ProductAction";
 const EmployState = {
   products: [],
   isSuccess: false,
@@ -17,8 +14,7 @@ const ProductSlice = createSlice({
     clearState: (state) => {
       state.isError = false;
       state.isSuccess = false;
-      state.isFetching = false;
-
+      state.products = [];
       return state;
     },
   },
@@ -32,16 +28,14 @@ const ProductSlice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.products = action?.payload;
-          state.loading=false
-
+          state.loading = false;
         }
       })
       .addCase(displayProductByProjectName.rejected, (state, { payload }) => {
         state.isError = true;
         state.loading = false;
         state.isSuccess = false;
-      })
-
+      });
   },
 });
 export default ProductSlice.reducer;

@@ -237,7 +237,12 @@ const ProjectMutual = (props) => {
   };
   return (
     <>
-      {loading && <Loader />}
+      {loading && (
+        <div style={{zIndex:"99999",position:"relative"}}>
+          <Loader />
+        </div>
+      )}
+
       <Box dir={rtl?.dir}>
         <Header
           title={t("ProjectList.title")}

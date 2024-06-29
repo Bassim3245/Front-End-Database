@@ -28,6 +28,7 @@ import AllowDelate from "./AllowDelete";
 import "react-toastify/dist/ReactToastify.css";
 import AutocompleteExample from "../../Config/AutoCompletSearch";
 import RefreshButtonData from "../../Config/RefreshButton";
+import { clearState } from "../../../redux/ProductSlice/ProductSlice";
 
 const FormatTextarea2 = ({ data }) => {
   if (typeof data !== "string") {
@@ -68,7 +69,7 @@ export default function OpenProject() {
   useEffect(() => {
     const userId = info?._id;
     dispatch(getRoleAndUserId({ userId, token }));
-  }, [dispatch, info?._id, token, refreshButton,message]);
+  }, [dispatch, info?._id, token, refreshButton, message]);
   useEffect(() => {
     console.log(products);
     dispatch(setLanguage());
@@ -115,12 +116,13 @@ export default function OpenProject() {
   };
 
   const handleBack = () => {
+    // dispatch(clearState());
     window.history.back();
   };
 
   const productRows = useMemo(() => {
-    return Array.isArray(products)
-      ? products.map((item, index) => (
+    return Array.isArray(filteredProducts)
+      ? filteredProducts.map((item, index) => (
           <tr key={index}>
             <td>{index + 1}</td>
             <td dir="rtl">
@@ -255,7 +257,7 @@ export default function OpenProject() {
                 </div>
               )}
               {Array.isArray(filteredProducts) &&
-              filteredProducts.length > 0 ? (
+              filteredProducts?.length > 0 ? (
                 !dataProject?.SendProject &&
                 (filteredProducts ? (
                   <Table
@@ -286,12 +288,8 @@ export default function OpenProject() {
                       {productRows}
                       <tr>
                         <td colSpan={10}>المجموع</td>
-                        <td>
-                          {sumDataProjectIQD(products).totalIQD} IQD
-                        </td>
-                        <td>
-                          {sumDataProjectIQD(products).totalOther} USD
-                        </td>
+                        <td>{sumDataProjectIQD(products).totalIQD} IQD</td>
+                        <td>{sumDataProjectIQD(products).totalOther} USD</td>
                       </tr>
                     </tbody>
                   </Table>
