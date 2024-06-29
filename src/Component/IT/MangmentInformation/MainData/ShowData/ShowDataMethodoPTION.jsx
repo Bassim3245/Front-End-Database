@@ -15,19 +15,37 @@ export default function ShowData() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const { message, setMessage } = React.useState("");
   const [dataMethodOption, setDataMethodOption] = React.useState([]);
-  const handleClickOpen = () => {setOpen(true)};
-  const handleClose = () => {setOpen(false)};
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const getDataMethodOtion = async () => {
     try {
       const response = await axios.get(`${BackendUrl}/api/getDataMethodOption`);
       setDataMethodOption(response?.data?.response);
-
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
   };
   // @ts-ignore
+  const handelDelete = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${BackendUrl}/api/deleteMethodOptionById/${id}`
+      );
+      if (response) {
+        setMessage(response?.data?.message);
+        toast(message);
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
   React.useEffect(() => getDataMethodOtion, [open]);
   return (
     <React.Fragment>
@@ -42,7 +60,13 @@ export default function ShowData() {
       >
         <DialogTitle id="responsive-dialog-title"></DialogTitle>
         <DialogContent>
-          <Table striped bordered hover dir="rtl" variant={theme?.palette?.mode === "dark" ? "dark" : ""}>
+          <Table
+            striped
+            bordered
+            hover
+            dir="rtl"
+            variant={theme?.palette?.mode === "dark" ? "dark" : ""}
+          >
             <thead>
               <tr>
                 <>
@@ -58,7 +82,12 @@ export default function ShowData() {
                   <td>{index + 1}</td>
                   <td>{data?.MethodOption}</td>
                   <td>
-                    <ButtonSave className="ms-3">حذف</ButtonSave>
+                    <ButtonSave
+                      className="ms-3"
+                      onClick={() => handelDelete(data?._id)}
+                    >
+                      حذف
+                    </ButtonSave>
                     <ButtonClearState>تعديل</ButtonClearState>
                   </td>
                 </tr>

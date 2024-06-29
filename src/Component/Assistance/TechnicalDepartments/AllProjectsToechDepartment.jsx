@@ -20,6 +20,9 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [token] = useState(() => localStorage.getItem("token"));
   const [openProjectId, setOpenProjectId] = useState(null);
   const handleOpen = (projectId) => {
@@ -29,7 +32,7 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
     const departmentID = id;
     const action =
       Label === "Delay" ? getProjectByDepartmentDelay : getProjectByDepartment;
-    dispatch(action({ departmentID, info, token }));
+    dispatch(action({ departmentID, info, token ,page ,rowsPerPage}));
   }, [dispatch, id, Label, info, token]);
 
   const getPermission = useCallback(() => {

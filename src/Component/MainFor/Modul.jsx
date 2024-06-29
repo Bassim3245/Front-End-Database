@@ -23,11 +23,7 @@ import { LevelOfAchevment, PerformenceLevel } from "../Config/SelectDrobdown";
 import axios from "axios";
 import { BackendUrl } from "../../redux/api/axios";
 import { getData } from "../../redux/MinistriesState/MinistresAction.js";
-import {
-  BottomClose,
-  ButtonClearState,
-  Textarea,
-} from "../Config/Content.jsx";
+import { BottomClose, ButtonClearState, Textarea } from "../Config/Content.jsx";
 import { toast } from "react-toastify";
 import {
   AddWorkNutral,
@@ -53,6 +49,8 @@ export default function MainForm(props) {
   const [dataUserID, setDataUserID] = useState([]);
   const [startTime, setStartTime] = React.useState("");
   const [endTime, setEndTime] = React.useState("");
+  const [dataMethodOption, setDataMethodOption] = React.useState([]);
+
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
     nameProject: "",
@@ -170,9 +168,20 @@ export default function MainForm(props) {
   const theme = createTheme({
     direction: "rtl",
   });
+  const getDataMethodOtion = async () => {
+    try {
+      const response = await axios.get(`${BackendUrl}/api/getDataMethodOption`);
+      setDataMethodOption(response?.data?.response);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
+  };
+  useEffect(() => {
+    getDataMethodOtion();
+  }, []);
   return (
     <React.Fragment>
-      <Box sx={{ "& > :not(style)": { } }}>
+      <Box sx={{ "& > :not(style)": {} }}>
         <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
           <AddIcon />
         </Fab>
@@ -233,17 +242,21 @@ export default function MainForm(props) {
                   ))}
                 </TextField>
                 {/* end WorkNatural */}
-
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
+                  select
+                  label="طريقة التحصيل "
                   className="mb-4"
-                  label="طريقة التحصيل"
                   name="MethodOption"
                   dir="rtl"
                   value={MethodOption}
                   onChange={handleInputChange}
-                ></TextField>
+                >
+                  {dataMethodOption?.map((data, index) => (
+                    <MenuItem value={data?._id}>{data?.MethodOption}</MenuItem>
+                  ))}
+                </TextField>
                 {/* end MethodOption */}
 
                 <TextField
@@ -446,7 +459,6 @@ export default function MainForm(props) {
               className="container "
               style={{ width: "82%", maxWidth: "100%" }}
             >
-            
               <ButtonClearState
                 onClick={(e) => HandleSubmit(e)}
                 style={{ width: "100%", fontSize: "20px" }}

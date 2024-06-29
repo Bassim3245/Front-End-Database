@@ -8,6 +8,7 @@ import UnitSystem from "./MangmentInformation/MainData/UnitSystem";
 import "./style.css";
 import { useTheme } from "@mui/material";
 import RoleSystem from "./MangmentInformation/MainData/Role";
+import MethodOption from "./MangmentInformation/MainData/MethodOption";
 function SettingInformation() {
   const [departmentName, setDepartmentName] = useState("");
   const [brief, setBrief] = useState("");
@@ -41,13 +42,13 @@ function SettingInformation() {
               setBrief={setBrief}
             />
           </div>
-          {/* <div
+          <div
             className={`p-20 ${
               theme.palette.mode === "dark" ? "dark" : ""
             } rad-10`}
           >
             <MethodOption theme={theme} />
-          </div> */}
+          </div>
           <div
             className={`p-20 ${
               theme.palette.mode === "dark" ? "dark" : ""
