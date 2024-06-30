@@ -12,9 +12,12 @@ import {
 import { formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
+import CostumePagination from "../../Config/CostumPagination";
 const AllProjectsEchDepartment = ({ id, Label }) => {
   const { Permission, roles } = useSelector((state) => state?.RolesData);
-  const { setProject, loading } = useSelector((state) => state?.Project);
+  const { setProject, loading, totalProject } = useSelector(
+    (state) => state?.Project
+  );
   const { rtl } = useSelector((state) => state?.language);
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -32,7 +35,7 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
     const departmentID = id;
     const action =
       Label === "Delay" ? getProjectByDepartmentDelay : getProjectByDepartment;
-    dispatch(action({ departmentID, info, token ,page ,rowsPerPage}));
+    dispatch(action({ departmentID, info, token, page, rowsPerPage }));
   }, [dispatch, id, Label, info, token]);
 
   const getPermission = useCallback(() => {
@@ -137,6 +140,13 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
             )}
           </tbody>
         </Table>
+        <CostumePagination
+          setRowsPerPage={setRowsPerPage}
+          setPage={setPage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          totalProject={totalProject}
+        />
       </div>
     </div>
   );

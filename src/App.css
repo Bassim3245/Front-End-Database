@@ -100,7 +100,7 @@ section h1 {
 
 html {
     scroll-behavior: smooth;
-    scrollbar-width:20px
+    scrollbar-width: 20px
 }
 
 body {
@@ -128,9 +128,11 @@ ul {
     z-index: 999;
     top: 50%;
     left: 50%;
-    background-color: rgba(0, 0, 0, 0.1); 
-    transform: translate(-50%, -50%); /* Correct the translate function */
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    /* Correct the translate function */
 }
+
 /* @media (min-width: 390px) {
     .containerCustomGridTable {
         width: 360px;
@@ -161,72 +163,65 @@ ul {
         width: 1370px;
     }
 }
+
 @media (min-width: 1700px) {
     .containerCustomGridTable {
         width: 1670px;
     }
 }
+
 .containerCustomGridTable {
     padding-left: 15px;
     padding-right: 15px;
     margin-left: auto;
     margin-right: auto;
 }
+
 @keyframes rotating {
     from {
-      -ms-transform: rotate(0deg);
-      -moz-transform: rotate(0deg);
-      -webkit-transform: rotate(0deg);
-      -o-transform: rotate(0deg);
-      transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
+
     to {
-      -ms-transform: rotate(360deg);
-      -moz-transform: rotate(360deg);
-      -webkit-transform: rotate(360deg);
-      -o-transform: rotate(360deg);
-      transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
-  .refreshButton {
-      &:hover {
-          cursor: pointer;
-          -webkit-animation: rotating 1.2s linear infinite;
-          -moz-animation: rotating 1.2s linear infinite;
-          -ms-animation: rotating 1.2s linear infinite;
-          -o-animation: rotating 1.2s linear infinite;
-          animation: rotating 1.2s linear infinite;
-      }
-      &:active {
-          .icon {
-              fill: #5ac938;
-          }
-  
-      }
-  }
-  .posisionRefersh{
+}
+
+.refreshButton {
+    &:hover {
+        cursor: pointer;
+        -webkit-animation: rotating 1.2s linear infinite;
+        -moz-animation: rotating 1.2s linear infinite;
+        -ms-animation: rotating 1.2s linear infinite;
+        -o-animation: rotating 1.2s linear infinite;
+        animation: rotating 1.2s linear infinite;
+    }
+
+    &:active {
+        .icon {
+            fill: #5ac938;
+        }
+
+    }
+}
+
+.posisionRefersh {
     position: fixed;
     bottom: 30px;
     right: 50%
-  }
-/* Small */
-/* @media (min-width: 768px) {
-    .container {
-        width: 750px;
-    }
-} */
+}
 
-/* Medium */
-/* @media (min-width: 992px) {
-    .container {
-        width: 970px;
-    }
-} */
-
-/* Large */
-/* @media (min-width: 1200px) {
-    .container {
-        width: 1170px;
-    }
-} */
+.PostionLoader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+}

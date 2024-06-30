@@ -4,7 +4,8 @@ import {
   getProjectByDepartment,
   getProjectByDepartmentDelay,
   getDataAllByIdProjectMutual,
-  getProjectByDepartmentMutualById
+  getProjectByDepartmentMutualById,
+  getDataAllByIdProjectMutualDelay,
 } from "./ProjectAction";
 const initialState = {
   setProject: [],
@@ -12,6 +13,7 @@ const initialState = {
   isError: false,
   message: "",
   loading: true,
+  totalProject: "",
 };
 const ProjectSLice = createSlice({
   name: "Project",
@@ -48,7 +50,8 @@ const ProjectSLice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.loading = false;
-          state.setProject = action.payload;
+          state.setProject = action?.payload?.response;
+          state.totalProject = action?.payload?.totalCount;
         }
       })
       .addCase(getProjectByDepartment.rejected, (state, { payload }) => {
@@ -66,7 +69,8 @@ const ProjectSLice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.loading = false;
-          state.setProject = action.payload;
+          state.setProject = action?.payload?.response;
+          state.totalProject = action?.payload?.totalCount;
         }
       })
       .addCase(getProjectByDepartmentDelay.rejected, (state, { payload }) => {
@@ -75,7 +79,7 @@ const ProjectSLice = createSlice({
         state.isSuccess = false;
         state.message = payload;
       });
-      builder
+    builder
       .addCase(getProjectByDepartmentMutualById.pending, (state) => {
         state = { ...state, loading: true };
       })
@@ -84,16 +88,20 @@ const ProjectSLice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.loading = false;
-          state.setProject = action.payload;
+          state.setProject = action?.payload?.response;
+          state.totalProject = action?.payload?.totalCount;
         }
       })
-      .addCase(getProjectByDepartmentMutualById.rejected, (state, { payload }) => {
-        state.isError = true;
-        state.loading = false;
-        state.isSuccess = false;
-        state.message = payload;
-      });
-      builder
+      .addCase(
+        getProjectByDepartmentMutualById.rejected,
+        (state, { payload }) => {
+          state.isError = true;
+          state.loading = false;
+          state.isSuccess = false;
+          state.message = payload;
+        }
+      );
+    builder
       .addCase(getDataAllByIdProjectMutual.pending, (state) => {
         state = { ...state, loading: true };
       })
@@ -102,7 +110,8 @@ const ProjectSLice = createSlice({
           state.isError = false;
           state.isSuccess = true;
           state.loading = false;
-          state.setProject = action.payload;
+          state.setProject = action?.payload?.response;
+          state.totalProject = action?.payload?.totalCount;
         }
       })
       .addCase(getDataAllByIdProjectMutual.rejected, (state, { payload }) => {
@@ -111,6 +120,28 @@ const ProjectSLice = createSlice({
         state.isSuccess = false;
         state.message = payload;
       });
+    builder
+      .addCase(getDataAllByIdProjectMutualDelay.pending, (state) => {
+        state = { ...state, loading: true };
+      })
+      .addCase(getDataAllByIdProjectMutualDelay.fulfilled, (state, action) => {
+        if (action?.payload) {
+          state.isError = false;
+          state.isSuccess = true;
+          state.loading = false;
+          state.setProject = action?.payload?.response;
+          state.totalProject = action?.payload?.totalCount;
+        }
+      })
+      .addCase(
+        getDataAllByIdProjectMutualDelay.rejected,
+        (state, { payload }) => {
+          state.isError = true;
+          state.loading = false;
+          state.isSuccess = false;
+          state.message = payload;
+        }
+      );
   },
 });
 export default ProjectSLice.reducer;

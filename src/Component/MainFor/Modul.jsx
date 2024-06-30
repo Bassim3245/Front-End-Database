@@ -31,6 +31,7 @@ import {
 } from "../../redux/Whorkntural/WorkNutralAction.js";
 import { Add, AddIcCallOutlined, Close } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
+import CustomTextField from "../Config/CustomTextField";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -223,6 +224,23 @@ export default function MainForm(props) {
                 component="form"
                 onSubmit={(e) => HandleSubmit(e)}
               >
+                <CustomTextField
+                  label={"الاسم"}
+                  haswidth={true}
+                  // value={props?.objectData?.name?.value}
+                  // error={props?.objectData?.name?.error}
+                  customWidth="100%"
+                  hasMultipleLine={false}
+                  paddingHorizontal={'0px'}
+                  // message={props?.objectData?.name?.message}
+                  readOnly={false}
+                  // onChange={(e) => {
+                  //   props?.setObjectData("name", e.target.value);
+                  // }}
+                  onClearClick={() => {
+                    props?.setObjectData("name", "");
+                  }}
+                />
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "100%", maxWidth: "100%" }}

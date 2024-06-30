@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDataAllByIdProjectMutual,
+  getDataAllByIdProjectMutualDelay,
   getProjectByDepartmentMutualById,
 } from "../../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
@@ -24,15 +25,20 @@ import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 import SendToUsers from "Component/Layout/HRlayout/SendToUsers";
+import RefreshButtonData from "../../Config/RefreshButton";
 
 const ProjectMutual = (props) => {
   const [DeleteItem, setDelete] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
-  const { setProject, loading } = useSelector((state) => state?.Project);
+  const { setProject, loading, totalProject } = useSelector(
+    (state) => state?.Project
+  );
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const token = localStorage.getItem("token") || {};
   const [RefreshButton, setRefreshButton] = useState(false);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { rtl } = useSelector((state) => {
     return state?.language;
   });
@@ -55,8 +61,8 @@ const ProjectMutual = (props) => {
     {
       field: "Code",
       headerName: t("ProjectList.Code"),
-      minWidth: "100px",
-      maxWidth: "150px",
+      minWidth: "150px",
+      maxWidth: "175px",
       flex: 1,
     },
     {
@@ -203,12 +209,21 @@ const ProjectMutual = (props) => {
   const fetchDataProject = () => {
     // @ts-ignore
     const DepartmentId = info?.DepartmentID;
+    const params = { DepartmentId, token, rowsPerPage, page };
+
     if (props.label === "getDataMutualToEchDepartment") {
-      dispatch(getProjectByDepartmentMutualById({ DepartmentId, token }));
-    } else {
-      dispatch(getDataAllByIdProjectMutual({ DepartmentId, token }));
+      dispatch(getProjectByDepartmentMutualById(params));
+      return;
     }
+
+    if (props?.ProjectDelayLabel === "ProjectDelayLabel") {
+      dispatch(getDataAllByIdProjectMutualDelay(params));
+      return;
+    }
+
+    dispatch(getDataAllByIdProjectMutual(params));
   };
+
   useEffect(() => {
     fetchDataProject();
   }, [RefreshButton]);
@@ -227,37 +242,52 @@ const ProjectMutual = (props) => {
   }));
   useEffect(() => {
     if (Array.isArray(setProject)) {
-      rows.forEach((item, index) => {
-        console.log(`Item  DepartmentID:`, item.DepartmentID);
+      rows?.forEach((item, index) => {
+        // console.log(`Item  DepartmentID:`, item?.DepartmentID);
       });
     }
   }, [setProject]);
-  const handleRefresh = () => {
-    setRefreshButton((prev) => !prev); // Toggle the refresh state
-  };
   return (
     <>
-      {loading && (
-        <div style={{zIndex:"99999",position:"relative"}}>
+      {loading ? (
+        <div
+          className="hhhhhhh"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            zIndex: "9999",
+          }}
+        >
           <Loader />
         </div>
+      ) : (
+        <Box dir={rtl?.dir}>
+          <Header
+            title={
+              props?.ProjectDelayLabel === "ProjectDelayLabel"
+                ? t("tableDelayProject.title")
+                : t("ProjectList.title")
+            }
+            subTitle={
+              props?.ProjectDelayLabel === "ProjectDelayLabel"
+                ? t("tableDelayProject.title")
+                : t("ProjectList.title")
+            }
+            dir={rtl?.dir}
+          />
+          <GridTemplate
+            rows={rows}
+            columns={columns}
+            setRowsPerPage={setRowsPerPage}
+            setPage={setPage}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            totalProject={totalProject}
+          />
+        </Box>
       )}
-
-      <Box dir={rtl?.dir}>
-        <Header
-          title={t("ProjectList.title")}
-          subTitle={t("ProjectList.subTitle")}
-          dir={rtl?.dir}
-        />
-        <GridTemplate rows={rows} columns={columns} />
-      </Box>
-      <div className="posisionRefersh">
-        <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
-          <span className="refreshButton">
-            <Cached />
-          </span>
-        </Fab>
-      </div>
+      <RefreshButtonData setRefreshButton={setRefreshButton} />
     </>
   );
 };

@@ -42,7 +42,9 @@ export const getProjectByDepartment = createAsyncThunk(
           token,
         },
       });
-      return response.data;
+      if (response) {
+        return response.data;
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       return thunkAPI.rejectWithValue(errorMessage);
@@ -62,8 +64,8 @@ export const getProjectByDepartmentDelay = createAsyncThunk(
           token: token,
         },
       });
-      if (response.data) {
-        return response.data;
+      if (response?.data) {
+        return response?.data;
       }
     } catch (error) {
       if (error.response) {
@@ -75,11 +77,33 @@ export const getProjectByDepartmentDelay = createAsyncThunk(
 );
 export const getDataAllByIdProjectMutual = createAsyncThunk(
   "GetALL/getDataAllByIdProjectMutual",
-  async ({ DepartmentId, token }, thunkAPI) => {
+  async ({ DepartmentId, token, rowsPerPage, page  }, thunkAPI) => {
     try {
       const response = await axios({
         method: "get",
-        url: `${BackendUrl}/api/getDataAllByIdProjectMutual/${DepartmentId}`,
+        url: `${BackendUrl}/api/getDataAllByIdProjectMutual?DepartmentId=${DepartmentId}&&page=${page}&rowsPerPage=${rowsPerPage}`,
+        headers: {
+          Accept: "application/json",
+          token: token,
+        },
+      });
+      if (response || response?.data) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error || error.response) {
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
+export const getDataAllByIdProjectMutualDelay = createAsyncThunk(
+  "GetALL/getDataAllByIdProjectMutualDelay",
+  async ({ DepartmentId, token, rowsPerPage, page }, thunkAPI) => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: `${BackendUrl}/api/getDataAllByIdProjectMutualDelay?DepartmentId=${DepartmentId}&&page=${page}&rowsPerPage=${rowsPerPage}`,
         headers: {
           Accept: "application/json",
           token: token,
@@ -97,11 +121,11 @@ export const getDataAllByIdProjectMutual = createAsyncThunk(
 );
 export const getProjectByDepartmentMutualById = createAsyncThunk(
   "GetALL/getProjectByDepartmentMutualById",
-  async ({ DepartmentId, token }, thunkAPI) => {
+  async ({ DepartmentId, token ,rowsPerPage,page}, thunkAPI) => {
     try {
       const response = await axios({
         method: "get",
-        url: `${BackendUrl}/api/getDataByDepartmentId/${DepartmentId}`,
+        url: `${BackendUrl}/api/getDataByDepartmentMutualId?DepartmentId=${DepartmentId}&&page=${page}&rowsPerPage=${rowsPerPage}`,
         headers: {
           Accept: "application/json",
           token: token,

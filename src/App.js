@@ -37,7 +37,6 @@ import ProjectMutual from "Component/Assistance/assIStanceTask/ProjectMuluat";
 import DepartmentsList from "./Component/Assistance/TechnicalDepartments/DepartmentsList";
 import ModuleEditUsers from "./Component/IT/MangmentInformation/MainData/ShowData/RoleAndPermission/EditUser";
 import GetAllDataDelaysProject from "./Component/Assistance/TechnicalDepartments/getAllDataDelaysProject";
-import GetAllDataProjectNotDelay from "./Component/Assistance/TechnicalDepartments/GetAllDataProjectNotDelay";
 import ProjectsListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectsList";
 import ProjectDelayListAssistance from "./Component/Assistance/TechnicalDepartments/ProjectDelayListAssistacnce";
 import MutualProjectClint from "Component/MutualProject/MutualProjectClaint";
@@ -45,6 +44,8 @@ import SetPermissionToGroup from "Component/IT/MangmentInformation/MainData/Show
 import HandelDataMutualProject from "Component/MutualProject/HandelDataMutualProject";
 import ProductListHOD from "Component/Product/ProductListHOD";
 import ProductListRecivedAssistance from "Component/Product/ProductListRecivedAssistance";
+import ProjectMutualDelay from "./Component/ProjectDelay/ProjectMutualDelay";
+import GetAllDataProjectCurrent from "./Component/Assistance/TechnicalDepartments/GetAllDataProjectNotDelay";
 export default function App() {
   const { Rol } = useSelector((state) => state?.user);
   const [info, setInfo] = useState(
@@ -122,8 +123,12 @@ export default function App() {
               <Route path="Assistance" element={<Assistance />} />
               <Route path="ProjectMutual" element={<ProjectMutual />} />
               <Route
-                path="GetAllDataProjectNotDelay"
-                element={<GetAllDataProjectNotDelay />}
+                path="GetAllDataProjectCurrent"
+                element={<GetAllDataProjectCurrent />}
+              />
+              <Route
+                path="ProjectMutualDelay"
+                element={<ProjectMutualDelay />}
               />
               <Route
                 path="ProjectsListAssistance/:id"

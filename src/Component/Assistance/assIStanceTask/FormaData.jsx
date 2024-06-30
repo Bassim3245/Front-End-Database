@@ -11,8 +11,7 @@ import {
 } from "Component/Config/SelectDrobdown";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataNatural } from "../../../redux/Whorkntural/WorkNutralAction";
-import { setLanguage } from "../../../redux/LanguageState";
-
+import CustomTextField from "../../Config/CustomTextField";
 function FormData({
   formData,
   HandleSubmit,
@@ -73,6 +72,23 @@ function FormData({
                   value={formData.nameProject}
                   onChange={handleInputChange}
                 />
+                 {/* <CustomTextField
+                  label={"الاسم"}
+                  haswidth={true}
+                  // value={props?.objectData?.name?.value}
+                  // error={props?.objectData?.name?.error}
+                  customWidth="100%"
+                  hasMultipleLine={false}
+                  paddingHorizontal={'0px'}
+                  // message={props?.objectData?.name?.message}
+                  readOnly={false}
+                  // onChange={(e) => {
+                  //   props?.setObjectData("name", e.target.value);
+                  // }}
+                  onClearClick={() => {
+                    props?.setObjectData("name", "");
+                  }}
+                /> */}
                 <TextField
                   fullWidth
                   label={rtl?.dir === 'rtl' ? 'رقم الكتاب' : 'Book Number'}

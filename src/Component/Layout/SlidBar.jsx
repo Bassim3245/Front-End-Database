@@ -281,7 +281,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
         {
           text: t("layout.DelayedProjects"),
           icon: <HourglassBottom />,
-          path: "ProjectDelay",
+          path: "ProjectMutualDelay",
           checkPermission: roles?.view_data_delay_Project?._id,
         },
 
@@ -304,7 +304,7 @@ const SideBar = ({ open, handleDrawerClose }) => {
         {
           text: t("layout.getAllDataDelaysProject"),
           icon: <Analytics />,
-          path: "GetAllDataProjectNotDelay",
+          path: "GetAllDataProjectCurrent",
           checkPermission: roles?.Technical_Department?._id,
         },
         {

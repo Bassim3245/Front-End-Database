@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectByDepartmentDelay } from "../../redux/ProjectSlice/ProjectAction";
 import moment from "moment";
-import { Cached, HourglassBottom, OpenInNew } from "@mui/icons-material";
+import {  HourglassBottom, OpenInNew } from "@mui/icons-material";
 import DropDownGrid from "../Config/CustomMennu";
 import ModuleFormEditProject from "../MainFor/ModuleEditProject";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,7 +26,7 @@ const ProjectDelay = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { setProject, loading } = useSelector((state) => state?.Project);
+  const { setProject, loading ,totalProject} = useSelector((state) => state?.Project);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const LabelCancelSendProjectDelay = "CancelSendProjectDelay";
   const token = localStorage.getItem("token") || {};
@@ -205,6 +205,7 @@ const ProjectDelay = () => {
         setPage={setPage}
         page={page}
         rowsPerPage={rowsPerPage}
+        totalProject={totalProject}
       />
       <RefreshButtonData setRefreshButton={setRefreshButton} />
     </Box>

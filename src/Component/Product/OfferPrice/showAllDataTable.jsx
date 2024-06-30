@@ -83,7 +83,7 @@ export default function OfferPrice(props) {
     const calculateTotalPriceOF = calculateTotalPriceOFproject(Products);
     const SumTotalPriceAfterAdd = SumTotalPriceAfterAddPercentage(Products);
     const SumTotalPriceAfterAddPercentageAndConvert =
-      SumTotalPriceAfterAddPercentageAndConvertToUSD(Products);
+      SumTotalPriceAfterAddPercentageAndConvertToUSD(Products,Products?.PriceConvertToIQD);
     const calculatePriceAfterPercentageWith = Products?.map((product) =>
       calculatePriceAfterPercentageWithQuantity(product)
     );
@@ -122,7 +122,7 @@ export default function OfferPrice(props) {
     } else if (item.PriceType === "IQD" && label === "IQD") {
       PriceData = item.Price; // Convert IQR to USD
     } else {
-      return null
+      return null;
     }
     return PriceData;
   };

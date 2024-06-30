@@ -100,7 +100,7 @@ export default function PrintPdf(props) {
     } else if (props?.label === "OfferPriceIQRAfterPercent") {
       total = props?.dataSet?.SumTotalPriceAfterAdd;
     } else if (props?.label === "OfferPriceUSD") {
-      total = props?.dataSet?.SumTotalPriceAfterAddPercentageAndConvertToUSD;
+      total = props?.dataSet?.SumTotalPriceAfterAddPercentageAndConvert;
     }
     return total;
   };

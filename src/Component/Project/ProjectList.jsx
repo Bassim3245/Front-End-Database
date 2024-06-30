@@ -24,8 +24,9 @@ import {
 import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
 import GridTemplate from "../Config/GridTemplet";
 import { ToastContainer } from "react-toastify";
+import RefreshButtonData from "../Config/RefreshButton";
 const Projects = () => {
-  const { setProject, loading } = useSelector((state) => state?.Project);
+  const { setProject, loading,totalProject } = useSelector((state) => state?.Project);
   const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
   const [page, setPage] = useState(1);
@@ -232,11 +233,7 @@ const Projects = () => {
             ) ? (
               <MainForm fetchDataProject={fetchDataProject} />
             ) : null}
-            <Fab color="secondary" aria-label="add" onClick={handleRefresh}>
-              <span className="refreshButton">
-                <Cached />
-              </span>
-            </Fab>
+            <RefreshButtonData setRefreshButton={setRefreshButton} />
           </Box>
           <GridTemplate
             rows={rows}
@@ -245,6 +242,7 @@ const Projects = () => {
             setPage={setPage}
             page={page}
             rowsPerPage={rowsPerPage}
+            totalProject={totalProject}
           />
         </Box>
       )}

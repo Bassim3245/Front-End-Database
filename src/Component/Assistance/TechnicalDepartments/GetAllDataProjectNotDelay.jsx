@@ -1,7 +1,7 @@
 import React from "react";
 import DepartmentsList from "./DepartmentsList";
 
-function GetAllDataProjectNotDelay() {
+function GetAllDataProjectCurrent() {
   return (
     <div>
       <DepartmentsList
@@ -12,4 +12,4 @@ function GetAllDataProjectNotDelay() {
     </div>
   );
 }
-export default GetAllDataProjectNotDelay;
+export default GetAllDataProjectCurrent;

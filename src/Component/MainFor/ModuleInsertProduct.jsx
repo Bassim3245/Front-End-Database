@@ -17,6 +17,8 @@ import { getDataSystemPrice } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
 import { BottomSend, EmptyTextarea, Textarea2 } from "Component/Config/Content";
 import { Textarea } from "@nextui-org/react";
+import CustomTextField from "Component/Config/CustomTextField";
+import CustomeSelectField from "../Config/CustomeSelectField";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,27 +26,26 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Module(props) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
   const token = localStorage.getItem("token") || "";
   const [dataUnit, setDataUnit] = useState([]);
   const [selectPriceType, setSelectPriceType] = useState(false);
-  const [formData, setFormData] = useState({
-    nameProduct: "",
-    description: "",
-    Quantity: "",
-    comments: "",
-    PriceType: "",
-    Price: "",
-    UnitId: "",
-    typeProject: "",
-    license: "",
-    PriceConvert: "1500",
-    percent: "",
-  });
+  const [nameProduct, setNameProduct] = useState("");
+  const [Quantity, setQuantity] = useState("");
+  const [Price, setPrice] = useState("");
+  const [license, setLicense] = useState("");
+  const [percent, setPercent] = useState("");
+  const [typeProject, setTypeProject] = useState("");
+  const [PriceConvert, setPriceConvert] = useState("1500");
+  const [UnitId, setUnitId] = useState("");
+  const [PriceType, setPriceType] = useState("");
+  const [description, setDescription] = useState("");
+  const [comments, setComments] = useState("");
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  // const handleInputChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setFormData((prevData) => ({ ...prevData, [name]: value }));
+  // };
 
   const { data, refetch } = useQuery("DataSystemPrice", getDataSystemPrice, {
     refetchOnWindowFocus: false,
@@ -58,22 +59,37 @@ export default function Module(props) {
   }, [open, refetch]);
 
   useEffect(() => {
-    setSelectPriceType(formData.PriceType !== "IQD");
-  }, [formData.PriceType]);
+    setSelectPriceType(PriceType !== "IQD");
+  }, [PriceType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${BackendUrl}/api/setProduct/${props.ProjectId}/${props.DepartmentID}`,
-        formData,
-        {
-          headers: {
-            Accept: "application/json",
-            token,
-          },
-        }
-      );
+      console.log(Price);
+      console.log(license);
+
+      const formData = new FormData();
+      formData.append("nameProduct", nameProduct);
+      formData.append("license", license);
+      formData.append("Price", Price);
+      formData.append("Quantity", Quantity);
+      formData.append("PriceConvert", PriceConvert);
+      formData.append("typeProject", typeProject);
+      formData.append("percent", percent);
+      formData.append("PriceType", PriceType);
+      formData.append("description", description);
+      formData.append("comments", comments);
+      formData.append("UnitId", UnitId);
+      const response = await axios({
+        method: "post",
+        url: `${BackendUrl}/api/setProduct/${props.ProjectId}/${props.DepartmentID}`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          token: token,
+        },
+        data: formData,
+      });
       if (response?.data) {
         toast.success(response.data.message);
         window.location.reload();
@@ -93,6 +109,7 @@ export default function Module(props) {
       setDataUnit(response?.data?.response);
     } catch (error) {
       if (error.response) {
+        setError(error.response.data.message);
         toast.error(error.response.data.message);
       }
     }
@@ -130,38 +147,78 @@ export default function Module(props) {
           }}
           component="form"
           onSubmit={handleSubmit}
+          dir="rtl"
         >
-          <Textarea2
-            minRows={2}
-            placeholder="اسم المنتج او المنظومة"
-            name="nameProduct"
-            value={formData.nameProduct}
-            onChange={handleInputChange}
-          />
-          <TextField
-            fullWidth
-            label="العدد"
-            className="mb-3"
-            name="Quantity"
-            value={formData.Quantity}
-            onChange={handleInputChange}
-          />
-          <TextField
-            fullWidth
-            label="الرخصة او الضمان"
-            className="mb-3"
-            name="license"
-            value={formData.license}
-            onChange={handleInputChange}
-          />
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"أسم المنتج أو المنظومة"}
+              haswidth={true}
+              value={nameProduct}
+              error={error}
+              customWidth="100%"
+              hasMultipleLine={true}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              readOnly={false}
+              onChange={(e) => {
+                setNameProduct(e.target.value);
+              }}
+              onClearClick={() => {
+                setNameProduct("");
+              }}
+            />
+          </Box>
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"العدد"}
+              haswidth={true}
+              value={Quantity}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              hasMultipleLine={false}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              // customePadding="8px"
+              // paddingHorizontal="0px"
+              readOnly={false}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
+              onClearClick={() => {
+                setQuantity("");
+              }}
+            />
+          </Box>
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"ألرخصة أو الظمان "}
+              haswidth={true}
+              value={license}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              // hasMultipleLine={true}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              // customePadding="8px"
+              // paddingHorizontal="0px"
+              readOnly={false}
+              onChange={(e) => {
+                setLicense(e.target.value);
+              }}
+              onClearClick={() => {
+                setLicense("");
+              }}
+            />
+          </Box>
+
           <TextField
             select
             fullWidth
             label="تحديد نوع السعر"
             className="mb-4"
             name="PriceType"
-            value={formData.PriceType}
-            onChange={handleInputChange}
+            value={PriceType}
+            onChange={(e) => setPriceType(e.target.value)}
           >
             {data?.map((option) => (
               <MenuItem key={option?._id} value={option?.typePrice}>
@@ -170,39 +227,78 @@ export default function Module(props) {
             ))}
           </TextField>
           {selectPriceType && (
-            <TextField
-              fullWidth
-              label="سعر الصرف"
-              className="mb-3"
-              name="PriceConvert"
-              value={formData.PriceConvert}
-              onChange={handleInputChange}
-            />
+            <Box sx={{ mb: "10px" }}>
+              <CustomTextField
+                label={"ألرخصة أو الظمان "}
+                haswidth={true}
+                value={PriceConvert}
+                error={error}
+                customWidth="100%"
+                // hasMultipleLine={true}
+                // paddingHorizontal={"0px"}
+                // message={props?.objectData?.name?.message}
+                // customePadding="8px"
+                // paddingHorizontal="0px"
+                readOnly={false}
+                onChange={(e) => {
+                  setPriceConvert(e.target.value);
+                }}
+                onClearClick={() => {
+                  setPriceConvert("");
+                }}
+              />
+            </Box>
           )}
-          <TextField
-            fullWidth
-            label="سعر المنتج"
-            className="mb-3"
-            name="Price"
-            value={formData.Price}
-            onChange={handleInputChange}
-          />
-          <TextField
-            fullWidth
-            label="النسبة بالمية"
-            className="mb-3"
-            name="percent"
-            value={formData.percent}
-            onChange={handleInputChange}
-          />
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"سعر المنتج"}
+              haswidth={true}
+              value={Price}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              hasMultipleLine={false}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              // customePadding="8px"
+              // paddingHorizontal="0px"
+              readOnly={false}
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+              onClearClick={() => {
+                setPrice("");
+              }}
+            />
+          </Box>
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"النسبة المؤية"}
+              haswidth={true}
+              value={percent}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              hasMultipleLine={false}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              // customePadding="8px"
+              // paddingHorizontal="0px"
+              readOnly={false}
+              onChange={(e) => {
+                setPercent(e.target.value);
+              }}
+              onClearClick={() => {
+                setPercent("");
+              }}
+            />
+          </Box>
           <TextField
             select
             fullWidth
             label="الوحدة"
             className="mb-4"
             name="UnitId"
-            value={formData.UnitId}
-            onChange={handleInputChange}
+            value={UnitId}
+            onChange={(e) => setUnitId(e.target.value)}
           >
             {dataUnit?.map((option) => (
               <MenuItem key={option?._id} value={option?._id}>
@@ -210,44 +306,77 @@ export default function Module(props) {
               </MenuItem>
             ))}
           </TextField>
+          {/* <CustomeSelectField
+            label={"الوحدة"}
+            haswidth={true}
+            value={UnitId}
+            // error={props?.objectData?.name?.error}
+            customWidth="100%"
+            hasMultipleLine={false}
+            // paddingHorizontal={"0px"}
+            // message={props?.objectData?.name?.message}
+            // customePadding="8px"
+            // paddingHorizontal="0px"
+            readOnly={false}
+            onChange={(e) => setUnitId(e.target.value)}
+            onClearClick={() => {
+              setPercent("");
+            }}
+          >
+            <option value="محلي">محلي</option>
+            <option value="خارجي">خارجي</option>
+          </CustomeSelectField> */}
           <TextField
             select
             fullWidth
             label="نوع المنتج اذاكان محلي او خارجي"
             className="mb-4"
             name="typeProject"
-            value={formData.typeProject}
-            onChange={handleInputChange}
+            value={typeProject}
+            onChange={(e) => setTypeProject(e.target.value)}
           >
             <MenuItem value="محلي">محلي</MenuItem>
             <MenuItem value="خارجي">خارجي</MenuItem>
           </TextField>
-          <FloatingLabel
-            controlId="floatingTextarea2"
-            label="المواصفات المطلوبة"
-            className="mb-3"
-            style={{ height: "100px", width: "100%" }}
-          >
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment here"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              style={{ height: "75px", width: "100%" }}
+
+          <Box sx={{ mb: "10px" }}>
+            <CustomTextField
+              label={"المواصفات المطلوبة"}
+              haswidth={true}
+              value={description}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              hasMultipleLine={true}
+              // paddingHorizontal={"0px"}
+              message={error}
+              readOnly={false}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              onClearClick={() => {
+                setDescription("");
+              }}
             />
-          </FloatingLabel>
-          <FloatingLabel controlId="floatingTextarea2" label="الملاحظات">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment here"
-              name="comments"
-              value={formData.comments}
-              onChange={handleInputChange}
-              className="mb-3"
-              style={{ height: "75px", width: "100%" }}
+          </Box>
+          <Box>
+            <CustomTextField
+              label={"المواصفات المطلوبة"}
+              haswidth={true}
+              value={comments}
+              // error={props?.objectData?.name?.error}
+              customWidth="100%"
+              hasMultipleLine={true}
+              // paddingHorizontal={"0px"}
+              // message={props?.objectData?.name?.message}
+              readOnly={false}
+              onChange={(e) => {
+                setComments(e.target.value);
+              }}
+              onClearClick={() => {
+                setComments("");
+              }}
             />
-          </FloatingLabel>
+          </Box>
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>

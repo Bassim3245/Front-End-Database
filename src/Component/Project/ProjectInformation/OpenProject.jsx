@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { BottomSend, ColorLink, StyledInputBase } from "../../Config/Content";
+import { BottomSend, ColorLink } from "../../Config/Content";
 import { Table } from "react-bootstrap";
 import Module from "../../MainFor/ModuleInsertProduct";
 import axios from "axios";
@@ -54,7 +54,7 @@ export default function OpenProject() {
   const [deleteItem, setDelete] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [refreshButton, setRefreshButton] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState(products || "");
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [info, setInfo] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
@@ -63,15 +63,19 @@ export default function OpenProject() {
   const theme = useTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(displayProductByProjectName(id));
-  }, []);
+  }, [refreshButton, id]);
+
   useEffect(() => {
     const userId = info?._id;
-    dispatch(getRoleAndUserId({ userId, token }));
-  }, [dispatch, info?._id, token, refreshButton, message]);
+    if (userId) {
+      dispatch(getRoleAndUserId({ userId, token }));
+    }
+  }, [refreshButton]);
+
   useEffect(() => {
-    console.log(products);
     dispatch(setLanguage());
   }, [dispatch]);
 
@@ -116,13 +120,14 @@ export default function OpenProject() {
   };
 
   const handleBack = () => {
-    // dispatch(clearState());
+    dispatch(clearState())
+    setFilteredProducts([])
     window.history.back();
   };
 
   const productRows = useMemo(() => {
     return Array.isArray(filteredProducts)
-      ? filteredProducts.map((item, index) => (
+      ? filteredProducts?.map((item, index) => (
           <tr key={index}>
             <td>{index + 1}</td>
             <td dir="rtl">
@@ -184,7 +189,7 @@ export default function OpenProject() {
         draggable
         pauseOnHover
       />
-      {loadingProject ? (
+      {loadingProject || loading ? (
         <div className="eventLoaderCenter">
           <Loader />
         </div>
@@ -195,6 +200,7 @@ export default function OpenProject() {
               {t("ProductList.BackButton")}
             </ColorLink>
             <AutocompleteExample
+            projectId={id}
               products={products}
               setFilteredProducts={setFilteredProducts}
               filteredProducts={filteredProducts}
@@ -256,8 +262,7 @@ export default function OpenProject() {
                   <p style={{ textAlign: "center" }}>Project has been sent</p>
                 </div>
               )}
-              {Array.isArray(filteredProducts) &&
-              filteredProducts?.length > 0 ? (
+              {Array.isArray(filteredProducts) && filteredProducts?.length > 0 ? (
                 !dataProject?.SendProject &&
                 (filteredProducts ? (
                   <Table

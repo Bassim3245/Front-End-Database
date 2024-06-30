@@ -17,6 +17,7 @@ const GridTemplate = ({
   setPage,
   rowsPerPage,
   page,
+  totalProject
 }) => {
   const theme = useTheme();
   const isWidth760 = useMediaQuery("(max-width:760px)");
@@ -61,6 +62,7 @@ const GridTemplate = ({
          setPage={setPage}
          page={page}
          rowsPerPage={rowsPerPage}
+         totalProject={totalProject}
        />
         </Box>
       </div>

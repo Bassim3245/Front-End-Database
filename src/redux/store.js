@@ -9,6 +9,7 @@ import DepartmentSlice from "./DepartmentState/DepartmentSlice";
 import languageSlice from "./LanguageState"
 import CustomDataFormPriceOfferPrice  from "./OfferPriceCustomStat/OfferPriceCustomSlice";
 import  RolesReducer  from "./RoleSlice/RoleSlice";
+import  themesSlice  from "./theme/themeReducer";
 // @ts-ignore
 const enhance = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const store = configureStore(
@@ -23,7 +24,8 @@ const store = configureStore(
       Department:DepartmentSlice,
       language: languageSlice,
       CustomDataPrice:CustomDataFormPriceOfferPrice,
-      RolesData:RolesReducer
+      RolesData:RolesReducer,
+      ThemeData:themesSlice
     },
   },
   // @ts-ignore
