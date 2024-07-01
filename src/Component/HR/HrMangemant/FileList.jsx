@@ -10,9 +10,7 @@ import {
 } from "Component/Config/Function";
 import { Fab, IconButton } from "@mui/material";
 import Swal from "sweetalert2";
-import { toast } from "react-toastify";
 import { formatSize } from "../../Config/Function";
-import { formatDistanceToNow } from "date-fns";
 function FileList(props) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [data, setData] = useState([]);

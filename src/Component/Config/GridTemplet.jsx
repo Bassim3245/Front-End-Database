@@ -51,7 +51,7 @@ const GridTemplate = ({
             columnVisibilityModel={{
               _id: false,
             }}
-            getRowId={(row) => row.id}
+            getRowId={(row) => row?._id}
             hideFooter={true} // This line hides the footer
             pagination
             autoPageSize

@@ -45,7 +45,7 @@ const Projects = () => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const fetchDataProject = () => {
-    const departmentID = info.DepartmentID;
+    const departmentID = info?.DepartmentID;
     dispatch(
       getProjectByDepartment({ departmentID, info, token, rowsPerPage, page })
     );

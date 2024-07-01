@@ -5,14 +5,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { setMaintheme } from '../../redux/theme/themeReducer';
-
 function CustomTextField({
     label, error, message, value, onChange, onClearClick, readOnly, type, haswidth, hasMultipleLine, customWidth, customePadding,
     focused, paddingHorizontal, inputPropStyle, errorMessage, disable, customHeight, hasePassswordEye, maxHeight, ...props
 }) {
     const maintheme = useSelector(state => state?.ThemeData?.maintheme);
-
     const inputRef = React.useRef(null);
     const [showPassword, setShowPassword] = useState(null)
     const globalTheme = useSelector(state => state?.ThemeData?.globalTheme)

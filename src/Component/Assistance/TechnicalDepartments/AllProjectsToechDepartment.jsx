@@ -36,7 +36,7 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
     const action =
       Label === "Delay" ? getProjectByDepartmentDelay : getProjectByDepartment;
     dispatch(action({ departmentID, info, token, page, rowsPerPage }));
-  }, [dispatch, id, Label, info, token]);
+  }, [dispatch, id, Label, info, token,rowsPerPage,page]);
 
   const getPermission = useCallback(() => {
     const userId = info?._id;
@@ -52,6 +52,7 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
   }, [fetchDataProject, id]);
 
   return (
+    
     <div
       className={`projects p-20 ${
         theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"

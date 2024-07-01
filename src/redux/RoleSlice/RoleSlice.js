@@ -214,6 +214,14 @@ const initialState = {
       value: false,
       _id: "665da1cdd663f86ca0c868f8",
     },
+    person_charge: {
+      value: false,
+      _id: "6682475976717d573dd939f6",
+    },
+    deadline_project: {
+      value: false,
+      _id: "668254b0d4331262c3e62673",
+    },
   },
 };
 

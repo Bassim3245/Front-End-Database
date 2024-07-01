@@ -10,7 +10,6 @@ import {
   Dialog,
   MenuItem,
   TextField,
-  createTheme,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -41,6 +40,9 @@ import {
 } from "../../redux/Whorkntural/WorkNutralAction.js";
 import { Close } from "@mui/icons-material";
 import { setLanguage } from "../../redux/LanguageState";
+import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+
+import { formatDate, hasPermission } from "Component/Config/Function";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -71,9 +73,12 @@ export default function ModuleFormEditProject(props) {
   const [DateBook, setDateBook] = useState(dataProject?.DateBook || "");
   const [DateClose, setDateClose] = useState(dataProject?.DateClose || "");
   const [formData, setFormData] = React.useState({});
+  const [dataMethodOption, setDataMethodOption] = React.useState([]);
   const [startTime, setStartTime] = React.useState(
     dataProject?.startTime || ""
   );
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
+
   const [endTime, setEndTime] = React.useState(dataProject?.endTime || "");
   const getDataByProjectID = async () => {
     const token = localStorage.getItem("token") || {};
@@ -148,6 +153,8 @@ export default function ModuleFormEditProject(props) {
         LevelPerformance,
         DateBook,
         DateClose,
+        endTime,
+        startTime,
         comments,
       };
       // @ts-ignore
@@ -220,6 +227,21 @@ export default function ModuleFormEditProject(props) {
   useEffect(() => {
     dispatch(setLanguage());
   }, [dispatch]);
+  const getDataMethodOtion = async () => {
+    try {
+      const response = await axios.get(`${BackendUrl}/api/getDataMethodOption`);
+      setDataMethodOption(response?.data?.response);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
+  };
+  useEffect(() => {
+    getDataMethodOtion();
+  }, []);
+  useEffect(() => {
+    const userId = users?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  }, []);
   return (
     <React.Fragment>
       <MenuItem onClick={handleClickOpen}>
@@ -285,13 +307,18 @@ export default function ModuleFormEditProject(props) {
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "500px", maxWidth: "100%" }}
+                  select
+                  label="طريقة التحصيل "
                   className="mb-4"
-                  label="طريقة التحصيل"
                   name="MethodOption"
                   dir="rtl"
                   value={MethodOption}
                   onChange={handleInputChange}
-                ></TextField>
+                >
+                  {dataMethodOption?.map((data, index) => (
+                    <MenuItem value={data?._id}>{data?.MethodOption}</MenuItem>
+                  ))}
+                </TextField>
                 {/* end MethodOption */}
 
                 <TextField
@@ -405,6 +432,7 @@ export default function ModuleFormEditProject(props) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
+                          // value={DateBook}
                           label="تاريخ الاستلام"
                           onChange={(value) => setDateBook(value)}
                         />
@@ -415,6 +443,7 @@ export default function ModuleFormEditProject(props) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker"]}>
                         <DatePicker
+                          // value={DateClose}
                           label="تاريخ الغلق"
                           onChange={(value) => setDateClose(value)}
                         />
@@ -427,6 +456,8 @@ export default function ModuleFormEditProject(props) {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="start"
+                        // defaultValue={dayjs(formatDate(startTime))}
+                        // value={startTime}
                         onChange={(value) => setStartTime(value)}
                       />
                       <DatePicker
@@ -452,35 +483,40 @@ export default function ModuleFormEditProject(props) {
                 />
 
                 {/* end other  option and slect drob down */}
-                <TextField
-                  id="outlined-select-currency"
-                  sx={{ width: "500px", maxWidth: "100%" }}
-                  select
-                  label=" القائم بالعمل"
-                  className="mb-4"
-                  name="PersonCharge"
-                  dir="rtl"
-                  value={PersonCharge}
-                  onChange={handleInputChange}
-                >
-                  {dataUserID
-                    .filter(
-                      (option) =>
-                        option?.user_type !== users?.user_type &&
-                        option?.user_type !== "IT"
-                    )
-                    .map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option?.name}{" "}
-                        <span
-                          className="text-secondary ms-3"
-                          style={{ fontSize: "15px" }}
-                        >
-                          {option.user_type}
-                        </span>
-                      </MenuItem>
-                    ))}
-                </TextField>
+                {hasPermission(
+                  roles?.person_charge?._id,
+                  Permission?.permissionIds
+                ) && (
+                  <TextField
+                    id="outlined-select-currency"
+                    sx={{ width: "500px", maxWidth: "100%" }}
+                    select
+                    label="القائم بالعمل"
+                    className="mb-4"
+                    name="PersonCharge"
+                    dir="rtl"
+                    value={PersonCharge}
+                    onChange={handleInputChange}
+                  >
+                    {dataUserID
+                      .filter(
+                        (option) =>
+                          option.user_type !== users?.user_type &&
+                          option.user_type !== "IT"
+                      )
+                      .map((option) => (
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.name}{" "}
+                          <span
+                            className="text-secondary ms-3"
+                            style={{ fontSize: "15px" }}
+                          >
+                            {option.user_type}
+                          </span>
+                        </MenuItem>
+                      ))}
+                  </TextField>
+                )}
               </Box>
             </div>
 

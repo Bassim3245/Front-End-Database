@@ -6,12 +6,19 @@ import { displayProductByProjectName } from "../../../redux/ProductSlice/Product
 import { useTranslation } from "react-i18next";
 import OfferPriceMain from "../../Product/OfferPrice/OfferPrice";
 import { hasPermission } from "../../Config/Function";
+import ModuleEdit from "Component/MainFor/ModulEditProducts";
+import axios from "axios";
+import { BackendUrl } from "../../../redux/api/axios";
+import RefreshButtonData from "Component/Config/RefreshButton";
 const DataProductByProjectId = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const theme = useTheme();
   const { products, loading } = useSelector((state) => state.products);
+  const [dataProject, setDataProject] = useState([]);
+  const [loadingProject, setLoading] = useState(false);
   const projectId = props?.ProjectID;
+  const [refreshButton, setRefreshButton] = useState(false);
   const getDataProductById = () => {
     dispatch(displayProductByProjectName(projectId));
   };
@@ -19,6 +26,25 @@ const DataProductByProjectId = (props) => {
     getDataProductById();
   }, [dispatch, open]);
   const { t } = useTranslation();
+  useEffect(() => {
+    const fetchDataByProjectId = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${BackendUrl}/api/getProjectById/${projectId}`
+        );
+        if (response.data) {
+          setDataProject(response?.data);
+        }
+      } catch (error) {
+        console.error("Error fetching project data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataByProjectId();
+  }, [refreshButton, projectId]);
   return (
     <>
       <div className="w-100 ">
@@ -47,6 +73,7 @@ const DataProductByProjectId = (props) => {
                 <th>{t("ProductList.table.Price")}</th>
                 <th> {t("ProductList.table.PriceType")}</th>
                 <th> {t("ProductList.table.priceConvert")}</th>
+                <th> {t("ProductList.table.Action")}</th>
               </tr>
             </thead>
             <tbody>
@@ -63,6 +90,13 @@ const DataProductByProjectId = (props) => {
                     <td>{item?.Price}</td>
                     <td>{item?.PriceConvert || "0"}</td>
                     <td>{item?.PriceType}</td>
+                    <td>
+                      <ModuleEdit
+                        item={item}
+                        getDataProduct={products}
+                        ProjectWorkNatural={dataProject?.WorkNatural}
+                      />
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -73,6 +107,7 @@ const DataProductByProjectId = (props) => {
             </tbody>
           </Table>
         </div>
+        <RefreshButtonData setRefreshButton={setRefreshButton} />
       </div>
     </>
   );

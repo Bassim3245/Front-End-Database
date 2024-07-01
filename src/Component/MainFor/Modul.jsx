@@ -31,7 +31,8 @@ import {
 } from "../../redux/Whorkntural/WorkNutralAction.js";
 import { Add, AddIcCallOutlined, Close } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import CustomTextField from "../Config/CustomTextField";
+import { getRoleAndUserId } from "../../redux/RoleSlice/rolAction";
+import { hasPermission } from "Component/Config/Function";
 const Transition = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
   return <Slide direction="up" ref={ref} {...props} />;
@@ -44,6 +45,7 @@ export default function MainForm(props) {
   const [users, setUsers] = useState(() => {
     return JSON.parse(localStorage.getItem("user")) || {};
   });
+  const { Permission, roles } = useSelector((state) => state?.RolesData);
   const [open, setOpen] = useState(false);
   const [DateBook, setDateBook] = useState("");
   const [DateClose, setDateClose] = useState("");
@@ -180,6 +182,10 @@ export default function MainForm(props) {
   useEffect(() => {
     getDataMethodOtion();
   }, []);
+  useEffect(() => {
+    const userId = users?._id;
+    dispatch(getRoleAndUserId({ userId, token }));
+  }, []);
   return (
     <React.Fragment>
       <Box sx={{ "& > :not(style)": {} }}>
@@ -224,23 +230,6 @@ export default function MainForm(props) {
                 component="form"
                 onSubmit={(e) => HandleSubmit(e)}
               >
-                <CustomTextField
-                  label={"الاسم"}
-                  haswidth={true}
-                  // value={props?.objectData?.name?.value}
-                  // error={props?.objectData?.name?.error}
-                  customWidth="100%"
-                  hasMultipleLine={false}
-                  paddingHorizontal={'0px'}
-                  // message={props?.objectData?.name?.message}
-                  readOnly={false}
-                  // onChange={(e) => {
-                  //   props?.setObjectData("name", e.target.value);
-                  // }}
-                  onClearClick={() => {
-                    props?.setObjectData("name", "");
-                  }}
-                />
                 <TextField
                   id="outlined-select-currency"
                   sx={{ width: "100%", maxWidth: "100%" }}
@@ -408,21 +397,25 @@ export default function MainForm(props) {
                     </LocalizationProvider>
                   </div>
                 </div>
-                <div className="mb-4">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="start"
-                        onChange={(value) => setStartTime(value)}
-                      />
-                      <DatePicker
-                        label="end"
-                        onChange={(value) => setEndTime(value)}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </div>
-
+                {hasPermission(
+                  roles?.deadline_project?._id,
+                  Permission?.permissionIds
+                ) && (
+                  <div className="mb-4">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="start"
+                          onChange={(value) => setStartTime(value)}
+                        />
+                        <DatePicker
+                          label="end"
+                          onChange={(value) => setEndTime(value)}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                )}
                 {/* end Date for the project  */}
                 {/* start select */}
                 {/* start beneficiary*/}
@@ -440,37 +433,41 @@ export default function MainForm(props) {
                   />
                 </div>
                 {/* end */}
-
                 {/* end other  option and slect drob down */}
-                <TextField
-                  id="outlined-select-currency"
-                  sx={{ width: "500px", maxWidth: "100%" }}
-                  select
-                  label=" القائم بالعمل"
-                  className="mb-4"
-                  name="PersonCharge"
-                  dir="rtl"
-                  value={PersonCharge}
-                  onChange={handleInputChange}
-                >
-                  {dataUserID
-                    .filter(
-                      (option) =>
-                        option.user_type !== users?.user_type &&
-                        option.user_type !== "IT"
-                    )
-                    .map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}{" "}
-                        <span
-                          className="text-secondary ms-3"
-                          style={{ fontSize: "15px" }}
-                        >
-                          {option.user_type}
-                        </span>
-                      </MenuItem>
-                    ))}
-                </TextField>
+                {hasPermission(
+                  roles?.person_charge?._id,
+                  Permission?.permissionIds
+                ) && (
+                  <TextField
+                    id="outlined-select-currency"
+                    sx={{ width: "500px", maxWidth: "100%" }}
+                    select
+                    label="القائم بالعمل"
+                    className="mb-4"
+                    name="PersonCharge"
+                    dir="rtl"
+                    value={PersonCharge}
+                    onChange={handleInputChange}
+                  >
+                    {dataUserID
+                      .filter(
+                        (option) =>
+                          option.user_type !== users?.user_type &&
+                          option.user_type !== "IT"
+                      )
+                      .map((option) => (
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.name}{" "}
+                          <span
+                            className="text-secondary ms-3"
+                            style={{ fontSize: "15px" }}
+                          >
+                            {option.user_type}
+                          </span>
+                        </MenuItem>
+                      ))}
+                  </TextField>
+                )}
               </Box>
             </div>
             <div
