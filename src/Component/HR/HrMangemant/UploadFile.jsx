@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,7 @@ function UploadFile(props) {
   const [file, setFile] = React.useState(null);
   const [token, setToken] = React.useState(localStorage.getItem("token"));
   const [BookName, setBookName] = useState("");
+  const theme=useTheme();
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     try {
@@ -41,7 +42,7 @@ function UploadFile(props) {
   //   toast?.error(fileTypeValidation);
   // }, [file]);
   return (
-    <div className="files-stats p-20 bg-white rad-10">
+    <div className={`files-stats p-20 ${theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"} rad-10`}>
       {/* <ToastContainer /> */}
       {/* <h2 className="mt-0 mb-15 txt-c-mobile">Files </h2> */}
       <div className="d-flex align-center border-eee p-10 rad-6 mb-15 fs-13">

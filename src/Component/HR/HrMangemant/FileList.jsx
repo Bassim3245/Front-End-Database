@@ -8,7 +8,7 @@ import {
   getTimeAgo,
   handleDownload,
 } from "Component/Config/Function";
-import { Fab, IconButton } from "@mui/material";
+import { Fab, IconButton, useTheme } from "@mui/material";
 import Swal from "sweetalert2";
 import { formatSize } from "../../Config/Function";
 function FileList(props) {
@@ -32,7 +32,7 @@ function FileList(props) {
   };
   useEffect(() => {
     getAllDataFileUpload();
-  }, [props?.action, deleteFile, RefreshButton,anchorEl]);
+  }, [props?.action, deleteFile, RefreshButton, anchorEl]);
   const HandleDelete = async (id) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -67,7 +67,6 @@ function FileList(props) {
           text: "Your file has been deleted.",
           icon: "success",
         });
-       
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
           title: "Cancelled",
@@ -82,11 +81,17 @@ function FileList(props) {
   const handleRefresh = () => {
     setRefreshButton((prev) => !prev); // Toggle the refresh state
   };
+  const theme = useTheme();
 
   return (
     <div className="files-content d-grid gap-20">
       {data?.map((file, index) => (
-        <div key={file?._id} className="file bg-white p-10 rad-10">
+        <div
+          key={file?._id}
+          className={`file ${
+            theme.palette.mode === "dark" ? "bg-dark" : "bg-eee"
+          } p-10 rad-10`}
+        >
           <IconButton onClick={() => handleDownload(file?.file)}>
             <CloudDownload />
           </IconButton>
