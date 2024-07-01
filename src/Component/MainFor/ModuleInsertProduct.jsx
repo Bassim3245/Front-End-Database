@@ -16,7 +16,6 @@ import { toast } from "react-toastify";
 import { getDataSystemPrice } from "Component/Config/fetchData";
 import { useQuery } from "react-query";
 import { BottomSend, EmptyTextarea, Textarea2 } from "Component/Config/Content";
-import { Textarea } from "@nextui-org/react";
 import CustomTextField from "Component/Config/CustomTextField";
 import CustomeSelectField from "../Config/CustomeSelectField";
 
@@ -59,7 +58,7 @@ export default function Module(props) {
   }, [open, refetch]);
 
   useEffect(() => {
-    setSelectPriceType(PriceType !== "IQD");
+    setSelectPriceType(PriceType?.typePrice !== "IQD");
   }, [PriceType]);
 
   const handleSubmit = async (e) => {
