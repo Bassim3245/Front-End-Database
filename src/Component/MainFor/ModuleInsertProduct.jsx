@@ -239,7 +239,7 @@ export default function Module(props) {
           </TextField> */}
           <Box sx={{ mb: "10px" }}>
             <CustomeSelectField
-              label={"نوع المنتج اذاكان محلي او خارجي"}
+              label={"أختيار سعر الصرف "}
               haswidth={true}
               value={PriceType}
               list={data ? data : []}
@@ -252,7 +252,7 @@ export default function Module(props) {
               onClearClick={() => {
                 setPriceType(null);
               }}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              // isOptionEqualToValue={(option, value) => option._id === value._id}
             />
           </Box>
           {selectPriceType && (
@@ -349,7 +349,7 @@ export default function Module(props) {
               onClearClick={() => {
                 setUnitId(null);
               }}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              // isOptionEqualToValue={(option, value) => option._id === value._id}
             />
           </Box>
           <Box sx={{ mb: "10px", p: "0" }}>
@@ -367,7 +367,7 @@ export default function Module(props) {
               onClearClick={() => {
                 setTypeProject(null);
               }}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              // isOptionEqualToValue={(option, value) => option._id === value._id}
             />
           </Box>
           {/* <TextField
