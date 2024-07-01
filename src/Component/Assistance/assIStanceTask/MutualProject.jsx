@@ -14,11 +14,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllDataUser } from "../../../redux/userSlice/authActions";
 function MutualProject({ setSecondaryData, HandleSubmit }) {
   const { dataUsers } = useSelector((state) => state?.user);
+  const [info] = useState(() => JSON.parse(localStorage.getItem("user")) || {});
+
   const [departmentsData, setDepartmentsData] = useState([]);
   const [common, setCommon] = useState(false);
   const [checkDataSelect, setCheckDataSelect] = useState(false);
   const [userSelect, setUserSelect] = useState("");
   const [checkedItems, setCheckedItems] = useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
   const theme = useTheme();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,6 +39,7 @@ function MutualProject({ setSecondaryData, HandleSubmit }) {
   useEffect(() => {
     fetchDataUser();
   }, [fetchDataUser]);
+
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "fetchDataAllDepartment",
     fetchDataAllDepartment,
@@ -51,6 +55,7 @@ function MutualProject({ setSecondaryData, HandleSubmit }) {
   useEffect(() => {
     setCheckDataSelect(common);
   }, [common]);
+
   const handleCheckboxChange = useCallback(
     (id) => (event) => {
       setCheckedItems((prevState) => ({
@@ -60,6 +65,11 @@ function MutualProject({ setSecondaryData, HandleSubmit }) {
     },
     []
   );
+  useEffect(() => {
+    setDataFilter(departmentsData?.filter((item) => item?._id !== info?.DepartmentID &&item.departmentName!=="الموارد البشرية"));
+    console.log(info?._id);
+    console.log(departmentsData);
+  }, [common]);
 
   return (
     <div className="Project">
@@ -121,7 +131,7 @@ function MutualProject({ setSecondaryData, HandleSubmit }) {
               </form>
               {common && (
                 <FormGroup>
-                  {departmentsData?.map((item) => (
+                  {dataFilter.map((item) => (
                     <FormControlLabel
                       key={item._id}
                       control={

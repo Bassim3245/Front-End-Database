@@ -45,6 +45,7 @@ export default function CustomizedSteppers(props) {
   const [token, setToken] = React.useState(() => {
     return localStorage.getItem("token") || {};
   });
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const handleInputChange = (event) => {
@@ -105,6 +106,7 @@ export default function CustomizedSteppers(props) {
       setDateClose={setDateClose}
       setEndTime={setEndTime}
       handleInputChange={handleInputChange}
+      
     />,
     <MutualProject
       setSecondaryData={setSecondaryData}
