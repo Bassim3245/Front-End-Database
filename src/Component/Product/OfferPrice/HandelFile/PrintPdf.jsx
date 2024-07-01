@@ -140,7 +140,7 @@ export default function PrintPdf(props) {
           </AppBar>
           <div className="a4-page mt-4">
             <div className="contentPage" ref={componentRef}>
-              <style>
+              {/* <style>
                 {`
                   @media print {
                     @page {
@@ -157,7 +157,7 @@ export default function PrintPdf(props) {
                     }
                   }
                 `}
-              </style>
+              </style> */}
               <div className="">
                 <div className="">
                   <div className="">

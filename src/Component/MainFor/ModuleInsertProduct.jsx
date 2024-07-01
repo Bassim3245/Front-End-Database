@@ -64,9 +64,6 @@ export default function Module(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(Price);
-      console.log(license);
-
       const formData = new FormData();
       formData.append("nameProduct", nameProduct);
       formData.append("license", license);
