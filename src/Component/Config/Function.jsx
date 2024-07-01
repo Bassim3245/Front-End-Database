@@ -423,7 +423,7 @@ export const hasPermission = (role, permissions) => {
 };
 export const renderMenuItem = (key, onClick, IconComponent, text) => (
   <MenuItem key={key} onClick={onClick} disableRipple>
-    <IconComponent />
+    <IconComponent size="large"/>
     <span className="ms-2">{text}</span>
   </MenuItem>
 );

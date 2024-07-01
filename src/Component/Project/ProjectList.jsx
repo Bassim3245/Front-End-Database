@@ -233,7 +233,7 @@ const Projects = () => {
             ) ? (
               <MainForm fetchDataProject={fetchDataProject} />
             ) : null}
-            <RefreshButtonData setRefreshButton={setRefreshButton} />
+           
           </Box>
           <GridTemplate
             rows={rows}
@@ -246,6 +246,7 @@ const Projects = () => {
           />
         </Box>
       )}
+       <RefreshButtonData setRefreshButton={setRefreshButton} />
     </div>
   );
 };

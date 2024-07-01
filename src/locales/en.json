@@ -189,6 +189,7 @@
     "CareerTitle":"Career Title",
     "Department":"Department select"
 
-  }
+  },
+  "NoDataFound":"There is no data on this page"
 
 }

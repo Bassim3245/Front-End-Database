@@ -4,7 +4,6 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
-import { validateFileType } from "Component/Config/Function";
 function UploadFile(props) {
   const [file, setFile] = React.useState(null);
   const [token, setToken] = React.useState(localStorage.getItem("token"));
@@ -27,7 +26,8 @@ function UploadFile(props) {
       );
       if (response && response?.data && response?.data?.message) {
         toast.success(response?.data?.message); // Assuming you're using toast for notifications
-        props?.setAction(true);
+        props?.setAction((prev) => !prev);
+        ;
       } else {
         toast.error("An error occurred while uploading the file.");
       }

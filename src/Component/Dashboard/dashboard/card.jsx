@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { ResponsivePie } from "@nivo/pie";
 import { useTranslation } from "react-i18next";
 
-const Card = ({ icon, title, subTitle, increase, data, scheme }) => {
+const Card = ({ image, title, subTitle, increase, data, scheme }) => {
 const {t}=useTranslation()
   const theme = useTheme();
   return (
@@ -16,7 +16,7 @@ const {t}=useTranslation()
       }}
     >
       <Stack gap={1}>
-        {icon}
+        <img src={image} alt="image" width ={"50px"}/>
         <Typography variant="body2" sx={{ fontSize: "13px" }}>
           {title}
         </Typography>

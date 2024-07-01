@@ -35,7 +35,7 @@ export default function Module(props) {
   const [Price, setPrice] = useState("");
   const [license, setLicense] = useState("");
   const [percent, setPercent] = useState("");
-  const [typeProject, setTypeProject] = useState("");
+  const [typeProject, setTypeProject] = useState([]);
   const [PriceConvert, setPriceConvert] = useState("1500");
   const [UnitId, setUnitId] = useState("");
   const [PriceType, setPriceType] = useState("");
@@ -74,12 +74,12 @@ export default function Module(props) {
       formData.append("Price", Price);
       formData.append("Quantity", Quantity);
       formData.append("PriceConvert", PriceConvert);
-      formData.append("typeProject", typeProject);
+      formData.append("typeProject", typeProject.value);
       formData.append("percent", percent);
-      formData.append("PriceType", PriceType);
+      formData.append("PriceType", PriceType?.typePrice);
       formData.append("description", description);
       formData.append("comments", comments);
-      formData.append("UnitId", UnitId);
+      formData.append("UnitId", UnitId?._id);
       const response = await axios({
         method: "post",
         url: `${BackendUrl}/api/setProduct/${props.ProjectId}/${props.DepartmentID}`,
@@ -120,9 +120,20 @@ export default function Module(props) {
       getDataUnit();
     }
   }, [open]);
+  console.log("adfsf", PriceType.typePrice);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const selectTypPProject = [
+    {
+      _id: 1,
+      value: "محلي",
+    },
+    {
+      _id: 2,
+      value: "خارجي",
+    },
+  ];
   return (
     <div>
       <BottomSend variant="outlined" onClick={handleClickOpen}>
@@ -154,7 +165,7 @@ export default function Module(props) {
               label={"أسم المنتج أو المنظومة"}
               haswidth={true}
               value={nameProduct}
-              error={error}
+              // error={error}
               customWidth="100%"
               hasMultipleLine={true}
               // paddingHorizontal={"0px"}
@@ -211,7 +222,7 @@ export default function Module(props) {
             />
           </Box>
 
-          <TextField
+          {/* <TextField
             select
             fullWidth
             label="تحديد نوع السعر"
@@ -225,7 +236,25 @@ export default function Module(props) {
                 {option?.typePrice}
               </MenuItem>
             ))}
-          </TextField>
+          </TextField> */}
+          <Box sx={{ mb: "10px" }}>
+            <CustomeSelectField
+              label={"نوع المنتج اذاكان محلي او خارجي"}
+              haswidth={true}
+              value={PriceType}
+              list={data ? data : []}
+              customGetOptionLabel={(option) => option?.typePrice || ""}
+              multiple={false}
+              readOnly={false}
+              onChange={(e, newValue) => {
+                setPriceType(newValue);
+              }}
+              onClearClick={() => {
+                setPriceType(null);
+              }}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+            />
+          </Box>
           {selectPriceType && (
             <Box sx={{ mb: "10px" }}>
               <CustomTextField
@@ -259,7 +288,6 @@ export default function Module(props) {
               hasMultipleLine={false}
               // paddingHorizontal={"0px"}
               // message={props?.objectData?.name?.message}
-              // customePadding="8px"
               // paddingHorizontal="0px"
               readOnly={false}
               onChange={(e) => {
@@ -291,7 +319,7 @@ export default function Module(props) {
               }}
             />
           </Box>
-          <TextField
+          {/* <TextField
             select
             fullWidth
             label="الوحدة"
@@ -305,28 +333,44 @@ export default function Module(props) {
                 {option?.Unit}
               </MenuItem>
             ))}
-          </TextField>
-          {/* <CustomeSelectField
-            label={"الوحدة"}
-            haswidth={true}
-            value={UnitId}
-            // error={props?.objectData?.name?.error}
-            customWidth="100%"
-            hasMultipleLine={false}
-            // paddingHorizontal={"0px"}
-            // message={props?.objectData?.name?.message}
-            // customePadding="8px"
-            // paddingHorizontal="0px"
-            readOnly={false}
-            onChange={(e) => setUnitId(e.target.value)}
-            onClearClick={() => {
-              setPercent("");
-            }}
-          >
-            <option value="محلي">محلي</option>
-            <option value="خارجي">خارجي</option>
-          </CustomeSelectField> */}
-          <TextField
+          </TextField> */}
+          <Box sx={{ mb: "10px" }}>
+            <CustomeSelectField
+              label={"اختر الوحدة"}
+              haswidth={true}
+              value={UnitId}
+              list={dataUnit ? dataUnit : []}
+              customGetOptionLabel={(option) => option?.Unit || ""}
+              multiple={false}
+              readOnly={false}
+              onChange={(e, newValue) => {
+                setUnitId(newValue);
+              }}
+              onClearClick={() => {
+                setUnitId(null);
+              }}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+            />
+          </Box>
+          <Box sx={{ mb: "10px", p: "0" }}>
+            <CustomeSelectField
+              label={"نوع المنتج اذاكان محلي او خارجي"}
+              haswidth={true}
+              value={typeProject}
+              list={selectTypPProject ? selectTypPProject : []}
+              customGetOptionLabel={(option) => option.value || ""}
+              multiple={false}
+              readOnly={false}
+              onChange={(e, newValue) => {
+                setTypeProject(newValue);
+              }}
+              onClearClick={() => {
+                setTypeProject(null);
+              }}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+            />
+          </Box>
+          {/* <TextField
             select
             fullWidth
             label="نوع المنتج اذاكان محلي او خارجي"
@@ -337,9 +381,9 @@ export default function Module(props) {
           >
             <MenuItem value="محلي">محلي</MenuItem>
             <MenuItem value="خارجي">خارجي</MenuItem>
-          </TextField>
+          </TextField> */}
 
-          <Box sx={{ mb: "10px" }}>
+          <Box sx={{ mb: "10px", p: "0" }}>
             <CustomTextField
               label={"المواصفات المطلوبة"}
               haswidth={true}
@@ -358,7 +402,7 @@ export default function Module(props) {
               }}
             />
           </Box>
-          <Box>
+          <Box sx={{ mb: "10px", p: "0" }}>
             <CustomTextField
               label={"المواصفات المطلوبة"}
               haswidth={true}

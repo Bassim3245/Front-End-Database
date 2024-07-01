@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { setLanguage } from "../../../redux/LanguageState";
 import SendToUsers from "Component/Layout/HRlayout/SendToUsers";
 import RefreshButtonData from "../../Config/RefreshButton";
+import SendDataProjectToEmployFromHOD from "../../MutualProject/SendDataProjectToEmployFromHOD";
 
 const ProjectMutual = (props) => {
   const [DeleteItem, setDelete] = useState([]);
@@ -189,15 +190,13 @@ const ProjectMutual = (props) => {
                 )}
               <Divider sx={{ my: 0.5 }} />
               {props.label === "getDataMutualToEchDepartment" ? (
-                <MenuItem>
-                  <SendToUsers /> <span> send</span>
-                </MenuItem>
+                <SendDataProjectToEmployFromHOD />
               ) : null}
               <MenuItem
                 onClick={() => HandelOpen(params.row._id)}
                 disableRipple
               >
-                <OpenInNew />
+                <OpenInNew size="large" />
                 <span className="ms-2"> Open Project</span>
               </MenuItem>
             </DropDownGrid>

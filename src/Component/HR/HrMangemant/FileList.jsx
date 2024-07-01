@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BackendUrl } from "../../../redux/api/axios";
 import {
-  formatDate,
   getFileIcon,
   getTimeAgo,
   handleDownload,
@@ -18,7 +17,7 @@ function FileList(props) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [deleteFile, setDelete] = useState("");
+  const [deleteFile, setDelete] = useState(false);
   const [RefreshButton, setRefreshButton] = useState(false);
   const getAllDataFileUpload = async () => {
     try {
@@ -35,7 +34,7 @@ function FileList(props) {
   };
   useEffect(() => {
     getAllDataFileUpload();
-  }, [props?.action, deleteFile, RefreshButton]);
+  }, [props?.action, deleteFile, RefreshButton,anchorEl]);
   const HandleDelete = async (id) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -63,13 +62,14 @@ function FileList(props) {
             token: token,
           },
         });
-        setDelete(toast.success(response?.data?.message));
+        setDelete((prev) => !prev);
         setAnchorEl(null);
         swalWithBootstrapButtons.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
           icon: "success",
         });
+       
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
           title: "Cancelled",
@@ -84,7 +84,6 @@ function FileList(props) {
   const handleRefresh = () => {
     setRefreshButton((prev) => !prev); // Toggle the refresh state
   };
-
 
   return (
     <div className="files-content d-grid gap-20">

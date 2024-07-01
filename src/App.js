@@ -80,6 +80,8 @@ export default function App() {
           return <Route index element={<Assistance />} />;
         } else if (stateRote === "TechnicalDepartments") {
           return <Route index element={<DepartmentsList />} />;
+        } else if (stateRote === "Dashboard") {
+          return <Route index element={<Dashboard />} />;
         } else {
           return null;
         }

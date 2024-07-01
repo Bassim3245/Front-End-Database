@@ -9,7 +9,7 @@ import {
   getProjectByDepartment,
   getProjectByDepartmentDelay,
 } from "../../../redux/ProjectSlice/ProjectAction";
-import { formatDate } from "../../Config/Function";
+import { CustomNoRowsOverlay, formatDate } from "../../Config/Function";
 import DataProductByProjectId from "./ProductDatabyProjectId";
 import { getRoleAndUserId } from "../../../redux/RoleSlice/rolAction";
 import CostumePagination from "../../Config/CostumPagination";
@@ -134,7 +134,7 @@ const AllProjectsEchDepartment = ({ id, Label }) => {
             ) : (
               <tr>
                 <td colSpan={13} style={{ textAlign: "center" }}>
-                  {t("ProjectList.NoDataFound")}
+                <CustomNoRowsOverlay />
                 </td>
               </tr>
             )}

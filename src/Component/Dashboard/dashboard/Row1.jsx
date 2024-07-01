@@ -20,7 +20,6 @@ const Row1 = () => {
     }
   );
   useEffect(() => {
-    console.log("DSCSD", data);
   }, []);
   const theme = useTheme();
   return (
@@ -31,11 +30,7 @@ const Row1 = () => {
       justifyContent={{ xs: "center", sm: "space-between" }}
     >
       <Card
-        icon={
-          <EmailIcon
-            sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
-          />
-        }
+        image={"/image/project_5956494.png"}
         title={data?.count2}
         subTitle={t("dashboard.ProjectsDelivered")}
         increase={"+14%"}
@@ -44,11 +39,7 @@ const Row1 = () => {
       />
 
       <Card
-        icon={
-          <PointOfSaleIcon
-            sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
-          />
-        }
+       image={"/image/planning_16759804.png"}
         title={data?.count}
         subTitle={t("dashboard.CurrentProjects")}
         increase={"+21%"}
@@ -57,11 +48,7 @@ const Row1 = () => {
       />
 
       <Card
-        icon={
-          <PersonAddIcon
-            sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
-          />
-        }
+      image={"/image/project_5956494.png"}
         title={data?.count1}
         subTitle={t("dashboard.AllProjects")}
         increase={"+5%"}
@@ -69,11 +56,7 @@ const Row1 = () => {
         scheme={"accent"}
       />
       <Card
-        icon={
-          <PersonAddIcon
-            sx={{ fontSize: "23px", color: theme.palette.secondary.main }}
-          />
-        }
+       image={"/image/deadline.png"}
         title={data?.count3}
         subTitle={t("dashboard.DelayedProjects")}
         increase={"+5%"}

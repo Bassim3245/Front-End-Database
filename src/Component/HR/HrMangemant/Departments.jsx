@@ -24,7 +24,7 @@ export default function DepartmentInHr(props) {
   const [openSend, setOpenSend] = React.useState(false);
   const [departmentsData, setDepartmentsData] = React.useState([]);
   const [checkData, setCheckData] = React.useState([]);
-  const [checkedItems, setCheckedItems] = React.useState({});
+  // const [checkedItems, setCheckedItems] = React.useState({});
   const [isActive, setIsActive] = React.useState({});
   
   const theme = useTheme();
