@@ -218,14 +218,13 @@ function Register(props) {
                         onChange={(e) => setRoleId(e.target.value)}
                       >
                         <option value="">Open this select role</option>
-                        {data &&
-                          data
-                            ?.filter((option) => option?.RoleName !== "Root")
-                            .map((item) => (
-                              <option key={item?._id} value={item?._id}>
-                                {item?.RoleName}
-                              </option>
-                            ))}
+                        {data
+                          ?.filter((option) => option?.RoleName !== "Root")
+                          .map((item) => (
+                            <option key={item?._id} value={item?._id}>
+                              {item?.RoleName}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
